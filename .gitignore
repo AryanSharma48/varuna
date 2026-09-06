@@ -1,0 +1,78 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+.env
+.venv
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing & Coverage
+.pytest_cache/
+pytest.ini
+.coverage
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+
+# Node & Frontend (React/Vite)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+apps/web/node_modules/
+apps/web/dist/
+apps/web/dist-ssr/
+*.local
+
+# Database & SQLite files
+*.db
+*.sqlite3
+sih_investigation.db
+
+# Logs & Temporary Files
+*.log
+logs/
+*.tmp
+*.bak
+PRD.md
+
+# IDE & System Files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Satellite Data Processing
+satellite-data/
+artifacts/
