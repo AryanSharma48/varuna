@@ -1,0 +1,28 @@
+{
+  "incident_id": "SIH-2026-001",
+  "title": "Eastern Mediterranean DARTIS Investigation",
+  "description": "Real Demonstration Incident using Sentinel-1B and DARTIS ow-0388 reference.",
+  "status": "INVESTIGATING",
+  "center_lat": 31.982759,
+  "center_lon": 32.849022,
+  "spill_window_start": "2019-06-10T14:00:00Z",
+  "spill_window_end": "2019-06-10T16:00:00Z",
+  "provenance": {
+    "satellite_source": "Copernicus Sentinel-1",
+    "scene_id": "S1B_IW_GRDH_1SDV_20190610T154813_20190610T154838_016636_01F4FD_EE80.SAFE",
+    "product_type": "GRDH",
+    "polarizations": [
+      "VV",
+      "VH"
+    ],
+    "sensing_timestamp": "2019-06-10T15:48:13Z",
+    "annotation_source": "DARTIS 2019",
+    "annotation_doi": "10.1594/PANGAEA.980773",
+    "annotation_id": "ow-0388",
+    "published_oil_coordinates": {
+      "lat": 31.982759,
+      "lon": 32.849022
+    },
+    "ais_source": "Unavailable"
+  }
+}

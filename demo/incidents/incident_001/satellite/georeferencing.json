@@ -1,0 +1,25 @@
+{
+  "source_product": "S1B_IW_GRDH_1SDV_20190610T154813_20190610T154838_016636_01F4FD_EE80.SAFE",
+  "gcp_crs": "EPSG:4326",
+  "source_dimensions": {
+    "height": 16685,
+    "width": 26503
+  },
+  "reference_coordinates": {
+    "lat": 31.982759,
+    "lon": 32.849022
+  },
+  "source_pixel_coordinates": {
+    "row": 7760,
+    "col": 10049
+  },
+  "tile_offsets": {
+    "row_offset": 5712,
+    "col_offset": 8001
+  },
+  "tile_dimensions": {
+    "height": 4096,
+    "width": 4096
+  },
+  "geolocation_method": "rasterio.transform.GCPTransformer using true Sentinel-1 GCPs"
+}
