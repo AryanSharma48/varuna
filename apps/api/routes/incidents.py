@@ -337,6 +337,37 @@ def trace_origin_live(incident_id: str, req: TraceOriginRequest, db: Session = D
         env=env
     )
     
+    try:
+        w_start = datetime.fromisoformat(result["origin_window_start"]) if isinstance(result["origin_window_start"], str) else result["origin_window_start"]
+        w_end = datetime.fromisoformat(result["origin_window_end"]) if isinstance(result["origin_window_end"], str) else result["origin_window_end"]
+        origin_rec = db.query(OriginEstimate).filter(OriginEstimate.incident_id == incident_id).first()
+        if origin_rec:
+            origin_rec.center_lat = result["origin_center_lat"]
+            origin_rec.center_lon = result["origin_center_lon"]
+            origin_rec.uncertainty_radius_km = result["uncertainty_radius_km"]
+            origin_rec.origin_window_start = w_start
+            origin_rec.origin_window_end = w_end
+            origin_rec.probability_contour_geojson = result["geojson"]
+            origin_rec.forcing_used = result["forcing_used"]
+        else:
+            origin_rec = OriginEstimate(
+                id=f"ORIGIN-{incident_id}",
+                incident_id=incident_id,
+                calculation_time=datetime.now(timezone.utc),
+                origin_window_start=w_start,
+                origin_window_end=w_end,
+                center_lat=result["origin_center_lat"],
+                center_lon=result["origin_center_lon"],
+                uncertainty_radius_km=result["uncertainty_radius_km"],
+                probability_contour_geojson=result["geojson"],
+                forcing_used=result["forcing_used"]
+            )
+            db.add(origin_rec)
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        print(f"Error persisting origin estimate: {e}")
+    
     return result
 
 @router.post("/incidents/{incident_id}/forecast-spill")
@@ -363,6 +394,28 @@ def forecast_spill_live(incident_id: str, req: ForecastSpillRequest, db: Session
         particle_count=500,
         env=env
     )
+    
+    try:
+        drift_rec = db.query(DriftRun).filter(DriftRun.incident_id == incident_id, DriftRun.run_type == "FORWARD_FORECAST").first()
+        if drift_rec:
+            drift_rec.forecast_steps = forecast_steps
+            drift_rec.environmental_parameters = env.__dict__
+        else:
+            drift_rec = DriftRun(
+                id=f"DRIFT-FWD-{incident_id}",
+                incident_id=incident_id,
+                run_type="FORWARD_FORECAST",
+                start_time=datetime.now(timezone.utc),
+                duration_hours=48.0,
+                particle_count=500,
+                forecast_steps=forecast_steps,
+                environmental_parameters=env.__dict__
+            )
+            db.add(drift_rec)
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        print(f"Error persisting drift run: {e}")
     
     impacts = sensitive_impact_service.assess_impact(forecast_steps)
     return {

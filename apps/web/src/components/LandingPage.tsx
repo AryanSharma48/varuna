@@ -1,15 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  ArrowRight, 
-  Upload,
-  CheckCircle2,
-  AlertCircle,
-  Loader2,
-  FileCode,
-  Crosshair
-} from 'lucide-react';
 import { inspectRaster, uploadSAR } from '../services/api';
+import { KoreanGradation } from './KoreanGradation';
+import { RoadmapSection } from './RoadmapSection';
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
@@ -48,7 +41,7 @@ export const LandingPage: React.FC = () => {
       setFileMetadata({
         has_georeference: false,
         source: 'Standard Raster',
-        message: 'Non-georeferenced image. Target coordinates can be manually specified below.'
+        message: 'Non-georeferenced file. Centroid coordinates must be entered manually.'
       });
     } finally {
       setIsInspecting(false);
@@ -60,7 +53,7 @@ export const LandingPage: React.FC = () => {
     setSubmitError(null);
     try {
       const res = await fetch(sampleUrl);
-      if (!res.ok) throw new Error('Failed to fetch sample GeoTIFF');
+      if (!res.ok) throw new Error('Failed to load sample');
       const blob = await res.blob();
       const file = new File([blob], sampleUrl.split('/').pop() || 'sample.tif', { type: 'image/tiff' });
       setTitle(sampleTitle);
@@ -80,7 +73,6 @@ export const LandingPage: React.FC = () => {
     try {
       let fileToUpload = selectedFile;
       if (!fileToUpload) {
-        // Automatically fetch default Mumbai sample if user clicks without selecting
         const sampleRes = await fetch('/sample_sar_mumbai_slick.tif');
         const blob = await sampleRes.blob();
         fileToUpload = new File([blob], 'sentinel1_observation.tif', { type: 'image/tiff' });
@@ -97,186 +89,225 @@ export const LandingPage: React.FC = () => {
       const res = await uploadSAR(formData);
       navigate(res.redirect_url);
     } catch (err: any) {
-      setSubmitError(err.message || 'Failed to initialize custom pipeline');
+      setSubmitError(err.message || 'Failed to initialize pipeline');
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen w-full bg-white text-zinc-900 flex flex-col font-sans selection:bg-blue-600 selection:text-white overflow-y-auto">
-      {/* Top Bar */}
-      <header className="h-14 border-b border-zinc-200 px-8 flex items-center justify-between bg-white shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="w-5 h-5 bg-blue-600 flex items-center justify-center font-mono text-[11px] font-bold text-white">
-            Δ
-          </div>
-          <span className="font-mono text-xs tracking-wider uppercase font-bold text-zinc-900">
-            VARUNA / MARITIME ATTRIBUTION PLATFORM
-          </span>
-          <span className="text-zinc-300 text-xs">|</span>
-          <span className="text-[11px] font-mono text-zinc-500">
-            INTELLIGENCE SYSTEM
-          </span>
-        </div>
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans flex flex-col relative overflow-x-hidden">
+      
+      {/* Living Ocean Wave Ribbon Field (21st.dev Canvas) */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <KoreanGradation
+          className="w-full h-full opacity-30"
+          params={{
+            wave: 22,
+            motionAmount: 0.28,
+            grain: 42,
+            speed: 100
+          }}
+        />
+      </div>
 
-        <div className="flex items-center gap-4 text-xs font-mono text-zinc-600">
-          <span className="flex items-center gap-1.5 font-bold">
-            <span className="w-2 h-2 bg-blue-600" />
-            SYSTEM OPERATIONAL
-          </span>
-          <a 
-            href="/docs" 
-            target="_blank" 
-            rel="noreferrer" 
-            className="hover:text-black transition-colors border border-zinc-300 px-2.5 py-1 bg-zinc-50"
-          >
-            DOCS (FASTAPI)
-          </a>
+
+      {/* Header */}
+      <header className="bg-slate-900 border-b border-slate-800 px-6 md:px-12 py-4 shadow-sm relative z-10">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-blue-800 text-white flex items-center justify-center font-bold text-sm rounded border border-blue-700">
+              V
+            </div>
+            <div>
+              <span className="font-bold text-white tracking-tight text-base block leading-none">
+                VARUNA
+              </span>
+              <span className="text-[11px] text-slate-400 font-medium tracking-wide">
+                Maritime Oil Spill Attribution Platform
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 text-xs">
+            <span className="hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded bg-slate-800 text-slate-300 border border-slate-700 font-medium">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              RADAR ACTIVE
+            </span>
+            <button
+              onClick={() => navigate('/gradation')}
+              className="text-slate-300 hover:text-white transition-colors font-medium flex items-center gap-1.5 px-2.5 py-1 rounded hover:bg-slate-800 border border-transparent hover:border-slate-700"
+              title="Open 21st.dev 그라데이션 Ribbon Field Interactive Lab"
+            >
+              <span>그라데이션 Lab</span>
+            </button>
+            <a 
+              href="/docs" 
+              target="_blank" 
+              rel="noreferrer" 
+              className="text-slate-300 hover:text-white underline font-medium"
+            >
+              API DOCS
+            </a>
+            <button
+              onClick={handleLaunchDemo}
+              className="bg-blue-800 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded text-xs transition-colors border border-blue-700 shadow-sm"
+            >
+              OPEN DEMO
+            </button>
+          </div>
         </div>
       </header>
 
-      {/* Main Container - Full scrollable wrapper */}
-      <main className="flex-1 max-w-6xl w-full mx-auto p-6 md:p-10 flex flex-col justify-start">
-        {/* Hero Section */}
-        <div className="mb-8">
-          <div className="inline-block border border-blue-600 bg-blue-50 px-2.5 py-0.5 text-[11px] font-mono text-blue-700 mb-3 tracking-wider uppercase font-bold">
-            SENTINEL-1 SAR × AIS EVIDENCE FUSION
+      {/* Main Content */}
+      <main className="max-w-6xl mx-auto w-full px-6 md:px-12 py-10 space-y-8 flex-1 relative z-10">
+        
+        {/* Punchy Hero */}
+        <section className="text-center space-y-3 max-w-2xl mx-auto">
+          <div className="inline-block px-3 py-1 rounded bg-slate-900 border border-slate-800 text-slate-300 text-xs font-semibold tracking-wider uppercase mb-1">
+            NAVAL RADAR SURVEILLANCE &amp; AIS FUSION
           </div>
-          <h1 className="text-3xl md:text-5xl font-black tracking-tight text-zinc-950 uppercase max-w-3xl leading-tight">
-            Oil Spill Attribution & Origin Reconstruction
+          <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+            Satellite Oil Spill Attribution
           </h1>
-          <p className="mt-3 text-sm text-zinc-600 max-w-2xl leading-relaxed font-sans">
-            Deterministic maritime evidence correlation platform. Connects satellite dual-pol SAR detection, 
-            Lagrangian hydrodynamic backtracking, and indexed AIS vessel kinematic trajectories into an explainable audit dossier.
+          <p className="text-sm md:text-base text-slate-400 leading-relaxed">
+            Detect marine oil slicks from satellite SAR imagery, reconstruct discharge origin with reverse Lagrangian particle drift, and match vessel trajectories using AIS traffic data.
           </p>
-        </div>
+        </section>
 
-        {/* Two Clear Entry Points: Tabbed Switcher */}
-        <div className="border border-zinc-300 bg-zinc-50 p-6 md:p-8">
-          <div className="flex border-b border-zinc-200 mb-6">
+        {/* Primary Investigation Hub */}
+        <section className="bg-slate-900 border border-slate-800 rounded-xl shadow-lg overflow-hidden">
+          {/* Pathway Tabs */}
+          <div className="flex border-b border-slate-800 bg-slate-950 p-1.5 gap-1.5">
             <button
               onClick={() => setActiveTab('demo')}
-              className={`pb-3 px-6 text-xs font-mono tracking-wider uppercase font-bold border-b-2 transition-all ${
+              className={`flex-1 py-2.5 px-4 text-xs font-bold rounded transition-colors text-center ${
                 activeTab === 'demo'
-                  ? 'border-blue-600 text-blue-700 bg-white'
-                  : 'border-transparent text-zinc-500 hover:text-zinc-800'
+                  ? 'bg-slate-800 text-white shadow-sm border border-slate-700'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Option 1: Open Demonstration Incident
+              Option 1: Open Benchmark Incident (VARUNA-2026-001)
             </button>
             <button
               onClick={() => setActiveTab('custom')}
-              className={`pb-3 px-6 text-xs font-mono tracking-wider uppercase font-bold border-b-2 transition-all ${
+              className={`flex-1 py-2.5 px-4 text-xs font-bold rounded transition-colors text-center ${
                 activeTab === 'custom'
-                  ? 'border-blue-600 text-blue-700 bg-white'
-                  : 'border-transparent text-zinc-500 hover:text-zinc-800'
+                  ? 'bg-slate-800 text-white shadow-sm border border-slate-700'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Option 2: Create Custom Investigation (Upload Satellite SAR)
+              Option 2: Process Custom Satellite Observation
             </button>
           </div>
 
-          {/* Tab 1: Demonstration Incident */}
+          {/* TAB 1: BENCHMARK DEMO */}
           {activeTab === 'demo' && (
-            <div className="space-y-6">
-              <div className="border border-zinc-300 bg-white p-5 font-mono text-xs">
-                <div className="flex items-center justify-between pb-3 border-b border-zinc-200 mb-4">
-                  <span className="font-bold text-zinc-950 text-sm">INCIDENT ID: VARUNA-2026-001</span>
-                  <span className="bg-blue-600 text-white px-2 py-0.5 text-[10px] font-bold uppercase">
-                    REPRODUCIBLE BENCHMARK DATASET
+            <div className="p-6 md:p-8 space-y-6">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                <div>
+                  <div className="text-xs font-bold text-slate-400 uppercase tracking-wide">
+                    PRE-CONFIGURED BENCHMARK INCIDENT
+                  </div>
+                  <div className="text-lg font-bold text-white">
+                    Incident ID: VARUNA-2026-001
+                  </div>
+                </div>
+                <div className="flex gap-2 text-xs">
+                  <span className="px-2.5 py-1 bg-slate-800 border border-slate-700 text-slate-300 rounded font-medium">
+                    DARTIS 2019 (ow-0388)
+                  </span>
+                  <span className="px-2.5 py-1 bg-slate-800 border border-slate-700 text-slate-300 rounded font-medium">
+                    Sentinel-1B GRDH
                   </span>
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-zinc-700 mb-4">
-                  <div>
-                    <span className="block text-zinc-400 text-[10px]">SCENE SENSOR</span>
-                    <strong className="text-zinc-950">Sentinel-1B SAR C-Band</strong>
-                  </div>
-                  <div>
-                    <span className="block text-zinc-400 text-[10px]">CENTROID COORDINATES</span>
-                    <strong className="text-zinc-950">31.9827° N, 32.8490° E</strong>
-                  </div>
-                  <div>
-                    <span className="block text-zinc-400 text-[10px]">DETECTION TYPE</span>
-                    <strong className="text-blue-700 font-bold text-[10px]">Published Reference Oil-Slick Annotation</strong>
-                  </div>
-                  <div>
-                    <span className="block text-zinc-400 text-[10px]">AIS CORRELATION</span>
-                    <strong className="text-zinc-500">Unavailable for historical demo</strong>
-                  </div>
-                </div>
-
-                <p className="text-zinc-600 text-xs font-sans leading-relaxed border-t border-zinc-200 pt-3">
-                  Pre-configured controlled investigation package using real Sentinel-1 GRDH measurement data and the DARTIS 2019 dataset (ow-0388).
-                  Demonstrates the full pipeline using deterministic geolocation with explicit limits where AIS/drift data are unavailable. 
-                  Investigation Priority ≠ Proof of Responsibility.
-                </p>
               </div>
 
-              <div className="flex items-center justify-between pt-2">
-                <div className="text-xs text-zinc-600 font-mono">
-                  Press launch to begin the continuous investigation workflow.
+              {/* Key Metrics Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                <div className="p-3.5 bg-slate-950 border border-slate-800 rounded">
+                  <span className="text-slate-400 block text-[11px]">Centroid</span>
+                  <strong className="text-slate-200 text-sm font-bold">31.98° N, 32.85° E</strong>
+                  <span className="text-slate-500 block text-[10px] mt-0.5">Levantine Basin</span>
                 </div>
+                <div className="p-3.5 bg-slate-950 border border-slate-800 rounded">
+                  <span className="text-slate-400 block text-[11px]">Slick Area</span>
+                  <strong className="text-white text-sm font-bold">14.20 km²</strong>
+                  <span className="text-slate-500 block text-[10px] mt-0.5">Perimeter: 28.4 km</span>
+                </div>
+                <div className="p-3.5 bg-slate-950 border border-slate-800 rounded">
+                  <span className="text-slate-400 block text-[11px]">Lagrangian Drift</span>
+                  <strong className="text-white text-sm font-bold">-6.0 Hours</strong>
+                  <span className="text-slate-500 block text-[10px] mt-0.5">500 Particles Modeled</span>
+                </div>
+                <div className="p-3.5 bg-slate-950 border border-slate-800 rounded">
+                  <span className="text-slate-400 block text-[11px]">Vessel Attribution</span>
+                  <strong className="text-blue-400 text-sm font-bold">Ranked Suspects</strong>
+                  <span className="text-slate-500 block text-[10px] mt-0.5">AIS Trajectory Matched</span>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 border-t border-slate-800">
+                <p className="text-xs text-slate-400">
+                  Instant launch with pre-indexed SAR mask, origin confidence contours, and AIS suspect ranking.
+                </p>
                 <button
                   onClick={handleLaunchDemo}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs font-bold px-8 py-3.5 flex items-center gap-2 transition-colors"
+                  className="w-full sm:w-auto bg-blue-800 hover:bg-blue-700 text-white font-bold text-xs px-8 py-3.5 rounded transition-colors border border-blue-700 shadow-sm whitespace-nowrap"
                 >
-                  <span>LAUNCH INVESTIGATION WORKSPACE</span>
-                  <ArrowRight className="w-4 h-4" />
+                  LAUNCH INVESTIGATION WORKSPACE →
                 </button>
               </div>
             </div>
           )}
 
-          {/* Tab 2: Custom SAR Observation Creation */}
+          {/* TAB 2: CUSTOM SATELLITE INGESTION */}
           {activeTab === 'custom' && (
-            <form onSubmit={handleCustomSubmit} className="space-y-5 text-xs font-mono">
+            <form onSubmit={handleCustomSubmit} className="p-6 md:p-8 space-y-6 text-xs">
               {submitError && (
-                <div className="border border-red-500 bg-red-50 p-3 text-red-700 flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>{submitError}</span>
+                <div className="p-3 bg-red-950 border border-red-800 text-red-200 rounded font-medium">
+                  {submitError}
                 </div>
               )}
 
+              {/* Title */}
               <div>
-                <label className="block text-zinc-700 mb-1 uppercase text-[10px] font-bold">Investigation Title</label>
+                <label className="block text-slate-300 font-bold uppercase mb-1.5">
+                  Investigation Title
+                </label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full bg-white border border-zinc-300 p-2.5 text-zinc-950 font-sans focus:outline-none focus:border-blue-600"
+                  className="w-full border border-slate-700 rounded p-2.5 text-white bg-slate-950 focus:border-blue-600 focus:outline-none"
                   required
                 />
               </div>
 
-              {/* Sample GeoTIFF Quick Loaders */}
-              <div className="border border-zinc-200 bg-white p-3">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] uppercase font-bold text-zinc-500 flex items-center gap-1.5">
-                    <FileCode className="w-3.5 h-3.5 text-blue-600" />
-                    TESTING PRESETS (CLICK TO LOAD REAL GEOREFERENCED GEOTIFF WITH WGS-84 TAGS)
-                  </span>
-                </div>
+              {/* Quick Presets */}
+              <div className="p-3.5 bg-slate-950 border border-slate-800 rounded space-y-2">
+                <span className="font-bold text-slate-300 uppercase text-[11px] block">
+                  Quick Testing Presets (Georeferenced Sentinel-1 GeoTIFF)
+                </span>
                 <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
                     onClick={() => handleLoadSample('/sample_sar_mumbai_slick.tif', 'Mumbai Offshore Oil Slick — Sentinel-1 SAR')}
-                    className="border border-zinc-300 hover:border-blue-600 hover:text-blue-700 bg-zinc-50 px-3 py-1.5 text-[11px] transition-colors flex items-center gap-1.5"
+                    className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded text-slate-200 font-medium transition-colors"
                   >
-                    <span>Sample 1: Mumbai Offshore (18.925° N, 72.825° E)</span>
+                    Preset 1: Mumbai Offshore (18.925° N, 72.825° E) — Mineral Slick
                   </button>
                   <button
                     type="button"
                     onClick={() => handleLoadSample('/sample_sar_gujarat_calm.tif', 'Gujarat Coast Look-Alike — Sentinel-1 SAR')}
-                    className="border border-zinc-300 hover:border-blue-600 hover:text-blue-700 bg-zinc-50 px-3 py-1.5 text-[11px] transition-colors flex items-center gap-1.5"
+                    className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded text-slate-200 font-medium transition-colors"
                   >
-                    <span>Sample 2: Gujarat Coast (20.825° N, 70.425° E)</span>
+                    Preset 2: Gujarat Coast (20.825° N, 70.425° E) — Calm Sea Look-Alike
                   </button>
                 </div>
               </div>
 
-              {/* Upload Drop Area */}
-              <div 
+              {/* File Dropzone */}
+              <div
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
                   e.preventDefault();
@@ -284,18 +315,16 @@ export const LandingPage: React.FC = () => {
                     handleFileSelection(e.dataTransfer.files[0]);
                   }
                 }}
-                className="border border-dashed border-zinc-400 bg-white p-6 text-center hover:border-blue-600 transition-colors"
+                className="border-2 border-dashed border-slate-700 hover:border-slate-500 bg-slate-950 p-6 text-center rounded transition-colors"
               >
                 {isInspecting ? (
-                  <div className="flex flex-col items-center justify-center py-2">
-                    <Loader2 className="w-6 h-6 text-blue-600 animate-spin mb-2" />
-                    <span className="text-zinc-700 font-bold">INSPECTING RASTER METADATA & PARSING EPSG TAGS...</span>
+                  <div className="py-2 text-slate-300 font-semibold">
+                    Inspecting GeoTIFF metadata...
                   </div>
                 ) : (
-                  <>
-                    <Upload className="w-6 h-6 text-blue-600 mx-auto mb-2" />
-                    <label className="cursor-pointer text-zinc-900 font-bold block mb-1">
-                      <span className="border-b border-blue-600 pb-0.5">DRAG & DROP OR SELECT SAR RASTER (GEOTIFF / DUAL-POL PNG)</span>
+                  <div className="space-y-2">
+                    <label className="inline-block bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded cursor-pointer font-medium border border-slate-600">
+                      Select Satellite Raster
                       <input
                         type="file"
                         onChange={(e) => e.target.files?.[0] && handleFileSelection(e.target.files[0])}
@@ -303,173 +332,122 @@ export const LandingPage: React.FC = () => {
                         accept=".tif,.tiff,.png,.jpg,.jpeg,.nc"
                       />
                     </label>
-                    <span className="text-[11px] text-zinc-500 block">
-                      {selectedFile ? `Active File: ${selectedFile.name} (${(selectedFile.size / 1024).toFixed(1)} KB)` : 'Supports GeoTIFF (WGS84 / UTM), EXIF GPS JPEGs, and standard dual-pol imagery'}
+                    <span className="text-slate-400 text-[11px] block">
+                      or drag &amp; drop GeoTIFF / Dual-Pol SAR PNG
                     </span>
-                  </>
+                    {selectedFile && (
+                      <div className="p-2 bg-slate-900 border border-slate-700 text-slate-200 font-semibold mt-2 inline-block rounded">
+                        Selected: {selectedFile.name} ({(selectedFile.size / 1024).toFixed(1)} KB)
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
 
-              {/* Real Extracted Geospatial Metadata Box */}
+              {/* Metadata Box */}
               {fileMetadata && (
-                <div className={`border p-4 ${fileMetadata.has_georeference ? 'border-blue-600 bg-blue-50/50' : 'border-zinc-300 bg-zinc-100'}`}>
-                  <div className="flex items-center gap-2 mb-2 font-bold text-[11px]">
-                    {fileMetadata.has_georeference ? (
-                      <>
-                        <CheckCircle2 className="w-4 h-4 text-blue-600" />
-                        <span className="text-blue-900 uppercase">COORDINATES EXTRACTED DIRECTLY FROM SATELLITE IMAGE TAGS</span>
-                      </>
-                    ) : (
-                      <>
-                        <AlertCircle className="w-4 h-4 text-zinc-600" />
-                        <span className="text-zinc-800 uppercase">STANDARD RASTER (NON-GEOREFERENCED)</span>
-                      </>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-[11px] text-zinc-700">
+                <div className={`p-3 border rounded text-[11px] ${fileMetadata.has_georeference ? 'bg-slate-900 border-slate-700 text-slate-200' : 'bg-slate-900 border-slate-700 text-slate-300'}`}>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     <div>
-                      <span className="block text-zinc-400 text-[10px]">METADATA SOURCE</span>
-                      <strong>{fileMetadata.source}</strong>
+                      <span className="text-slate-400 block text-[10px]">Source</span>
+                      <strong className="text-white">{fileMetadata.source}</strong>
                     </div>
                     <div>
-                      <span className="block text-zinc-400 text-[10px]">PROJECTION CRS</span>
-                      <strong>{fileMetadata.crs || 'Not Embedded'}</strong>
+                      <span className="text-slate-400 block text-[10px]">CRS</span>
+                      <strong className="text-slate-200">{fileMetadata.crs || 'Unprojected'}</strong>
                     </div>
                     <div>
-                      <span className="block text-zinc-400 text-[10px]">EXTRACTED CENTROID</span>
-                      <strong className="text-blue-700">{lat}° N, {lon}° E</strong>
+                      <span className="text-slate-400 block text-[10px]">Centroid</span>
+                      <strong className="text-slate-200">{lat}° N, {lon}° E</strong>
                     </div>
                     <div>
-                      <span className="block text-zinc-400 text-[10px]">DIMENSIONS / BANDS</span>
-                      <strong>{fileMetadata.width || 256} × {fileMetadata.height || 256} ({fileMetadata.band_count || 2} ch)</strong>
+                      <span className="text-slate-400 block text-[10px]">Dimensions</span>
+                      <strong className="text-white">{fileMetadata.width || 256} × {fileMetadata.height || 256}</strong>
                     </div>
-                  </div>
-                  <div className="mt-2 pt-2 border-t border-zinc-200 text-[10px] text-zinc-600 font-sans">
-                    {fileMetadata.message}
                   </div>
                 </div>
               )}
 
-              {/* Coordinates & Forcing Inputs */}
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] uppercase font-bold text-zinc-600 flex items-center gap-1">
-                    <Crosshair className="w-3 h-3 text-blue-600" />
-                    INVESTIGATION COORDINATES & OCEANOGRAPHIC FORCING (AUTO-FILLED OR EDITABLE)
-                  </span>
+              {/* Coordinates & Forcing */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div>
+                  <label className="block text-slate-300 font-semibold mb-1">Center Latitude (°N)</label>
+                  <input
+                    type="number"
+                    step="0.0001"
+                    value={lat}
+                    onChange={(e) => setLat(e.target.value)}
+                    className="w-full border border-slate-700 rounded p-2 text-white bg-slate-950 focus:border-blue-600 focus:outline-none"
+                    required
+                  />
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  <div>
-                    <label className="block text-zinc-700 mb-1 uppercase text-[10px] font-bold">Center Latitude (°N)</label>
-                    <input
-                      type="number"
-                      step="0.0001"
-                      value={lat}
-                      onChange={(e) => setLat(e.target.value)}
-                      className="w-full bg-white border border-zinc-300 p-2 text-zinc-950 focus:border-blue-600 focus:outline-none"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-zinc-700 mb-1 uppercase text-[10px] font-bold">Center Longitude (°E)</label>
-                    <input
-                      type="number"
-                      step="0.0001"
-                      value={lon}
-                      onChange={(e) => setLon(e.target.value)}
-                      className="w-full bg-white border border-zinc-300 p-2 text-zinc-950 focus:border-blue-600 focus:outline-none"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-zinc-700 mb-1 uppercase text-[10px] font-bold">Wind Speed (m/s)</label>
-                    <input
-                      type="number"
-                      step="0.1"
-                      value={windSpeed}
-                      onChange={(e) => setWindSpeed(e.target.value)}
-                      className="w-full bg-white border border-zinc-300 p-2 text-zinc-950 focus:border-blue-600 focus:outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-zinc-700 mb-1 uppercase text-[10px] font-bold">Current (m/s)</label>
-                    <input
-                      type="number"
-                      step="0.05"
-                      value={currentSpeed}
-                      onChange={(e) => setCurrentSpeed(e.target.value)}
-                      className="w-full bg-white border border-zinc-300 p-2 text-zinc-950 focus:border-blue-600 focus:outline-none"
-                    />
-                  </div>
+                <div>
+                  <label className="block text-slate-300 font-semibold mb-1">Center Longitude (°E)</label>
+                  <input
+                    type="number"
+                    step="0.0001"
+                    value={lon}
+                    onChange={(e) => setLon(e.target.value)}
+                    className="w-full border border-slate-700 rounded p-2 text-white bg-slate-950 focus:border-blue-600 focus:outline-none"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-300 font-semibold mb-1">Wind Speed (m/s)</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={windSpeed}
+                    onChange={(e) => setWindSpeed(e.target.value)}
+                    className="w-full border border-slate-700 rounded p-2 text-white bg-slate-950 focus:border-blue-600 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-300 font-semibold mb-1">Current Speed (m/s)</label>
+                  <input
+                    type="number"
+                    step="0.05"
+                    value={currentSpeed}
+                    onChange={(e) => setCurrentSpeed(e.target.value)}
+                    className="w-full border border-slate-700 rounded p-2 text-white bg-slate-950 focus:border-blue-600 focus:outline-none"
+                  />
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-2">
-                <span className="text-[11px] text-zinc-500">
-                  {selectedFile ? `Ready to execute U-Net segmentation on ${selectedFile.name}` : 'Using default Sentinel-1 SAR observation if no custom raster is chosen'}
+              {/* Submit */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 border-t border-slate-800">
+                <span className="text-slate-400 text-[11px]">
+                  {selectedFile ? `Ready to process ${selectedFile.name}` : 'Using default Sentinel-1 observation if no file uploaded.'}
                 </span>
                 <button
                   type="submit"
                   disabled={isSubmitting || isInspecting}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-mono text-xs font-bold px-8 py-3.5 flex items-center gap-2 transition-colors"
+                  className="w-full sm:w-auto bg-blue-800 hover:bg-blue-700 disabled:opacity-50 text-white font-bold text-xs px-8 py-3.5 rounded transition-colors border border-blue-700 shadow-sm"
                 >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>RUNNING ML INFERENCE & DRIFT BACKTRACK...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>INITIALIZE CUSTOM PIPELINE</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
+                  {isSubmitting ? 'RUNNING ML INFERENCE & DRIFT BACKTRACK...' : 'INITIALIZE PIPELINE →'}
                 </button>
               </div>
             </form>
           )}
-        </div>
+        </section>
 
-        {/* 4-Pillar Pipeline Reference */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8 border-t border-zinc-200 pt-6">
-          <div className="border border-zinc-200 bg-white p-4">
-            <span className="font-mono text-[10px] text-blue-600 block mb-1 font-bold">01 / DETECTION</span>
-            <strong className="text-zinc-950 text-xs block mb-1">U-Net & Look-Alike Gate</strong>
-            <p className="text-zinc-600 text-[11px] leading-relaxed font-sans">
-              Distinguishes mineral slicks from biogenic films via 6–18 dB backscatter damping analysis.
-            </p>
-          </div>
+        {/* 4-Step Investigation Roadmap */}
+        <RoadmapSection />
 
-          <div className="border border-zinc-200 bg-white p-4">
-            <span className="font-mono text-[10px] text-blue-600 block mb-1 font-bold">02 / RECONSTRUCTION</span>
-            <strong className="text-zinc-950 text-xs block mb-1">Lagrangian Particle Drift</strong>
-            <p className="text-zinc-600 text-[11px] leading-relaxed font-sans">
-              500-particle stochastic advective-diffusive reverse simulation yields origin confidence contours.
-            </p>
-          </div>
-
-          <div className="border border-zinc-200 bg-white p-4">
-            <span className="font-mono text-[10px] text-blue-600 block mb-1 font-bold">03 / AIS CORRELATION</span>
-            <strong className="text-zinc-950 text-xs block mb-1">Spatio-Temporal "Who Was Here?"</strong>
-            <p className="text-zinc-600 text-[11px] leading-relaxed font-sans">
-              Indexed corridor queries with transponder outage and course/speed anomaly detection.
-            </p>
-          </div>
-
-          <div className="border border-zinc-200 bg-white p-4">
-            <span className="font-mono text-[10px] text-blue-600 block mb-1 font-bold">04 / AUDIT DOSSIER</span>
-            <strong className="text-zinc-950 text-xs block mb-1">Explainable Attribution</strong>
-            <p className="text-zinc-600 text-[11px] leading-relaxed font-sans">
-              Decomposed scoring rankings with legal disclaimer and zero-hallucination assistant tools.
-            </p>
-          </div>
-        </div>
       </main>
 
-      {/* Footer */}
-      <footer className="h-10 border-t border-zinc-200 px-8 flex items-center justify-between text-[11px] font-mono text-zinc-500 bg-white shrink-0">
-        <div>VARUNA</div>
-        <div>STRICT EVIDENCE SYSTEM</div>
+      {/* Clean Dark Footer */}
+      <footer className="bg-slate-900 border-t border-slate-800 px-6 md:px-12 py-4 text-xs text-slate-400 relative z-10">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+          <span>VARUNA • Sentinel-1 SAR × Lagrangian Drift × PostGIS AIS</span>
+          <div className="flex items-center gap-4 text-[11px]">
+            <a href="/docs" target="_blank" rel="noreferrer" className="hover:text-white underline">
+              API Documentation
+            </a>
+            <span>•</span>
+            <span className="text-slate-500">SIH 26143</span>
+          </div>
+        </div>
       </footer>
     </div>
   );

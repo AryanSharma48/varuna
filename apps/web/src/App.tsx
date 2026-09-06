@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LandingPage } from './components/LandingPage';
 import { InvestigationWorkspace } from './components/InvestigationWorkspace';
+import { GradationPage } from './components/GradationPage';
 
 export const App: React.FC = () => {
   return (
@@ -9,6 +10,10 @@ export const App: React.FC = () => {
       <Routes>
         {/* Landing Page with the two clear entry options */}
         <Route path="/" element={<LandingPage />} />
+
+        {/* 21st.dev 그라데이션 Ribbon Field Gradient Showcase */}
+        <Route path="/gradient" element={<GradationPage />} />
+        <Route path="/gradation" element={<GradationPage />} />
 
         {/* Dedicated Subroutes */}
         <Route path="/investigation/:id/overview" element={<InvestigationWorkspace />} />

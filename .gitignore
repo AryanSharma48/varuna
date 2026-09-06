@@ -64,6 +64,7 @@ PRD.md
 # IDE & System Files
 .idea/
 .vscode/
+.agents/
 *.swp
 *.swo
 *~

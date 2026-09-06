@@ -98,7 +98,7 @@ class SensitiveImpactService:
                     "estimated_arrival": intersected_step["step_label"],
                     "estimated_timestamp": intersected_step["timestamp"],
                     "severity": impact_severity,
-                    "distance_to_core_km": round(min_dist_to_slick, 2),
+                    "distance_to_core_km": round(min_dist_to_slick, 2) if min_dist_to_slick != float("inf") else None,
                     "geojson": self._asset_geojson(asset)
                 })
             else:
@@ -112,7 +112,7 @@ class SensitiveImpactService:
                     "estimated_arrival": "NO_IMPACT_PREDICTED_48H",
                     "estimated_timestamp": None,
                     "severity": "LOW",
-                    "distance_to_core_km": round(min_dist_to_slick, 2),
+                    "distance_to_core_km": round(min_dist_to_slick, 2) if min_dist_to_slick != float("inf") else None,
                     "geojson": self._asset_geojson(asset)
                 })
                 
