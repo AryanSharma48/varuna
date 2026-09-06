@@ -1,0 +1,40 @@
+{
+  "manifest_version": "1.0.0",
+  "dataset_title": "Sentinel-1 SAR Oil Spill & Look-Alike Reference Dataset",
+  "source": "Zenodo Sentinel-1 SAR Oil Spill Dataset (SIH-26143 Reference)",
+  "sensor": "Sentinel-1 C-SAR IW GRDH",
+  "polarizations_supported": ["VV", "VH"],
+  "nominal_resolution_meters": 10.0,
+  "scenes": [
+    {
+      "image_id": "S1A_IW_GRDH_1SDV_20260904T151022_MUMBAI_OFFSHORE",
+      "filepath_vv": "data/raw/mumbai_offshore_vv.tif",
+      "filepath_vh": "data/raw/mumbai_offshore_vh.tif",
+      "acquisition_time": "2026-09-04T15:10:22Z",
+      "split": "test",
+      "class": "OIL",
+      "has_mask": true,
+      "mask_filepath": "data/processed/mumbai_offshore_mask.png",
+      "width": 1024,
+      "height": 1024,
+      "center_lat": 18.92,
+      "center_lon": 72.83,
+      "georeferencing_available": true
+    },
+    {
+      "image_id": "S1B_IW_GRDH_1SDV_20260812T042010_GUJARAT_LOW_WIND",
+      "filepath_vv": "data/raw/gujarat_calm_vv.tif",
+      "filepath_vh": "data/raw/gujarat_calm_vh.tif",
+      "acquisition_time": "2026-08-12T04:20:10Z",
+      "split": "test",
+      "class": "LOOK_ALIKE_LOW_WIND",
+      "has_mask": false,
+      "mask_filepath": null,
+      "width": 1024,
+      "height": 1024,
+      "center_lat": 20.85,
+      "center_lon": 70.42,
+      "georeferencing_available": true
+    }
+  ]
+}
