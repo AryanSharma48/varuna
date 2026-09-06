@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    border-radius: 0px !important;
+  }
+  html, body {
+    background-color: #ffffff;
+    color: #09090b;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Geist', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+    min-height: 100%;
+    overflow-y: auto;
+  }
+}
+
+/* Minimalist scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f4f4f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4d4d8;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1aa;
+}
+
+/* Sharp minimalist panels for inverted white/black theme */
+.border-grid {
+  border-color: #e4e4e7;
+}
+
+.bg-surface {
+  background-color: #ffffff;
+}
+
+.bg-surface-elevated {
+  background-color: #fafafa;
+}
