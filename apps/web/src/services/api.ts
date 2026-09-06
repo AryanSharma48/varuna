@@ -10,6 +10,14 @@ export async function fetchIncident(incidentId: string = 'SIH-2026-001'): Promis
   return res.json();
 }
 
+export async function fetchSatelliteBounds(incidentId: string = 'SIH-2026-001'): Promise<{ coordinates: [[number, number], [number, number], [number, number], [number, number]] }> {
+  const res = await fetch(`${API_BASE}/incidents/${incidentId}/satellite/bounds`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch satellite bounds: ${res.statusText}`);
+  }
+  return res.json();
+}
+
 export async function queryAIS(incidentId: string, searchRadiusKm: number = 35.0): Promise<any> {
   const res = await fetch(`${API_BASE}/incidents/${incidentId}/ais/query`, {
     method: 'POST',

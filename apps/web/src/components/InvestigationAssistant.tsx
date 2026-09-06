@@ -27,7 +27,7 @@ export const InvestigationAssistant: React.FC<InvestigationAssistantProps> = ({
   const [loading, setLoading] = useState(false);
 
   const suggestedQuestions = [
-    "Why is Pacific Voyager ranked #1?",
+    "What is the published DARTIS oil-slick reference for this incident?",
     "Who was near the origin zone?",
     "What was the estimated spill window & origin?",
     "Which sensitive areas could be affected in 12 hours?"
@@ -127,7 +127,7 @@ export const InvestigationAssistant: React.FC<InvestigationAssistantProps> = ({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Ask factual question (e.g. 'Why is Pacific Voyager ranked #1?')..."
+            placeholder="Ask a factual question about this investigation..."
             className="flex-1 bg-white border border-zinc-300 px-3 py-2 text-zinc-950 placeholder-zinc-400 focus:outline-none focus:border-blue-600"
           />
           <button

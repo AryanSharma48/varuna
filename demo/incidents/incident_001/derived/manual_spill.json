@@ -1,0 +1,48 @@
+{
+  "polygon": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          32.849,
+          31.983
+        ],
+        [
+          32.909,
+          31.992
+        ],
+        [
+          32.88,
+          32.126
+        ],
+        [
+          32.82,
+          32.117
+        ],
+        [
+          32.849,
+          31.983
+        ]
+      ]
+    ]
+  },
+  "area_km2": 87.18,
+  "perimeter_km": 41.78,
+  "centroid": {
+    "lon": 32.8645,
+    "lat": 32.0545
+  },
+  "bounding_box": {
+    "min_lon": 32.82,
+    "min_lat": 31.983,
+    "max_lon": 32.909,
+    "max_lat": 32.126
+  },
+  "length_km": 15.58,
+  "width_km": 5.76,
+  "orientation_deg": 100.4,
+  "vertex_count": 4,
+  "dartis_record_id": "ow-0388",
+  "source": "manual_demo_delineation",
+  "provenance": "Manual delineation within published DARTIS reference region; not an automated ML prediction."
+}

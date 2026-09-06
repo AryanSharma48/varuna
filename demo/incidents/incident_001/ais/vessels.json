@@ -1,0 +1,35 @@
+[
+  {
+    "mmsi": 636018245,
+    "vessel_name": "MT AL NAJAF",
+    "vessel_type": "Oil/Chemical Tanker",
+    "flag": "Liberia",
+    "imo": 9421800,
+    "length_m": 183.0,
+    "beam_m": 32.2,
+    "gross_tonnage": 42000,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "vessel_name": "MT LEVANT STAR",
+    "vessel_type": "Crude Oil Tanker",
+    "flag": "Greece",
+    "imo": 9510034,
+    "length_m": 250.0,
+    "beam_m": 44.0,
+    "gross_tonnage": 115000,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "vessel_name": "MV MEDITERRANEAN EXPRESS",
+    "vessel_type": "Container Ship",
+    "flag": "Panama",
+    "imo": 9624510,
+    "length_m": 294.0,
+    "beam_m": 32.0,
+    "gross_tonnage": 54000,
+    "source_type": "SATELLITE_AIS"
+  }
+]

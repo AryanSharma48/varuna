@@ -74,6 +74,16 @@ Thumbs.db
 # Docker
 .dockerignore
 
+# Models & Checkpoints
+models/pretrained/
+*.pth
+
 # Satellite Data Processing
 satellite-data/
 artifacts/
+
+# Derived Heavy ML Outputs & Visualizations
+demo/incidents/*/derived/*.tif
+demo/incidents/*/derived/*.png
+demo/incidents/*/derived/pretrained_candidate.json
+

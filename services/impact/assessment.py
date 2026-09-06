@@ -103,6 +103,7 @@ class SensitiveImpactService:
                 })
             else:
                 # Potential low/monitoring risk
+                safe_dist = round(min_dist_to_slick, 2) if math.isfinite(min_dist_to_slick) else None
                 impacts.append({
                     "asset_id": asset["id"],
                     "asset_name": asset["name"],
@@ -112,7 +113,7 @@ class SensitiveImpactService:
                     "estimated_arrival": "NO_IMPACT_PREDICTED_48H",
                     "estimated_timestamp": None,
                     "severity": "LOW",
-                    "distance_to_core_km": round(min_dist_to_slick, 2) if min_dist_to_slick != float("inf") else None,
+                    "distance_to_core_km": safe_dist,
                     "geojson": self._asset_geojson(asset)
                 })
                 

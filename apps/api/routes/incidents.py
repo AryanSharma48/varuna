@@ -51,9 +51,18 @@ def get_incident_detail(incident_id: str, db: Session = Depends(get_db)):
     
     # Format attribution candidates
     vessels = {v.mmsi: v for v in db.query(Vessel).all()}
+    ais_pts = db.query(AISPoint).order_by(AISPoint.timestamp).all()
+    tracks_by_mmsi = {}
+    for p in ais_pts:
+        if p.mmsi not in tracks_by_mmsi:
+            tracks_by_mmsi[p.mmsi] = []
+        tracks_by_mmsi[p.mmsi].append(p)
+
     formatted_scores = []
     for s in scores:
         v = vessels.get(s.mmsi)
+        pts = tracks_by_mmsi.get(s.mmsi, [])
+        last_pt = pts[-1] if pts else None
         formatted_scores.append({
             "mmsi": s.mmsi,
             "vessel_name": v.vessel_name if v else f"MMSI {s.mmsi}",
@@ -62,6 +71,20 @@ def get_incident_detail(incident_id: str, db: Session = Depends(get_db)):
             "priority_rank": s.priority_rank,
             "total_score": s.total_score,
             "priority_level": s.priority_level,
+            "last_known_lat": last_pt.latitude if last_pt else None,
+            "last_known_lon": last_pt.longitude if last_pt else None,
+            "sog": last_pt.sog if last_pt else None,
+            "cog": last_pt.cog if last_pt else None,
+            "trajectory": [[p.longitude, p.latitude] for p in pts],
+            "ais_points": [
+                {
+                    "timestamp": p.timestamp.isoformat(),
+                    "lat": p.latitude,
+                    "lon": p.longitude,
+                    "sog": p.sog,
+                    "cog": p.cog
+                } for p in pts
+            ],
             "breakdown": {
                 "proximity": s.score_proximity,
                 "timing": s.score_timing,
@@ -718,3 +741,78 @@ async def upload_and_process_sar(
     }
 
 
+
+from fastapi.responses import StreamingResponse
+import io
+
+@router.get("/incidents/{incident_id}/satellite/image")
+def get_satellite_image(incident_id: str, db: Session = Depends(get_db)):
+    import os
+    import rasterio
+    import numpy as np
+    from PIL import Image
+    
+    base_dir = os.path.join("demo", "incidents", "incident_001")
+    vv_path = os.path.join(base_dir, "satellite", "vv.tif")
+        
+    if not os.path.exists(vv_path):
+        raise HTTPException(status_code=404, detail="SAR raster files not found.")
+        
+    try:
+        with rasterio.open(vv_path) as src_vv:
+            from rasterio.enums import Resampling
+            sar_vv = src_vv.read(1, out_shape=(1, 1024, 1024), resampling=Resampling.bilinear).astype(np.float32)
+            
+            # Normal Grayscale SAR image visualization using 2nd-98th percentile stretch
+            valid_pixels = sar_vv[sar_vv > 0]
+            if len(valid_pixels) > 0:
+                p2, p98 = np.percentile(valid_pixels, (2, 98))
+            else:
+                p2, p98 = np.percentile(sar_vv, (2, 98))
+                
+            norm_vv = np.clip((sar_vv - p2) / (p98 - p2 + 1e-7), 0.0, 1.0)
+            gray_array = (norm_vv * 255.0).astype(np.uint8)
+            
+            img = Image.fromarray(gray_array, mode='L')
+            buf = io.BytesIO()
+            img.save(buf, format='PNG', optimize=True)
+            buf.seek(0)
+            
+            return StreamingResponse(buf, media_type="image/png")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to read raster: {e}")
+
+@router.get("/incidents/{incident_id}/satellite/bounds")
+def get_satellite_bounds(incident_id: str, db: Session = Depends(get_db)):
+    import os
+    import rasterio
+    
+    base_dir = os.path.join("demo", "incidents", "incident_001")
+    vv_path = os.path.join(base_dir, "satellite", "vv.tif")
+        
+    if os.path.exists(vv_path):
+        with rasterio.open(vv_path) as src:
+            gcps, gcps_crs = src.gcps
+            if len(gcps) > 0:
+                from rasterio.transform import GCPTransformer
+                transformer = GCPTransformer(gcps)
+                w, h = src.width, src.height
+                # MapLibre image source expects coordinates in [top-left, top-right, bottom-right, bottom-left]
+                # In SAR raster space (row 0 = South, row h = North):
+                # top-left (North-West) = (h, 0)
+                # top-right (North-East) = (h, w)
+                # bottom-right (South-East) = (0, w)
+                # bottom-left (South-West) = (0, 0)
+                tl = transformer.xy(h, 0)
+                tr = transformer.xy(h, w)
+                br = transformer.xy(0, w)
+                bl = transformer.xy(0, 0)
+                return {"coordinates": [[tl[0], tl[1]], [tr[0], tr[1]], [br[0], br[1]], [bl[0], bl[1]]]}
+            else:
+                bounds = src.bounds
+                tl = [bounds.left, bounds.top]
+                tr = [bounds.right, bounds.top]
+                br = [bounds.right, bounds.bottom]
+                bl = [bounds.left, bounds.bottom]
+                return {"coordinates": [tl, tr, br, bl]}
+    raise HTTPException(status_code=404, detail="Bounds not found")

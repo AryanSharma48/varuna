@@ -1,0 +1,47 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "source": "manual_demo_delineation",
+        "incident_id": "SIH-2026-001",
+        "reference_source": "DARTIS ow-0388",
+        "disclaimer": "Manual delineation within published DARTIS reference region; not an automated ML prediction.",
+        "area_km2": 87.18,
+        "perimeter_km": 41.78,
+        "length_km": 15.58,
+        "width_km": 5.76,
+        "orientation_deg": 100.4,
+        "vertex_count": 4
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              32.849,
+              31.983
+            ],
+            [
+              32.909,
+              31.992
+            ],
+            [
+              32.88,
+              32.126
+            ],
+            [
+              32.82,
+              32.117
+            ],
+            [
+              32.849,
+              31.983
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

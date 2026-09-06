@@ -1,0 +1,29 @@
+[
+  {
+    "id": "ANOM-001",
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T14:15:00Z",
+    "latitude": 31.981,
+    "longitude": 32.8265,
+    "anomaly_type": "AIS_GAP",
+    "severity": "HIGH",
+    "description": "Unannounced 22-minute AIS transmission blackout while transiting estimated spill origin centroid.",
+    "raw_details": {
+      "gap_duration_minutes": 22.0,
+      "last_known_speed": 12.8
+    }
+  },
+  {
+    "id": "ANOM-002",
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T14:05:00Z",
+    "latitude": 31.989,
+    "longitude": 32.801,
+    "anomaly_type": "SPEED_JUMP",
+    "severity": "MEDIUM",
+    "description": "Abrupt speed reduction from 13.5 kts to 7.2 kts near origin boundary.",
+    "raw_details": {
+      "speed_delta_kts": -6.3
+    }
+  }
+]

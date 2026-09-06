@@ -4,6 +4,9 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  optimizeDeps: {
+    exclude: ['maplibre-gl', 'react-map-gl', '@vis.gl/react-maplibre']
+  },
   server: {
     port: 5173,
     proxy: {

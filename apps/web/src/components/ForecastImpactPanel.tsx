@@ -39,38 +39,44 @@ export const ForecastImpactPanel: React.FC<ForecastImpactPanelProps> = ({ data }
             COASTAL & MARINE ASSETS IN SPREAD PATH:
           </span>
 
-          {impacts.map((asset) => {
-            const isCrit = asset.severity === 'CRITICAL' || asset.severity === 'HIGH';
+          {impacts.length > 0 ? (
+            impacts.map((asset) => {
+              const isCrit = asset.severity === 'CRITICAL' || asset.severity === 'HIGH';
 
-            return (
-              <div
-                key={asset.asset_id}
-                className={`p-2.5 border ${
-                  isCrit
-                    ? 'bg-blue-50 border-blue-600'
-                    : 'bg-zinc-50 border-zinc-200'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <strong className="text-zinc-950 text-xs font-bold">{asset.asset_name}</strong>
-                  <span
-                    className={`px-1.5 py-0.5 text-[10px] font-bold uppercase border ${
-                      isCrit ? 'border-blue-600 text-blue-700 bg-white' : 'border-zinc-300 text-zinc-600 bg-white'
-                    }`}
-                  >
-                    ETA: {asset.estimated_arrival}
-                  </span>
+              return (
+                <div
+                  key={asset.asset_id}
+                  className={`p-2.5 border ${
+                    isCrit
+                      ? 'bg-blue-50 border-blue-600'
+                      : 'bg-zinc-50 border-zinc-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <strong className="text-zinc-950 text-xs font-bold">{asset.asset_name}</strong>
+                    <span
+                      className={`px-1.5 py-0.5 text-[10px] font-bold uppercase border ${
+                        isCrit ? 'border-blue-600 text-blue-700 bg-white' : 'border-zinc-300 text-zinc-600 bg-white'
+                      }`}
+                    >
+                      ETA: {asset.estimated_arrival}
+                    </span>
+                  </div>
+
+                  <p className="text-[11px] text-zinc-600 mt-1 font-sans leading-relaxed">{asset.description}</p>
+
+                  <div className="flex items-center justify-between text-[10px] text-zinc-500 mt-2 font-bold">
+                    <span>TYPE: {asset.asset_type}</span>
+                    <span>VULNERABILITY: {(asset.vulnerability_index * 100).toFixed(0)}%</span>
+                  </div>
                 </div>
-
-                <p className="text-[11px] text-zinc-600 mt-1 font-sans leading-relaxed">{asset.description}</p>
-
-                <div className="flex items-center justify-between text-[10px] text-zinc-500 mt-2 font-bold">
-                  <span>TYPE: {asset.asset_type}</span>
-                  <span>VULNERABILITY: {(asset.vulnerability_index * 100).toFixed(0)}%</span>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <div className="p-3 bg-zinc-50 border border-zinc-200 text-center text-zinc-500 italic">
+              DATA UNAVAILABLE FOR THIS DEMONSTRATION INCIDENT
+            </div>
+          )}
         </div>
       </div>
     </div>

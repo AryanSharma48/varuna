@@ -10,12 +10,12 @@ class IncidentReportGenerator:
         pass
 
     def generate_report(self, incident_data: Dict[str, Any]) -> Dict[str, Any]:
-        inc = incident_data.get("incident", {})
-        det = incident_data.get("detection", {})
-        qg = incident_data.get("quality_gate", {})
-        origin = incident_data.get("origin_estimate", {})
-        scores = incident_data.get("attribution_scores", [])
-        impacts = incident_data.get("impacts", [])
+        inc = incident_data.get("incident", {}) or {}
+        det = incident_data.get("detection") or {}
+        qg = incident_data.get("quality_gate") or {}
+        origin = incident_data.get("origin_estimate") or {}
+        scores = incident_data.get("attribution_scores") or []
+        impacts = incident_data.get("impacts") or []
         
         top_candidate = scores[0] if scores else {}
         
@@ -33,10 +33,10 @@ class IncidentReportGenerator:
 | Field | Investigation Detail |
 |---|---|
 | **Incident Status** | `{inc.get('status', 'INVESTIGATING')}` |
-| **Observation Centroid** | `{inc.get('center_lat', 18.92):.4f}° N, {inc.get('center_lon', 72.83):.4f}° E` |
+| **Observation Centroid** | `{inc.get('center_lat', 0):.4f}° N, {inc.get('center_lon', 0):.4f}° E` |
 | **Primary Sensor** | Sentinel-1 SAR (C-Band Synthetic Aperture Radar, VV/VH) |
-| **AIS Data Source** | {inc.get('provenance', {}).get('ais_source', 'Synthetic Controlled Demo Scenario (MarineCadastre format)')} |
-| **Highest Priority Candidate** | **{top_candidate.get('vessel_name', 'PACIFIC VOYAGER')}** (MMSI: `{top_candidate.get('mmsi', 412356789)}`, Score: `{top_candidate.get('total_score', 91.2)}/100`) |
+| **AIS Data Source** | {inc.get('provenance', {}).get('ais_source', 'Unavailable')} |
+| **Highest Priority Candidate** | {f"**{top_candidate.get('vessel_name', 'N/A')}** (MMSI: `{top_candidate.get('mmsi', 'N/A')}`, Score: `{top_candidate.get('total_score', 'N/A')}/100`)" if top_candidate else '**AIS attribution unavailable for this incident**'} |
 
 > **IMPORTANT LEGAL NOTICE:**  
 > Vessel rankings and attribution scores produced by this system represent **actionable investigation priorities** derived from multiple independent corroborating evidence streams (satellite SAR detection, backward drift reconstruction, AIS track kinematics, and transponder gap analysis). They **do NOT establish formal legal liability or criminal guilt**.

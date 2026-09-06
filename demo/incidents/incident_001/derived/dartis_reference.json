@@ -1,0 +1,39 @@
+{
+  "source": "DARTIS",
+  "record_id": "ow-0388",
+  "sentinel1_product": "S1B_IW_GRDH_1SDV_20190610T154813_20190610T154838_016636_01F4FD_EE80.SAFE",
+  "reference_location": {
+    "longitude": 32.8490217560092,
+    "latitude": 31.9827590094738
+  },
+  "geometry_type": "Polygon",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          32.8490217560092,
+          31.9827590094738
+        ],
+        [
+          32.9095542244857,
+          31.9921367943323
+        ],
+        [
+          32.8805127235375,
+          32.1267688686379
+        ],
+        [
+          32.819980255061,
+          32.1173910837794
+        ],
+        [
+          32.8490217560092,
+          31.9827590094738
+        ]
+      ]
+    ]
+  },
+  "coordinate_system": "EPSG:4326",
+  "provenance": "Published DARTIS reference annotation (DLR PANGAEA DOI: 10.1594/PANGAEA.980773)"
+}

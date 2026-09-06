@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Pause, RotateCcw } from 'lucide-react';
+import { IncidentData } from '../types';
 
 interface TimelineSliderProps {
+  data?: IncidentData | null;
   timelineMinutes: number;
   onChangeTimeline: (minutes: number) => void;
 }
 
 export const TimelineSlider: React.FC<TimelineSliderProps> = ({
+  data,
   timelineMinutes,
   onChangeTimeline
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const totalMinutes = 720; // 10:00 to 22:00 UTC
+  const totalMinutes = 720; // Generic 12 hours
+
 
   useEffect(() => {
     let interval: any = null;
@@ -24,11 +28,11 @@ export const TimelineSlider: React.FC<TimelineSliderProps> = ({
   }, [isPlaying, timelineMinutes]);
 
   const formatTime = (minutes: number) => {
-    const startHour = 10;
-    const currentTotalMinutes = startHour * 60 + minutes;
-    const hour = Math.floor(currentTotalMinutes / 60) % 24;
-    const min = Math.floor(currentTotalMinutes % 60);
-    return `${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')} UTC`;
+    const baseDate = new Date("2019-06-10T12:00:00Z");
+    const targetDate = new Date(baseDate.getTime() + minutes * 60 * 1000);
+    const hour = targetDate.getUTCHours().toString().padStart(2, '0');
+    const min = targetDate.getUTCMinutes().toString().padStart(2, '0');
+    return `${hour}:${min} UTC (10 JUN 2019)`;
   };
 
   return (
@@ -61,11 +65,12 @@ export const TimelineSlider: React.FC<TimelineSliderProps> = ({
         </div>
 
         <div className="relative flex-1 flex items-center">
-          {/* Origin critical window mark */}
-          <div
-            className="absolute h-3 bg-blue-600/30 border-x border-blue-500 pointer-events-none"
-            style={{ left: `${(210 / 720) * 100}%`, width: `${(75 / 720) * 100}%` }}
-          />
+          {data?.origin_estimate && (
+            <div
+              className="absolute h-3 bg-blue-600/30 border-x border-blue-500 pointer-events-none"
+              style={{ left: `20%`, width: `10%` }}
+            />
+          )}
 
           <input
             type="range"
@@ -79,16 +84,18 @@ export const TimelineSlider: React.FC<TimelineSliderProps> = ({
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-3 text-[10px] text-zinc-500 shrink-0">
-        <span className="flex items-center gap-1 text-blue-400">
-          <span className="w-2 h-2 bg-blue-500" />
-          ORIGIN WINDOW (13:30–14:45)
-        </span>
-        <span className="flex items-center gap-1 text-zinc-400">
-          <span className="w-2 h-2 bg-white" />
-          SAR PASS (15:10)
-        </span>
-      </div>
+      {data?.scene && (
+        <div className="flex items-center gap-3 text-[10px] text-zinc-500 shrink-0">
+          <span className="flex items-center gap-1 text-blue-400">
+            <span className="w-2 h-2 bg-blue-500" />
+            ORIGIN WINDOW
+          </span>
+          <span className="flex items-center gap-1 text-zinc-400">
+            <span className="w-2 h-2 bg-white" />
+            SAR PASS ({data.scene.acquisition_time.split('T')[1].substring(0, 5)} UTC)
+          </span>
+        </div>
+      )}
     </div>
   );
 };

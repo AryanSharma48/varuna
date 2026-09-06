@@ -49,11 +49,12 @@ export interface IncidentData {
     origin_window_end: string;
     geojson: any;
     forcing_used: {
-      wind_speed_ms: number;
-      wind_direction_deg: number;
-      current_speed_ms: number;
-      current_direction_deg: number;
-      source_name: string;
+      status?: string;
+      wind_speed_ms?: number;
+      wind_direction_deg?: number;
+      current_speed_ms?: number;
+      current_direction_deg?: number;
+      source_name?: string;
     };
   } | null;
   attribution_scores: CandidateVessel[];
@@ -71,6 +72,21 @@ export interface CandidateVessel {
   priority_rank: number;
   total_score: number;
   priority_level: 'HIGH' | 'MEDIUM' | 'LOW';
+  last_known_lat?: number;
+  last_known_lon?: number;
+  sog?: number;
+  cog?: number;
+  lat?: number;
+  lon?: number;
+  isDark?: boolean;
+  trajectory?: number[][];
+  ais_points?: {
+    timestamp: string;
+    lat: number;
+    lon: number;
+    sog: number;
+    cog: number;
+  }[];
   breakdown: {
     proximity: number;
     timing: number;

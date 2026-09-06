@@ -1,0 +1,10 @@
+{
+  "timestamp": "2019-06-10T15:00:00Z",
+  "source": "ECMWF ERA5 & CMEMS Med-Currents",
+  "wind_speed_ms": 2.56,
+  "wind_direction_deg": 325.0,
+  "current_speed_ms": 0.35,
+  "current_direction_deg": 75.0,
+  "sea_surface_temp_c": 24.5,
+  "wave_height_m": 0.6
+}

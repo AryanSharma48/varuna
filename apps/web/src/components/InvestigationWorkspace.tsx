@@ -234,6 +234,7 @@ export const InvestigationWorkspace: React.FC = () => {
           </div>
 
           <TimelineSlider
+            data={data}
             timelineMinutes={timelineMinutes}
             onChangeTimeline={setTimelineMinutes}
           />
@@ -255,7 +256,7 @@ export const InvestigationWorkspace: React.FC = () => {
                 <div>
                   <span className="text-[10px] text-zinc-500 uppercase block">HYDRODYNAMIC RECONSTRUCTION</span>
                   <h2 className="text-xs font-bold text-zinc-950 uppercase tracking-wider">
-                    Lagrangian Backward Simulation
+                    {data?.incident?.title || 'Lagrangian Backward Simulation'}
                   </h2>
                 </div>
                 <span className="border border-zinc-200 px-2 py-0.5 text-[10px] text-zinc-600 bg-zinc-50">
@@ -264,24 +265,31 @@ export const InvestigationWorkspace: React.FC = () => {
               </div>
 
               <div className="space-y-3 overflow-y-auto">
-                <div className="p-3 bg-blue-50 border border-blue-600 space-y-2">
-                  <span className="text-[10px] text-blue-700 uppercase tracking-wider block font-bold">
-                    PROBABLE ORIGIN REGION
-                  </span>
-                  <div>CENTROID: <strong className="text-zinc-950">18.8500° N, 72.7200° E</strong></div>
-                  <div>90% UNCERTAINTY: <strong className="text-zinc-950">4.2 km</strong></div>
-                  <div>ESTIMATED SPILL WINDOW: <strong className="text-zinc-950">13:30 – 14:45 UTC</strong></div>
-                </div>
+                {data?.origin_estimate ? (
+                  <>
+                    <div className="p-3 bg-blue-50 border border-blue-600 space-y-2">
+                      <span className="text-[10px] text-blue-700 uppercase tracking-wider block font-bold">
+                        PROBABLE ORIGIN REGION
+                      </span>
+                      <div>CENTROID: <strong className="text-zinc-950">{data.origin_estimate.origin_center_lat.toFixed(4)}° N, {data.origin_estimate.origin_center_lon.toFixed(4)}° E</strong></div>
+                      <div>90% UNCERTAINTY: <strong className="text-zinc-950">{data.origin_estimate.uncertainty_radius_km} km</strong></div>
+                      <div>ESTIMATED SPILL WINDOW: <strong className="text-zinc-950">{data.origin_estimate.origin_window_start.split('T')[1].substring(0,5)} – {data.origin_estimate.origin_window_end.split('T')[1].substring(0,5)} UTC</strong></div>
+                    </div>
 
-                <div className="p-3 bg-zinc-50 border border-zinc-200 space-y-2">
-                  <span className="text-[10px] text-zinc-500 uppercase tracking-wider block font-bold">
-                    FORCING APPLIED:
-                  </span>
-                  <div>SURFACE CURRENT: <span className="text-zinc-900">0.35 m/s @ 75° (ENE)</span></div>
-                  <div>SURFACE WIND: <span className="text-zinc-900">6.2 m/s @ 240° (SW)</span></div>
-                  <div>WINDAGE FACTOR: <span className="text-zinc-900">3.0% EMPIRICAL</span></div>
-                  <div>TURBULENT DIFFUSION: <span className="text-zinc-900">D = 2.0 m²/s</span></div>
-                </div>
+                    <div className="p-3 bg-zinc-50 border border-zinc-200 space-y-2">
+                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider block font-bold">
+                        FORCING APPLIED:
+                      </span>
+                      <div>SURFACE CURRENT: <span className="text-zinc-900">{data.origin_estimate.forcing_used.current_speed_ms} m/s @ {data.origin_estimate.forcing_used.current_direction_deg}°</span></div>
+                      <div>SURFACE WIND: <span className="text-zinc-900">{data.origin_estimate.forcing_used.wind_speed_ms} m/s @ {data.origin_estimate.forcing_used.wind_direction_deg}°</span></div>
+                      <div>SOURCE: <span className="text-zinc-900">{data.origin_estimate.forcing_used.source_name}</span></div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="p-6 border border-zinc-200 bg-zinc-50 text-center text-zinc-500 font-bold text-xs uppercase">
+                    Data unavailable for this demonstration incident.
+                  </div>
+                )}
 
                 <button
                   onClick={handleTraceOrigin}
@@ -310,36 +318,23 @@ export const InvestigationWorkspace: React.FC = () => {
               </div>
 
               <div className="flex-1 overflow-y-auto space-y-2.5">
-                <div className="p-3 bg-blue-50 border border-blue-600 space-y-1.5">
-                  <div className="flex items-center justify-between text-blue-800 font-bold text-[11px]">
-                    <span>[CRITICAL ANOMALY] 40-MIN AIS GAP</span>
-                    <span>MMSI 412356789</span>
+                {data?.anomalies && data.anomalies.length > 0 ? (
+                  data.anomalies.map(anomaly => (
+                    <div key={anomaly.id} className="p-3 bg-blue-50 border border-blue-600 space-y-1.5">
+                      <div className="flex items-center justify-between text-blue-800 font-bold text-[11px]">
+                        <span>[{anomaly.severity} ANOMALY] {anomaly.anomaly_type}</span>
+                        <span>MMSI {anomaly.mmsi}</span>
+                      </div>
+                      <p className="text-zinc-700 font-sans text-xs">
+                        {anomaly.description}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-6 border border-zinc-200 bg-zinc-50 text-center text-zinc-500 font-bold text-xs uppercase mt-4">
+                    AIS data unavailable for this demonstration incident.
                   </div>
-                  <p className="text-zinc-700 font-sans text-xs">
-                    PACIFIC VOYAGER ceased AIS transmissions for 40 minutes exactly while crossing the probable origin zone. 
-                    Speed throttled from 14.2 kts to 6.1 kts before reappearing.
-                  </p>
-                </div>
-
-                <div className="p-3 bg-zinc-50 border border-zinc-200 space-y-1.5">
-                  <div className="flex items-center justify-between text-zinc-700 font-bold text-[11px]">
-                    <span>NORDIC TRADER (MMSI 211567890)</span>
-                    <span className="text-zinc-500 font-bold">NORMAL</span>
-                  </div>
-                  <p className="text-zinc-600 font-sans text-xs">
-                    Transited east corridor without transmission gaps or speed anomalies. Closest approach: 11.2 km.
-                  </p>
-                </div>
-
-                <div className="p-3 bg-zinc-50 border border-zinc-200 space-y-1.5">
-                  <div className="flex items-center justify-between text-zinc-700 font-bold text-[11px]">
-                    <span>OCEAN EXPLORER (MMSI 352678901)</span>
-                    <span className="text-zinc-500 font-bold">NORMAL</span>
-                  </div>
-                  <p className="text-zinc-600 font-sans text-xs">
-                    Southbound transit along outer fairway. Closest approach: 22.4 km.
-                  </p>
-                </div>
+                )}
               </div>
             </div>
           )}
