@@ -1,0 +1,14 @@
+{
+  "overlap_found": true,
+  "dartis_reference_location": [
+    32.8490217560092,
+    31.9827590094738
+  ],
+  "primary_unet_centroid": [
+    32.994115,
+    31.996655
+  ],
+  "distance_to_reference_km": 13.787,
+  "predicted_area_km2": 110.732,
+  "status": "CONCORDANT"
+}

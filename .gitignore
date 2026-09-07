@@ -76,7 +76,9 @@ Thumbs.db
 
 # Models & Checkpoints
 models/pretrained/
+models/checkpoints/*.pt
 *.pth
+*.pt
 
 # Satellite Data Processing
 satellite-data/
@@ -86,4 +88,5 @@ artifacts/
 demo/incidents/*/derived/*.tif
 demo/incidents/*/derived/*.png
 demo/incidents/*/derived/pretrained_candidate.json
-
+training-data
+training_data

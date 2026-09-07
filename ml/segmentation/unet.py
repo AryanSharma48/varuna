@@ -97,6 +97,8 @@ class DiceBCELoss(nn.Module):
         self.bce_weight = bce_weight
 
     def forward(self, preds: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+        preds = preds.float()
+        targets = targets.float()
         bce = F.binary_cross_entropy(preds, targets)
         
         preds_flat = preds.view(-1)

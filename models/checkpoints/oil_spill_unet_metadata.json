@@ -1,0 +1,42 @@
+{
+  "dataset": "Refined Deep-SAR Oil Spill (SOS) - Zenodo 15298010",
+  "image_channels": "2 (Dual SAR representation [sar_norm, sar_norm])",
+  "input_resolution": [
+    256,
+    256
+  ],
+  "preprocessing": "Normalized linear stretch [0.0, 1.0] (sar_band / 255.0)",
+  "architecture": "U-Net (Standard 4-level encoder-decoder with bilinear upsampling)",
+  "encoder": "DoubleConv (64 -> 128 -> 256 -> 512 -> 512)",
+  "loss": "DiceBCELoss (0.5 * BCE + 0.5 * Dice)",
+  "optimizer": "AdamW",
+  "learning_rate": 0.0001,
+  "batch_size": 16,
+  "epochs_trained": 6,
+  "seed": 42,
+  "device": "cuda",
+  "calibrated_threshold": 0.5,
+  "validation_metrics": {
+    "iou": 0.7100177652601352,
+    "dice": 0.8304215075240686,
+    "precision": 0.8108493555044423,
+    "recall": 0.8509618894712023,
+    "accuracy": 0.9054926195109201,
+    "tp": 12238185,
+    "fp": 2854859,
+    "tn": 35651103,
+    "fn": 2143405
+  },
+  "test_metrics": {
+    "iou": 0.7076699278176171,
+    "dice": 0.8288134800406144,
+    "precision": 0.8086339905463427,
+    "recall": 0.850025906237539,
+    "accuracy": 0.9055236023251373,
+    "tp": 12110773,
+    "fp": 2866056,
+    "tn": 35839498,
+    "fn": 2136761
+  },
+  "checkpoint_file": "models/checkpoints/oil_spill_unet_best.pt"
+}
