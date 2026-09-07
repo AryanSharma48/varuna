@@ -1,6 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Amita:wght@400;700&family=Cinzel:wght@400;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.font-amita {
+  font-family: 'Amita', cursive !important;
+}
+
+.font-cinzel {
+  font-family: 'Cinzel', serif !important;
+}
 
 @layer base {
   html, body {
@@ -85,42 +95,35 @@
   background-color: #fafafa;
 }
 
-/* Apple iOS Liquid Glass Specular System */
+/* Seamless Low-Opacity Glass System (No Borders) */
 .liquid-glass {
-  background: rgba(6, 11, 20, 0.68);
-  backdrop-filter: blur(28px) saturate(190%);
-  -webkit-backdrop-filter: blur(28px) saturate(190%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.25),
-    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.05),
-    0 24px 60px rgba(0, 0, 0, 0.65);
+  background: rgba(6, 12, 24, 0.22);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: none;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
 }
 
 .liquid-glass-subtle {
-  background: rgba(6, 11, 20, 0.52);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.18),
-    0 10px 30px rgba(0, 0, 0, 0.45);
+  background: rgba(6, 12, 24, 0.14);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: none;
+  box-shadow: none;
 }
 
 .liquid-glass-interactive {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.22);
+  border: none;
+  box-shadow: none;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .liquid-glass-interactive:hover {
-  background: rgba(255, 255, 255, 0.16);
-  border-color: rgba(255, 255, 255, 0.32);
-  box-shadow: 
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.38),
-    0 8px 24px rgba(0, 0, 0, 0.4);
+  background: rgba(255, 255, 255, 0.14);
+  border: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   transform: translateY(-1px);
 }

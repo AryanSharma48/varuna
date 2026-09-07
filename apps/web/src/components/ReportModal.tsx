@@ -36,9 +36,9 @@ export const ReportModal: React.FC<ReportModalProps> = ({ incidentId, onClose })
         {/* Header */}
         <div className="px-6 py-4 border-b border-zinc-200 flex items-center justify-between bg-zinc-50">
           <div>
-            <span className="text-[10px] text-zinc-500 uppercase block font-bold">AUDIT DOSSIER</span>
+            <span className="text-[10px] text-zinc-500 uppercase block font-bold">CASE SUMMARY</span>
             <h3 className="text-xs font-bold text-zinc-950 uppercase tracking-wider">
-              Official Incident Investigation Report
+              Incident Investigation Report
             </h3>
           </div>
 
@@ -72,7 +72,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({ incidentId, onClose })
         <div className="flex-1 p-6 overflow-y-auto bg-white text-zinc-800 whitespace-pre-wrap leading-relaxed selection:bg-blue-600 selection:text-white">
           {loading ? (
             <div className="text-zinc-500 italic">
-              Compiling multi-sensor evidence dossier...
+              Compiling investigation report...
             </div>
           ) : (
             report

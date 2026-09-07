@@ -148,7 +148,6 @@ export const KoreanGradation: React.FC<KoreanGradationProps> = ({
       uniform float u_angle;
       uniform float u_wave;
       uniform float u_wave_clock;
-      uniform float u_scroll_shift;
       uniform float u_grain;
       
       uniform vec3 u_color0;
@@ -219,8 +218,7 @@ export const KoreanGradation: React.FC<KoreanGradationProps> = ({
         // Cross-axis wave offset:
         float waveOffset = (u_wave / 100.0) * 0.35 * sin(crossAxis * 2.4 * 6.28318530718 + u_wave_clock);
 
-        // As the user scrolls down, u_scroll_shift pushes waves UP and transitions into the white crest (u_color0)
-        float p = along + waveOffset - u_scroll_shift;
+        float p = along + waveOffset;
 
         vec3 color = sampleStripeField(p);
 
@@ -289,7 +287,6 @@ export const KoreanGradation: React.FC<KoreanGradationProps> = ({
     const uAngleLoc = gl.getUniformLocation(program, 'u_angle');
     const uWaveLoc = gl.getUniformLocation(program, 'u_wave');
     const uWaveClockLoc = gl.getUniformLocation(program, 'u_wave_clock');
-    const uScrollShiftLoc = gl.getUniformLocation(program, 'u_scroll_shift');
     const uGrainLoc = gl.getUniformLocation(program, 'u_grain');
 
     const uColor0Loc = gl.getUniformLocation(program, 'u_color0');
@@ -317,28 +314,9 @@ export const KoreanGradation: React.FC<KoreanGradationProps> = ({
     updateSize();
     window.addEventListener('resize', updateSize);
 
-    // Scroll tracking with smooth lerp
-    let targetScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
-    let currentScrollY = targetScrollY;
-
-    const onScroll = () => {
-      targetScrollY = window.scrollY;
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-
     // Render loop
     const render = (now: number) => {
       updateSize();
-
-      // Smooth lerp scroll interpolation for fluid response
-      currentScrollY += (targetScrollY - currentScrollY) * 0.08;
-
-      const maxScroll = Math.max(
-        (typeof document !== 'undefined' && document.documentElement ? document.documentElement.scrollHeight - window.innerHeight : 1000),
-        1
-      );
-      const scrollFraction = Math.min(Math.max(currentScrollY / maxScroll, 0.0), 1.0);
 
       const elapsedSeconds = (now - startTimeRef.current) / 1000.0;
       const speedFactor = config.speed / 100.0;
@@ -356,10 +334,8 @@ export const KoreanGradation: React.FC<KoreanGradationProps> = ({
 
       gl.uniform2f(uResolutionLoc, canvas.width, canvas.height);
 
-      // Waves travel UPWARDS on screen as you scroll down
-      const scrollYOffset = scrollFraction * canvas.height * 0.45;
       const centerX = (config.centerX / 100.0) * canvas.width;
-      const centerY = ((100.0 - config.centerY) / 100.0) * canvas.height + scrollYOffset;
+      const centerY = ((100.0 - config.centerY) / 100.0) * canvas.height;
       gl.uniform2f(uCenterLoc, centerX, centerY);
 
       const diag = Math.sqrt(canvas.width * canvas.width + canvas.height * canvas.height);
@@ -369,13 +345,8 @@ export const KoreanGradation: React.FC<KoreanGradationProps> = ({
       // Steady wave vector: no velocity/vector increase!
       gl.uniform1f(uWaveLoc, config.wave);
 
-      // As you scroll down, scrollShift moves waves UP and transitions into the pure white foreground of the last wave
-      // At scrollFraction = 1.0, scrollShift = 0.95, ensuring all samples fall in the pure white crest (u_color0)
-      const scrollShift = scrollFraction * 0.95;
-
       gl.uniform1f(uAngleLoc, animatedAngle);
       gl.uniform1f(uWaveClockLoc, waveClock);
-      gl.uniform1f(uScrollShiftLoc, scrollShift);
       gl.uniform1f(uGrainLoc, config.grain);
 
       // Pass colors
@@ -395,7 +366,6 @@ export const KoreanGradation: React.FC<KoreanGradationProps> = ({
 
     return () => {
       window.removeEventListener('resize', updateSize);
-      window.removeEventListener('scroll', onScroll);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }

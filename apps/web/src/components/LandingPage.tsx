@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { inspectRaster, uploadSAR } from '../services/api';
-import { SmokeShader } from './SmokeShader';
+import { WavesShader } from './WavesShader';
 import { RoadmapSection } from './RoadmapSection';
 
 export const LandingPage: React.FC = () => {
@@ -9,7 +9,7 @@ export const LandingPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'demo' | 'custom'>('demo');
 
   // Custom Form Inputs
-  const [title, setTitle] = useState('Arabian Sea Sector 4 — Sentinel-1 Observation');
+  const [title, setTitle] = useState('Arabian Sea Sector 4: Sentinel-1 Observation');
   const [lat, setLat] = useState('18.9200');
   const [lon, setLon] = useState('72.8300');
   const [windSpeed, setWindSpeed] = useState('6.2');
@@ -97,89 +97,74 @@ export const LandingPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-black text-slate-100 font-sans flex flex-col relative overflow-x-hidden">
       
-      {/* Animated WebGL Smoke Flow Shader Background */}
+      {/* Animated WebGL Waves Flow Shader Background */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <SmokeShader className="w-full h-full opacity-60" />
-      </div>
-
-      {/* Top-Left Brand Capsule (No full-width ribbon bar) */}
-      <div className="pt-6 px-4 sm:px-6 md:px-10 max-w-[1600px] mx-auto w-full flex items-center justify-start relative z-30">
-        <div className="inline-flex items-center gap-3.5 liquid-glass px-4 py-3 rounded-2xl border border-white/20 shadow-2xl backdrop-blur-2xl">
-          <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center font-extrabold text-xl font-heading border border-white/20 shrink-0">
-            V
-          </div>
-          <div className="flex flex-col">
-            <span className="font-extrabold text-white tracking-tight text-xl sm:text-2xl font-heading leading-tight drop-shadow-sm">
-              VARUNA
-            </span>
-            <span className="text-xs sm:text-sm text-slate-200 font-medium font-sans tracking-wide">
-              Maritime Oil Spill Attribution Platform
-            </span>
-          </div>
-        </div>
+        <WavesShader className="w-full h-full" />
       </div>
 
       {/* Main Content */}
       <main className="max-w-[1600px] mx-auto w-full px-4 sm:px-6 md:px-10 py-10 space-y-10 flex-1 relative z-10">
         
-        {/* Punchy Hero Centerpiece */}
-        <section className="text-center max-w-5xl mx-auto liquid-glass rounded-3xl px-6 sm:px-12 md:px-16 py-12 md:py-16 border border-white/20">
-          <div className="space-y-5">
-
-            {/* Dominant Headline (Crisp, High Contrast, No Glows) */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold font-heading text-white tracking-tight leading-[1.08]">
-              Satellite Oil Spill <br className="hidden sm:inline" />
-              Attribution
-            </h1>
-
-            {/* Explanatory Deck */}
-            <p className="text-sm sm:text-base md:text-lg text-slate-300 leading-relaxed max-w-3xl mx-auto font-normal font-sans">
-              Detect marine oil slicks from satellite SAR imagery, reconstruct discharge origin with reverse Lagrangian particle drift, and match rogue vessel trajectories using AIS forensics.
-            </p>
-          </div>
+        {/* Hero Title - Seamless without background box */}
+        <section className="text-center max-w-7xl mx-auto py-12 sm:py-16 md:py-20 flex items-center justify-center">
+          <h1 className="flex items-center justify-center w-full">
+            <span 
+              className="text-6xl sm:text-8xl md:text-9xl lg:text-[10rem] xl:text-[12rem] font-bold tracking-normal leading-none font-amita select-none bg-clip-text text-transparent"
+              style={{ 
+                fontFamily: "'Amita', cursive",
+                backgroundImage: 'linear-gradient(180deg, #0b1d3a, #1a56db)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                color: 'transparent'
+              }}
+            >
+              वरुण
+            </span>
+          </h1>
         </section>
 
         {/* The Crisis & The Solution Spotlight */}
-        <section className="liquid-glass rounded-3xl overflow-hidden shadow-2xl w-full border border-white/15">
+        <section className="liquid-glass rounded-3xl overflow-hidden shadow-2xl w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 items-stretch">
             
             {/* Left Content Column */}
-            <div className="lg:col-span-6 p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-between space-y-6">
+            <div className="lg:col-span-6 p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-center space-y-6 sm:space-y-8">
               
-              {/* Problem: Oil Spills in Harsh Reality */}
+              {/* Problem */}
               <div className="space-y-3">
-                <h2 className="text-xl sm:text-2xl font-bold font-heading text-white tracking-tight leading-snug">
-                  Millions of Tonnes of Toxic Crude &amp; Bilge Dumped in Complete Secrecy
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading text-white tracking-tight leading-tight">
+                  Tankers dump oily bilge at night and turn off transponders to avoid fines.
                 </h2>
 
-                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal font-sans">
-                  Oil spills are catastrophic, suffocating oceanic ecosystems, wiping out coastal fisheries, and decimating marine wildlife for generations. Rogue vessels routinely exploit the open ocean’s vastness—purposely turning off AIS trackers under dark hours to illegally flush toxic bilge and wash cargo tanks with near-total impunity.
+                <p className="text-base sm:text-lg text-slate-200 leading-relaxed font-normal font-sans">
+                  Most marine oil pollution does not come from tanker shipwrecks. It comes from cargo vessels routinely washing tanks and flushing oily engine bilge into open waters, knowing coast guards rarely catch them.
                 </p>
               </div>
 
-              {/* Solution: How Varuna Solves It */}
-              <div className="border-t border-white/10 pt-5 space-y-3">
-                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
-                  <strong className="text-white font-bold">Varuna eliminates the blind spots.</strong> By combining all-weather space radar satellites with backward Lagrangian ocean drift simulation and AIS pattern forensics, Varuna rewinds oceanic currents to pinpoint the exact discharge coordinate, matches rogue vessel trajectories, and generates court-admissible attribution evidence.
+              {/* Solution */}
+              <div className="space-y-4">
+                <p className="text-base sm:text-lg text-slate-200 leading-relaxed">
+                  <strong className="text-white font-bold">Varuna traces the slick back to the ship.</strong> We analyze satellite radar to spot fresh slicks, simulate ocean currents backward to find where the oil was dropped, and match that window with ship tracking data.
                 </p>
 
-                <div className="flex flex-wrap gap-2 pt-1 text-[11px] font-medium text-slate-200">
-                  <span className="liquid-glass-interactive px-3 py-1 rounded-xl text-white font-medium text-[11px]">
-                    Zero-Blindspot Radar
+                <div className="flex flex-wrap gap-2.5 pt-2 text-xs sm:text-sm font-medium text-slate-200">
+                  <span className="liquid-glass-interactive px-3.5 py-1.5 rounded-xl text-white font-medium text-xs sm:text-sm">
+                    Satellite Radar Detection
                   </span>
-                  <span className="liquid-glass-interactive px-3 py-1 rounded-xl text-white font-medium text-[11px]">
-                    Reverse Ocean Drift
+                  <span className="liquid-glass-interactive px-3.5 py-1.5 rounded-xl text-white font-medium text-xs sm:text-sm">
+                    Reverse Drift Backtrack
                   </span>
-                  <span className="liquid-glass-interactive px-3 py-1 rounded-xl text-white font-medium text-[11px]">
-                    AIS Ghost-Ship Forensics
+                  <span className="liquid-glass-interactive px-3.5 py-1.5 rounded-xl text-white font-medium text-xs sm:text-sm">
+                    Vessel AIS Forensics
                   </span>
                 </div>
               </div>
 
             </div>
 
-            {/* Right Column: User's Oil Spill Image */}
-            <div className="lg:col-span-6 relative min-h-[300px] sm:min-h-[360px] lg:min-h-full overflow-hidden border-t lg:border-t-0 lg:border-l border-white/10">
+            {/* Right Column: Oil Spill Image */}
+            <div className="lg:col-span-6 relative min-h-[300px] sm:min-h-[360px] lg:min-h-full overflow-hidden">
               <img
                 src="/oil_spill_disaster.jpg?v=2"
                 alt="Aerial view of marine oil spill disaster and response vessel"
@@ -194,41 +179,41 @@ export const LandingPage: React.FC = () => {
         <RoadmapSection />
 
         {/* Primary Investigation Hub */}
-        <section className="liquid-glass rounded-2xl shadow-2xl overflow-hidden border border-white/15">
+        <section className="liquid-glass rounded-2xl shadow-2xl overflow-hidden">
           {/* Pathway Tabs */}
-          <div className="flex border-b border-white/10 p-1.5 gap-1.5 bg-white/5 backdrop-blur-md">
+          <div className="flex p-1.5 gap-1.5 bg-white/5 backdrop-blur-md">
             <button
               onClick={() => setActiveTab('demo')}
               className={`flex-1 py-2.5 px-4 text-xs font-bold rounded-xl transition-all text-center ${
                 activeTab === 'demo'
-                  ? 'liquid-glass text-white shadow-md border border-white/25'
+                  ? 'liquid-glass text-white shadow-md'
                   : 'text-slate-300 hover:text-white hover:bg-white/5'
               }`}
             >
-              Option 1: Open Benchmark Incident (VARUNA-2026-001)
+              Option 1: View Sample Incident (14.2 km² Levantine Basin Slick)
             </button>
             <button
               onClick={() => setActiveTab('custom')}
               className={`flex-1 py-2.5 px-4 text-xs font-bold rounded-xl transition-all text-center ${
                 activeTab === 'custom'
-                  ? 'liquid-glass text-white shadow-md border border-white/25'
+                  ? 'liquid-glass text-white shadow-md'
                   : 'text-slate-300 hover:text-white hover:bg-white/5'
               }`}
             >
-              Option 2: Process Custom Satellite Observation
+              Option 2: Upload Your Own Satellite Image
             </button>
           </div>
 
           {/* TAB 1: BENCHMARK DEMO */}
           {activeTab === 'demo' && (
             <div className="p-6 md:p-8 space-y-6">
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-4">
                 <div>
                   <div className="text-xs font-bold text-slate-300 uppercase tracking-wide">
-                    PRE-CONFIGURED BENCHMARK INCIDENT
+                    VERIFIED SAMPLE INCIDENT
                   </div>
                   <div className="text-lg font-bold text-white">
-                    Incident ID: VARUNA-2026-001
+                    Incident VARUNA-2026-001 (Eastern Mediterranean)
                   </div>
                 </div>
                 <div className="flex gap-2 text-xs">
@@ -236,44 +221,44 @@ export const LandingPage: React.FC = () => {
                     DARTIS 2019 (ow-0388)
                   </span>
                   <span className="px-2.5 py-1 liquid-glass-subtle text-slate-200 rounded-lg font-medium">
-                    Sentinel-1B GRDH
+                    Sentinel-1B Radar
                   </span>
                 </div>
               </div>
 
               {/* Key Metrics Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                <div className="p-3.5 liquid-glass-subtle border border-white/10 rounded-xl">
+                <div className="p-3.5 liquid-glass-subtle rounded-xl">
                   <span className="text-slate-300 block text-[11px]">Centroid</span>
                   <strong className="text-white text-sm font-bold">31.98° N, 32.85° E</strong>
                   <span className="text-slate-400 block text-[10px] mt-0.5">Levantine Basin</span>
                 </div>
-                <div className="p-3.5 liquid-glass-subtle border border-white/10 rounded-xl">
+                <div className="p-3.5 liquid-glass-subtle rounded-xl">
                   <span className="text-slate-300 block text-[11px]">Slick Area</span>
                   <strong className="text-white text-sm font-bold">14.20 km²</strong>
-                  <span className="text-slate-400 block text-[10px] mt-0.5">Perimeter: 28.4 km</span>
+                  <span className="text-slate-400 block text-[10px] mt-0.5">28.4 km perimeter</span>
                 </div>
-                <div className="p-3.5 liquid-glass-subtle border border-white/10 rounded-xl">
-                  <span className="text-slate-300 block text-[11px]">Lagrangian Drift</span>
-                  <strong className="text-white text-sm font-bold">-6.0 Hours</strong>
-                  <span className="text-slate-400 block text-[10px] mt-0.5">500 Particles Modeled</span>
+                <div className="p-3.5 liquid-glass-subtle rounded-xl">
+                  <span className="text-slate-300 block text-[11px]">Drift Backtrack</span>
+                  <strong className="text-white text-sm font-bold">6 hours back</strong>
+                  <span className="text-slate-400 block text-[10px] mt-0.5">500 particles tracked</span>
                 </div>
-                <div className="p-3.5 liquid-glass-subtle border border-white/10 rounded-xl">
-                  <span className="text-slate-300 block text-[11px]">Vessel Attribution</span>
-                  <strong className="text-sky-400 text-sm font-bold">Ranked Suspects</strong>
-                  <span className="text-slate-400 block text-[10px] mt-0.5">AIS Trajectory Matched</span>
+                <div className="p-3.5 liquid-glass-subtle rounded-xl">
+                  <span className="text-slate-300 block text-[11px]">Suspect Vessels</span>
+                  <strong className="text-sky-400 text-sm font-bold">3 ships flagged</strong>
+                  <span className="text-slate-400 block text-[10px] mt-0.5">Ranked by track and speed</span>
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/10">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
                 <p className="text-xs text-slate-300">
-                  Instant launch with pre-indexed SAR mask, origin confidence contours, and AIS suspect ranking.
+                  Inspect the radar oil mask, drift probability contours, and ranked suspect ship trajectories for this spill.
                 </p>
                 <button
                   onClick={handleLaunchDemo}
-                  className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-8 py-3.5 rounded-xl transition-all shadow-lg hover:shadow-blue-500/25 whitespace-nowrap border border-white/20"
+                  className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-8 py-3.5 rounded-xl transition-all shadow-lg hover:shadow-blue-500/25 whitespace-nowrap"
                 >
-                  LAUNCH INVESTIGATION WORKSPACE →
+                  Open Investigation Workspace →
                 </button>
               </div>
             </div>
@@ -283,7 +268,7 @@ export const LandingPage: React.FC = () => {
           {activeTab === 'custom' && (
             <form onSubmit={handleCustomSubmit} className="p-6 md:p-8 space-y-6 text-xs">
               {submitError && (
-                <div className="p-3 bg-red-950/80 backdrop-blur-md border border-red-500/50 text-red-200 rounded-xl font-medium">
+                <div className="p-3 bg-red-950/80 backdrop-blur-md text-red-200 rounded-xl font-medium">
                   {submitError}
                 </div>
               )}
@@ -297,30 +282,30 @@ export const LandingPage: React.FC = () => {
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full border border-white/15 rounded-xl p-2.5 text-white bg-black/40 backdrop-blur-md focus:border-sky-400 focus:outline-none"
+                  className="w-full rounded-xl p-2.5 text-white bg-white/5 backdrop-blur-md focus:outline-none focus:ring-1 focus:ring-sky-400"
                   required
                 />
               </div>
 
               {/* Quick Presets */}
-              <div className="p-4 liquid-glass-subtle border border-white/10 rounded-2xl space-y-2.5">
+              <div className="p-4 liquid-glass-subtle rounded-2xl space-y-2.5">
                 <span className="font-bold text-slate-200 uppercase text-[11px] block">
-                  Quick Testing Presets (Georeferenced Sentinel-1 GeoTIFF)
+                  Quick test images (Sentinel-1 GeoTIFF)
                 </span>
                 <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
-                    onClick={() => handleLoadSample('/sample_sar_mumbai_slick.tif', 'Mumbai Offshore Oil Slick — Sentinel-1 SAR')}
+                    onClick={() => handleLoadSample('/sample_sar_mumbai_slick.tif', 'Mumbai Offshore Oil Slick (Sentinel-1 SAR)')}
                     className="px-3 py-1.5 liquid-glass-interactive rounded-xl text-slate-200 font-medium"
                   >
-                    Preset 1: Mumbai Offshore (18.925° N, 72.825° E) — Mineral Slick
+                    Preset 1: Mumbai offshore mineral slick (18.925° N, 72.825° E)
                   </button>
                   <button
                     type="button"
-                    onClick={() => handleLoadSample('/sample_sar_gujarat_calm.tif', 'Gujarat Coast Look-Alike — Sentinel-1 SAR')}
+                    onClick={() => handleLoadSample('/sample_sar_gujarat_calm.tif', 'Gujarat Coast Look-Alike (Sentinel-1 SAR)')}
                     className="px-3 py-1.5 liquid-glass-interactive rounded-xl text-slate-200 font-medium"
                   >
-                    Preset 2: Gujarat Coast (20.825° N, 70.425° E) — Calm Sea Look-Alike
+                    Preset 2: Gujarat coast calm-water false alarm (20.825° N, 70.425° E)
                   </button>
                 </div>
               </div>
@@ -334,16 +319,16 @@ export const LandingPage: React.FC = () => {
                     handleFileSelection(e.dataTransfer.files[0]);
                   }
                 }}
-                className="border-2 border-dashed border-white/20 hover:border-white/40 bg-white/5 backdrop-blur-md p-6 text-center rounded-2xl transition-all"
+                className="bg-white/5 backdrop-blur-md p-6 text-center rounded-2xl transition-all hover:bg-white/[0.08]"
               >
                 {isInspecting ? (
                   <div className="py-2 text-slate-200 font-semibold">
-                    Inspecting GeoTIFF metadata...
+                    Reading image coordinates and metadata...
                   </div>
                 ) : (
                   <div className="space-y-2">
                     <label className="inline-block liquid-glass-interactive text-white px-4 py-2 rounded-xl cursor-pointer font-medium">
-                      Select Satellite Raster
+                      Select Satellite Image
                       <input
                         type="file"
                         onChange={(e) => e.target.files?.[0] && handleFileSelection(e.target.files[0])}
@@ -352,10 +337,10 @@ export const LandingPage: React.FC = () => {
                       />
                     </label>
                     <span className="text-slate-300 text-[11px] block">
-                      or drag &amp; drop GeoTIFF / Dual-Pol SAR PNG
+                      or drag and drop a GeoTIFF or SAR image
                     </span>
                     {selectedFile && (
-                      <div className="p-2 liquid-glass-subtle border border-white/15 text-slate-200 font-semibold mt-2 inline-block rounded-xl">
+                      <div className="p-2 liquid-glass-subtle text-slate-200 font-semibold mt-2 inline-block rounded-xl">
                         Selected: {selectedFile.name} ({(selectedFile.size / 1024).toFixed(1)} KB)
                       </div>
                     )}
@@ -365,7 +350,7 @@ export const LandingPage: React.FC = () => {
 
               {/* Metadata Box */}
               {fileMetadata && (
-                <div className={`p-3.5 border border-white/10 rounded-2xl text-[11px] liquid-glass-subtle text-slate-200`}>
+                <div className="p-3.5 rounded-2xl text-[11px] liquid-glass-subtle text-slate-200">
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     <div>
                       <span className="text-slate-400 block text-[10px]">Source</span>
@@ -396,7 +381,7 @@ export const LandingPage: React.FC = () => {
                     step="0.0001"
                     value={lat}
                     onChange={(e) => setLat(e.target.value)}
-                    className="w-full border border-white/15 rounded-xl p-2 text-white bg-black/40 backdrop-blur-md focus:border-sky-400 focus:outline-none"
+                    className="w-full rounded-xl p-2 text-white bg-white/5 backdrop-blur-md focus:outline-none focus:ring-1 focus:ring-sky-400"
                     required
                   />
                 </div>
@@ -407,7 +392,7 @@ export const LandingPage: React.FC = () => {
                     step="0.0001"
                     value={lon}
                     onChange={(e) => setLon(e.target.value)}
-                    className="w-full border border-white/15 rounded-xl p-2 text-white bg-black/40 backdrop-blur-md focus:border-sky-400 focus:outline-none"
+                    className="w-full rounded-xl p-2 text-white bg-white/5 backdrop-blur-md focus:outline-none focus:ring-1 focus:ring-sky-400"
                     required
                   />
                 </div>
@@ -418,7 +403,7 @@ export const LandingPage: React.FC = () => {
                     step="0.1"
                     value={windSpeed}
                     onChange={(e) => setWindSpeed(e.target.value)}
-                    className="w-full border border-white/15 rounded-xl p-2 text-white bg-black/40 backdrop-blur-md focus:border-sky-400 focus:outline-none"
+                    className="w-full rounded-xl p-2 text-white bg-white/5 backdrop-blur-md focus:outline-none focus:ring-1 focus:ring-sky-400"
                   />
                 </div>
                 <div>
@@ -428,22 +413,22 @@ export const LandingPage: React.FC = () => {
                     step="0.05"
                     value={currentSpeed}
                     onChange={(e) => setCurrentSpeed(e.target.value)}
-                    className="w-full border border-white/15 rounded-xl p-2 text-white bg-black/40 backdrop-blur-md focus:border-sky-400 focus:outline-none"
+                    className="w-full rounded-xl p-2 text-white bg-white/5 backdrop-blur-md focus:outline-none focus:ring-1 focus:ring-sky-400"
                   />
                 </div>
               </div>
 
               {/* Submit */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/10">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
                 <span className="text-slate-300 text-[11px]">
                   {selectedFile ? `Ready to process ${selectedFile.name}` : 'Using default Sentinel-1 observation if no file uploaded.'}
                 </span>
                 <button
                   type="submit"
                   disabled={isSubmitting || isInspecting}
-                  className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-bold text-xs px-8 py-3.5 rounded-xl transition-all border border-white/20 shadow-lg hover:shadow-blue-500/25"
+                  className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-bold text-xs px-8 py-3.5 rounded-xl transition-all shadow-lg hover:shadow-blue-500/25"
                 >
-                  {isSubmitting ? 'RUNNING ML INFERENCE & DRIFT BACKTRACK...' : 'INITIALIZE PIPELINE →'}
+                  {isSubmitting ? 'Analyzing radar image and calculating drift...' : 'Start Investigation →'}
                 </button>
               </div>
             </form>
@@ -451,20 +436,6 @@ export const LandingPage: React.FC = () => {
         </section>
 
       </main>
-
-      {/* Clean Dark Footer */}
-      <footer className="liquid-glass border-t border-white/10 px-6 md:px-12 py-4 text-xs text-slate-300 relative z-10">
-        <div className="max-w-[1600px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>VARUNA • Sentinel-1 SAR × Lagrangian Drift × PostGIS AIS</span>
-          <div className="flex items-center gap-4 text-[11px]">
-            <a href="/docs" target="_blank" rel="noreferrer" className="hover:text-white underline">
-              API Documentation
-            </a>
-            <span>•</span>
-            <span className="text-slate-400">SIH 26143</span>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

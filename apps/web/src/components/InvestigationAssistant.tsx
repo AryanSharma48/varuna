@@ -20,17 +20,17 @@ export const InvestigationAssistant: React.FC<InvestigationAssistantProps> = ({
   const [messages, setMessages] = useState<Message[]>([
     {
       sender: 'assistant',
-      text: "Grounded Investigation Assistant initialized. Responses strictly retrieved from PostGIS AIS queries, Lagrangian backtrack coordinates, and U-Net metrics without speculation.",
+      text: "Ask any question about this spill. I pull answers directly from satellite radar data, drift backtrack coordinates, and vessel GPS records.",
     }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
   const suggestedQuestions = [
-    "What is the published DARTIS oil-slick reference for this incident?",
-    "Who was near the origin zone?",
-    "What was the estimated spill window & origin?",
-    "Which sensitive areas could be affected in 12 hours?"
+    "What is the DARTIS reference for this incident?",
+    "Which ships were near the origin when the oil leaked?",
+    "Where and when did the spill start?",
+    "Which coastal areas will the slick reach in 12 hours?"
   ];
 
   const handleSend = async (queryText?: string) => {
@@ -63,9 +63,9 @@ export const InvestigationAssistant: React.FC<InvestigationAssistantProps> = ({
         {/* Header */}
         <div className="px-5 py-3 border-b border-zinc-200 flex items-center justify-between bg-zinc-50">
           <div>
-            <span className="text-[10px] text-zinc-500 uppercase block font-bold">DETERMINISTIC RETRIEVAL</span>
+            <span className="text-[10px] text-zinc-500 uppercase block font-bold">INCIDENT Q&A</span>
             <h3 className="text-xs font-bold text-zinc-950 uppercase tracking-wider">
-              Grounded Investigation Assistant
+              Investigation Assistant
             </h3>
           </div>
           <button
@@ -115,7 +115,7 @@ export const InvestigationAssistant: React.FC<InvestigationAssistantProps> = ({
 
           {loading && (
             <div className="text-zinc-500 text-xs italic">
-              Querying PostGIS and trajectory indices...
+              Searching vessel tracks and simulation data...
             </div>
           )}
         </div>
@@ -127,7 +127,7 @@ export const InvestigationAssistant: React.FC<InvestigationAssistantProps> = ({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Ask a factual question about this investigation..."
+            placeholder="Ask a question about this spill, vessel tracks, or drift..."
             className="flex-1 bg-white border border-zinc-300 px-3 py-2 text-zinc-950 placeholder-zinc-400 focus:outline-none focus:border-blue-600"
           />
           <button
