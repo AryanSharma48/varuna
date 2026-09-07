@@ -148,7 +148,7 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
   return (
     <div className="relative w-full h-full bg-slate-900 overflow-hidden select-none border border-zinc-200">
       {/* Live Spatial-Temporal Telemetry HUD */}
-      <div className="absolute top-3 left-3 z-30 flex items-center bg-slate-900/95 text-white backdrop-blur border border-zinc-700 shadow-lg rounded px-3 py-1.5 gap-3 font-mono text-[11px]">
+      <div className="absolute top-3 left-3 z-30 flex items-center bg-black text-white border border-zinc-700 shadow-lg rounded px-3 py-1.5 gap-3 font-mono text-[11px]">
         <div className="flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
           <span className="text-zinc-400 uppercase font-bold text-[10px]">TIME SCRUBBER:</span>
@@ -390,7 +390,7 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
       </Map>
 
       {/* Hydrodynamic & Environmental Legend Overlay */}
-      <div className="absolute bottom-3 right-3 bg-slate-900/95 text-white backdrop-blur border border-zinc-700 p-3 font-mono text-[11px] shadow-2xl space-y-1">
+      <div className="absolute bottom-3 right-3 bg-black text-white border border-zinc-700 p-3 font-mono text-[11px] shadow-2xl space-y-1">
         <div className="text-zinc-400 uppercase pb-1 border-b border-zinc-700 mb-1 text-[10px] flex items-center justify-between gap-4 font-bold">
           <span>HYDRODYNAMIC FORCING</span>
           <span className="text-amber-400 font-bold">ECMWF ERA5 / CMEMS</span>

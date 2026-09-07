@@ -8,6 +8,7 @@ export default defineConfig({
     exclude: ['maplibre-gl', 'react-map-gl', '@vis.gl/react-maplibre']
   },
   server: {
+    host: true,
     port: 5173,
     proxy: {
       '/api': {

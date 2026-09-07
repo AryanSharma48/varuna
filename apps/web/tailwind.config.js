@@ -22,7 +22,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Geist', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+        heading: ['Manrope', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'IBM Plex Mono', 'monospace'],
       }
     },

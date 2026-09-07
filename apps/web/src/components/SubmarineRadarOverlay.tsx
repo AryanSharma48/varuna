@@ -37,10 +37,7 @@ export const SubmarineRadarOverlay: React.FC = () => {
         {/* Mechanical Sonar Sweep Beam */}
         <div className="absolute w-[1060px] h-[1060px] rounded-full animate-sonar-sweep pointer-events-none overflow-hidden">
           <div
-            className="w-1/2 h-1/2 ml-auto origin-bottom-left border-b border-blue-400/40"
-            style={{
-              background: 'conic-gradient(from 180deg at 0% 100%, rgba(59, 130, 246, 0.15) 0deg, rgba(59, 130, 246, 0) 35deg)'
-            }}
+            className="w-1/2 h-1/2 ml-auto origin-bottom-left border-b border-blue-400"
           />
         </div>
 
@@ -73,13 +70,13 @@ export const SubmarineRadarOverlay: React.FC = () => {
       </div>
 
       {/* Submarine Telemetry Badges (Corner Heads-Up Data - Matte Solid Boxes) */}
-      <div className="absolute top-16 left-6 text-[11px] text-slate-400 space-y-0.5 bg-slate-900/90 p-3 rounded border border-slate-800">
+      <div className="absolute top-16 left-6 text-[11px] text-slate-400 space-y-0.5 bg-black p-3 rounded border border-slate-800">
         <div className="text-slate-200 font-bold">RADAR SCOPE: ACTIVE</div>
         <div>SENSOR: SENTINEL-1 C-BAND SAR</div>
         <div>SWEEP: 360° MECHANICAL SCAN</div>
       </div>
 
-      <div className="absolute top-16 right-6 text-[11px] text-slate-400 space-y-0.5 text-right bg-slate-900/90 p-3 rounded border border-slate-800">
+      <div className="absolute top-16 right-6 text-[11px] text-slate-400 space-y-0.5 text-right bg-black p-3 rounded border border-slate-800">
         <div className="text-slate-200 font-bold">RANGE: 120 NM</div>
         <div>GRID: WGS-84 (EPSG:4326)</div>
         <div>BEARING: 032° AZIMUTH</div>

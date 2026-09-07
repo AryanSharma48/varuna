@@ -47,7 +47,7 @@ export const GradationPage: React.FC = () => {
 
       {/* Floating HUD Top Header */}
       <header className="relative z-20 px-6 py-4 flex items-center justify-between pointer-events-auto">
-        <div className="flex items-center gap-3 bg-slate-900/80 backdrop-blur-md px-4 py-2 rounded-lg border border-slate-700/70 shadow-lg">
+        <div className="flex items-center gap-3 bg-black px-4 py-2 rounded-lg border border-slate-700/70 shadow-lg">
           <button
             onClick={() => navigate('/')}
             className="text-xs font-semibold text-slate-300 hover:text-white transition-colors"
@@ -59,14 +59,14 @@ export const GradationPage: React.FC = () => {
             <span className="text-xs font-bold text-white tracking-wide">
               그라데이션 (21st.dev)
             </span>
-            <span className="text-[10px] px-2 py-0.5 rounded bg-blue-900/80 border border-blue-600/60 text-blue-200 font-semibold uppercase">
+            <span className="text-[10px] px-2 py-0.5 rounded bg-blue-900 border border-blue-600 text-blue-200 font-semibold uppercase">
               Ribbon Field
             </span>
           </div>
         </div>
 
         {/* Mode Switcher */}
-        <div className="flex items-center gap-2 bg-slate-900/80 backdrop-blur-md p-1 rounded-lg border border-slate-700/70 shadow-lg">
+        <div className="flex items-center gap-2 bg-black p-1 rounded-lg border border-slate-700/70 shadow-lg">
           <button
             onClick={() => setRenderMode('canvas')}
             className={`px-3 py-1.5 rounded text-xs font-semibold transition-all ${
@@ -94,7 +94,7 @@ export const GradationPage: React.FC = () => {
       <div className="relative z-20 mt-auto p-6 flex flex-col md:flex-row items-end justify-between gap-4 pointer-events-none">
         
         {/* Color Palette Pill Bar */}
-        <div className="pointer-events-auto bg-slate-900/85 backdrop-blur-md border border-slate-700/70 p-4 rounded-xl shadow-2xl space-y-2 max-w-sm">
+        <div className="pointer-events-auto bg-black border border-slate-700/70 p-4 rounded-xl shadow-2xl space-y-2 max-w-sm">
           <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
             Palette Breakdown (4 Spectral Stops)
           </div>
@@ -122,7 +122,7 @@ export const GradationPage: React.FC = () => {
         </div>
 
         {/* Real-Time Parameter Sliders */}
-        <div className="pointer-events-auto bg-slate-900/85 backdrop-blur-md border border-slate-700/70 p-5 rounded-xl shadow-2xl space-y-3 w-full md:w-96">
+        <div className="pointer-events-auto bg-black border border-slate-700/70 p-5 rounded-xl shadow-2xl space-y-3 w-full md:w-96">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <span className="text-xs font-bold text-white uppercase tracking-wider">
               Motion & Physics Controls
