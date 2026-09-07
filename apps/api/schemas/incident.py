@@ -108,3 +108,9 @@ class CreateCustomIncidentRequest(BaseModel):
     wind_speed_ms: float = 6.2
     current_speed_ms: float = 0.35
 
+class CustomSpillRequest(BaseModel):
+    geojson: Dict[str, Any]
+    area_km2: Optional[float] = None
+    center_lat: Optional[float] = None
+    center_lon: Optional[float] = None
+

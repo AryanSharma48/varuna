@@ -130,5 +130,28 @@ export async function uploadSAR(formData: FormData): Promise<{
   return res.json();
 }
 
+export async function applyCustomSpillGeometry(incidentId: string, payload: {
+  geojson: any;
+  area_km2?: number;
+  center_lat?: number;
+  center_lon?: number;
+}): Promise<IncidentData> {
+  const res = await fetch(`${API_BASE}/incidents/${incidentId}/custom-spill-geometry`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Failed to update custom spill geometry' }));
+    throw new Error(err.detail || 'Failed to update custom spill geometry');
+  }
+  return res.json();
+}
 
-
+export async function revertSpillGeometry(incidentId: string): Promise<IncidentData> {
+  const res = await fetch(`${API_BASE}/incidents/${incidentId}/revert-spill-geometry`, {
+    method: 'POST'
+  });
+  if (!res.ok) throw new Error('Failed to revert spill geometry');
+  return res.json();
+}

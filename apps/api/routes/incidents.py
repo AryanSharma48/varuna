@@ -2,6 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File, 
 from sqlalchemy.orm import Session
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timezone, timedelta
+import os
+import json
+import math
 import numpy as np
 
 from db.database import get_db
@@ -14,7 +17,7 @@ from apps.api.schemas.incident import (
     IncidentResponse, IncidentCreate, DetectionResponse, OriginResponse,
     AISQueryRequest, AISReplayRequest, AttributionResponse,
     AssistantRequest, AssistantResponse, ReportResponse,
-    TraceOriginRequest, ForecastSpillRequest
+    TraceOriginRequest, ForecastSpillRequest, CustomSpillRequest
 )
 from services.characterisation.morphology import characterisation_service
 from services.drift.lagrangian import drift_engine
@@ -135,6 +138,46 @@ def get_incident_detail(incident_id: str, db: Session = Depends(get_db)):
             "morphology_type": detection.morphology_type,
             "geojson": detection.geojson_geometry
         } if detection else None,
+        "unet_prediction": (
+            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "unet_prediction.geojson"), "r"))
+            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "unet_prediction.geojson"))
+            else None
+        ),
+        "dartis_reference": (
+            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "dartis_reference.json"), "r"))
+            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "dartis_reference.json"))
+            else None
+        ),
+        "backtrack_particles": (
+            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "backtrack_particles.geojson"), "r"))
+            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "backtrack_particles.geojson"))
+            else None
+        ),
+        "origin_corridor": (
+            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "origin_corridor.geojson"), "r"))
+            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "origin_corridor.geojson"))
+            else None
+        ),
+        "backtrack_snapshots": (
+            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "backtrack_snapshots.json"), "r"))
+            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "backtrack_snapshots.json"))
+            else None
+        ),
+        "forward_particles": (
+            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "forward_particles.geojson"), "r"))
+            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "forward_particles.geojson"))
+            else None
+        ),
+        "forward_corridor": (
+            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "forward_corridor.geojson"), "r"))
+            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "forward_corridor.geojson"))
+            else None
+        ),
+        "forward_snapshots": (
+            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "forward_snapshots.json"), "r"))
+            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "forward_snapshots.json"))
+            else None
+        ),
         "origin_estimate": {
             "id": origin.id,
             "origin_center_lat": origin.center_lat,
@@ -445,6 +488,278 @@ def forecast_spill_live(incident_id: str, req: ForecastSpillRequest, db: Session
         "forecast_steps": forecast_steps,
         "impacts": impacts
     }
+
+@router.post("/incidents/{incident_id}/custom-spill-geometry")
+def apply_custom_spill_geometry(incident_id: str, req: CustomSpillRequest, db: Session = Depends(get_db)):
+    inc = db.query(Incident).filter(Incident.id == incident_id).first()
+    if not inc:
+        raise HTTPException(status_code=404, detail="Incident not found")
+        
+    geom = req.geojson.get("geometry", {})
+    coords = geom.get("coordinates", [[]])[0]
+    if not coords or len(coords) < 3:
+        raise HTTPException(status_code=400, detail="Invalid polygon coordinates: at least 3 points required.")
+        
+    # Ensure closed ring
+    if coords[0] != coords[-1]:
+        coords = list(coords) + [coords[0]]
+        
+    # Compute centroid
+    lons = [c[0] for c in coords[:-1]]
+    lats = [c[1] for c in coords[:-1]]
+    c_lon = round(float(sum(lons) / len(lons)), 6)
+    c_lat = round(float(sum(lats) / len(lats)), 6)
+    
+    # Compute planar geodesic area (km2)
+    avg_lat_rad = math.radians(c_lat)
+    m_per_deg_lat = 111132.95
+    m_per_deg_lon = 111132.95 * math.cos(avg_lat_rad)
+    area_m2 = 0.0
+    for i in range(len(coords) - 1):
+        x1 = coords[i][0] * m_per_deg_lon
+        y1 = coords[i][1] * m_per_deg_lat
+        x2 = coords[i+1][0] * m_per_deg_lon
+        y2 = coords[i+1][1] * m_per_deg_lat
+        area_m2 += (x1 * y2 - x2 * y1)
+    calc_area_km2 = round(abs(area_m2) / 2.0 / 1e6, 2)
+    area_km2 = req.area_km2 or calc_area_km2
+    if area_km2 <= 0.0:
+        area_km2 = 1.0
+    
+    # Compute perimeter (km)
+    perim_km = 0.0
+    for i in range(len(coords) - 1):
+        dx = (coords[i+1][0] - coords[i][0]) * m_per_deg_lon
+        dy = (coords[i+1][1] - coords[i][1]) * m_per_deg_lat
+        perim_km += math.sqrt(dx * dx + dy * dy) / 1000.0
+    perim_km = round(perim_km, 2)
+
+    # 1. Update Incident record
+    inc.center_lat = c_lat
+    inc.center_lon = c_lon
+
+    # 2. Update SpillDetection record
+    custom_geom_data = {
+        "type": "Feature",
+        "properties": {
+            "id": f"CUSTOM-{incident_id}",
+            "center_lat": c_lat,
+            "center_lon": c_lon,
+            "area_km2": area_km2,
+            "perimeter_km": perim_km,
+            "confidence": 0.98,
+            "source": "user_manual_trace",
+            "name": "User-Traced Spill Area",
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [coords]
+        }
+    }
+    
+    detection = db.query(SpillDetection).filter(SpillDetection.incident_id == incident_id).first()
+    if detection:
+        detection.geojson_geometry = custom_geom_data
+        detection.area_km2 = area_km2
+        detection.perimeter_km = perim_km
+        detection.morphology_type = "USER_DEFINED_SLICK"
+        detection.decision_state = "VERIFIED_OIL_SPILL"
+    else:
+        detection = SpillDetection(
+            id=f"DET-CUSTOM-{incident_id}",
+            incident_id=incident_id,
+            scene_id=f"SCENE-{incident_id}",
+            oil_confidence=0.98,
+            look_alike_risk="LOW",
+            look_alike_type="BIOMEMBRANE_RULED_OUT",
+            decision_state="VERIFIED_OIL_SPILL",
+            model_name="Manual User Annotation",
+            model_version="1.0",
+            area_km2=area_km2,
+            perimeter_km=perim_km,
+            length_km=round(math.sqrt(area_km2) * 1.5, 2),
+            width_km=round(math.sqrt(area_km2) / 1.5, 2),
+            orientation_deg=45.0,
+            morphology_type="USER_DEFINED_SLICK",
+            geojson_geometry=custom_geom_data
+        )
+        db.add(detection)
+    
+    # 3. Save to disk in demo folder for persistent storage
+    target_folder = "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id
+    derived_dir = os.path.join("demo", "incidents", target_folder, "derived")
+    os.makedirs(derived_dir, exist_ok=True)
+    
+    with open(os.path.join(derived_dir, "custom_user_spill.geojson"), "w") as f:
+        json.dump(custom_geom_data, f, indent=2)
+    with open(os.path.join(derived_dir, "spill_geometry.json"), "w") as f:
+        json.dump({
+            "status": "available",
+            "detection_id": f"DET-CUSTOM-{incident_id}",
+            "sensing_time": "2019-06-10T15:48:13+00:00",
+            "oil_confidence": 0.96,
+            "look_alike_risk": "LOW",
+            "look_alike_type": "USER_MANUAL_DELINEATION",
+            "decision_state": "VERIFIED_OIL_SPILL",
+            "area_km2": area_km2,
+            "perimeter_km": perim_km,
+            "length_km": round(math.sqrt(max(0.1, area_km2)) * 1.5, 2),
+            "width_km": round(area_km2 / max(0.1, math.sqrt(max(0.1, area_km2)) * 1.5), 2),
+            "orientation_deg": 45.0,
+            "morphology_type": "USER_DRAWN_POLYGON",
+            "geojson": custom_geom_data
+        }, f, indent=2)
+        
+    # 4. Recalculate Lagrangian Backward Origin Drift from new centroid
+    env = EnvironmentalSnapshot(wind_speed_ms=2.56, wind_direction_deg=325.0, current_speed_ms=0.35, current_direction_deg=75.0, sea_surface_temp_c=24.5)
+    env_file = os.path.join("demo", "incidents", target_folder, "environment", "snapshot.json")
+    if os.path.exists(env_file):
+        try:
+            e_dat = json.load(open(env_file))
+            env = EnvironmentalSnapshot(
+                wind_speed_ms=e_dat.get("wind_speed_ms", 2.56),
+                wind_direction_deg=e_dat.get("wind_direction_deg", 325.0),
+                current_speed_ms=e_dat.get("current_speed_ms", 0.35),
+                current_direction_deg=e_dat.get("current_direction_deg", 75.0),
+                sea_surface_temp_c=e_dat.get("sea_surface_temp_c", 24.5)
+            )
+        except Exception:
+            pass
+
+    origin_res = drift_engine.simulate_backward_origin(
+        slick_center_lat=c_lat,
+        slick_center_lon=c_lon,
+        detection_time=datetime(2019, 6, 10, 15, 48, 13, tzinfo=timezone.utc),
+        backtrack_hours=2.0,
+        particle_count=500,
+        env=env
+    )
+    with open(os.path.join(derived_dir, "origin.json"), "w") as f:
+        json.dump(origin_res, f, indent=2)
+        
+    origin_rec = db.query(OriginEstimate).filter(OriginEstimate.incident_id == incident_id).first()
+    w_start = datetime.fromisoformat(origin_res["origin_window_start"]) if isinstance(origin_res["origin_window_start"], str) else origin_res["origin_window_start"]
+    w_end = datetime.fromisoformat(origin_res["origin_window_end"]) if isinstance(origin_res["origin_window_end"], str) else origin_res["origin_window_end"]
+    if origin_rec:
+        origin_rec.center_lat = origin_res["origin_center_lat"]
+        origin_rec.center_lon = origin_res["origin_center_lon"]
+        origin_rec.uncertainty_radius_km = origin_res["uncertainty_radius_km"]
+        origin_rec.origin_window_start = w_start
+        origin_rec.origin_window_end = w_end
+        origin_rec.probability_contour_geojson = origin_res["geojson"]
+        origin_rec.forcing_used = origin_res["forcing_used"]
+    else:
+        origin_rec = OriginEstimate(
+            id=f"ORIGIN-{incident_id}",
+            incident_id=incident_id,
+            calculation_time=datetime.now(timezone.utc),
+            origin_window_start=w_start,
+            origin_window_end=w_end,
+            center_lat=origin_res["origin_center_lat"],
+            center_lon=origin_res["origin_center_lon"],
+            uncertainty_radius_km=origin_res["uncertainty_radius_km"],
+            probability_contour_geojson=origin_res["geojson"],
+            forcing_used=origin_res["forcing_used"]
+        )
+        db.add(origin_rec)
+
+    # 5. Recalculate forward drift forecast
+    forecast_steps = drift_engine.simulate_forward_forecast(
+        slick_center_lat=c_lat,
+        slick_center_lon=c_lon,
+        start_time=datetime(2019, 6, 10, 15, 48, 13, tzinfo=timezone.utc),
+        forecast_horizons_hours=[6.0, 12.0, 24.0, 48.0],
+        particle_count=500,
+        env=env
+    )
+    with open(os.path.join(derived_dir, "drift.json"), "w") as f:
+        json.dump({"forecast_horizons": forecast_steps, "forcing_used": origin_res.get("forcing_used")}, f, indent=2)
+        
+    drift_rec = db.query(DriftRun).filter(DriftRun.incident_id == incident_id, DriftRun.run_type == "FORWARD_FORECAST").first()
+    if drift_rec:
+        drift_rec.forecast_steps = forecast_steps
+
+    # 6. Recalculate AIS vessel attribution
+    all_vessels = db.query(Vessel).all()
+    all_points = db.query(AISPoint).all()
+    all_anomalies = db.query(AISAnomaly).all()
+    vessels_list = [{"mmsi": v.mmsi, "vessel_name": v.vessel_name, "vessel_type": v.vessel_type, "flag": v.flag, "source_type": v.source_type} for v in all_vessels]
+    ais_points_list = [{"mmsi": p.mmsi, "timestamp": p.timestamp.isoformat(), "latitude": p.latitude, "longitude": p.longitude, "sog": p.sog, "cog": p.cog, "heading": p.heading, "source_type": p.source_type} for p in all_points]
+    anomalies_list = [{"mmsi": a.mmsi, "latitude": a.latitude, "longitude": a.longitude, "anomaly_type": a.anomaly_type, "severity": a.severity, "description": a.description} for a in all_anomalies]
+
+    who = ais_trajectory_service.who_was_here(
+        ais_points=ais_points_list,
+        vessels=vessels_list,
+        origin_lat=origin_res["origin_center_lat"],
+        origin_lon=origin_res["origin_center_lon"],
+        origin_window_start=w_start,
+        origin_window_end=w_end,
+        search_radius_km=35.0
+    )
+
+    trajectories = ais_trajectory_service.build_trajectories(ais_points_list)
+    candidates = attribution_engine.rank_all_candidates(
+        candidates=who,
+        trajectories=trajectories,
+        anomalies=anomalies_list,
+        origin_lat=origin_res["origin_center_lat"],
+        origin_lon=origin_res["origin_center_lon"],
+        origin_window_start=w_start,
+        origin_window_end=w_end,
+        slick_orientation_deg=45.0
+    )
+    db.query(AttributionScore).filter(AttributionScore.incident_id == incident_id).delete()
+    for c in candidates:
+        attr = AttributionScore(
+            id=f"ATTR-{incident_id}-{c['mmsi']}",
+            incident_id=incident_id,
+            mmsi=c["mmsi"],
+            priority_rank=c["priority_rank"],
+            priority_level=c["priority_level"],
+            total_score=c["total_score"],
+            score_proximity=c["breakdown"]["proximity"],
+            score_timing=c["breakdown"]["timing"],
+            score_trajectory=c["breakdown"]["trajectory"],
+            score_ais_gap=c["breakdown"]["ais_gap"],
+            score_behaviour_anomaly=c["breakdown"]["behaviour_anomaly"],
+            explanation_reasons=c["reasons"],
+            calculated_at=datetime.now(timezone.utc),
+            disclaimer=c.get("disclaimer", "Investigation priority rank only. Does not constitute legal proof of liability.")
+        )
+        db.add(attr)
+    with open(os.path.join(derived_dir, "attribution.json"), "w") as f:
+        json.dump(candidates, f, indent=2)
+
+    db.commit()
+    return get_incident_detail(incident_id, db)
+
+@router.post("/incidents/{incident_id}/revert-spill-geometry")
+def revert_spill_geometry(incident_id: str, db: Session = Depends(get_db)):
+    target_folder = "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id
+    derived_dir = os.path.join("demo", "incidents", target_folder, "derived")
+    default_backup = os.path.join(derived_dir, "spill_geometry_default.json")
+    if os.path.exists(default_backup):
+        import shutil
+        shutil.copyfile(default_backup, os.path.join(derived_dir, "spill_geometry.json"))
+        default_data = json.load(open(default_backup))
+        
+        c_lat = 32.006759
+        c_lon = 32.815022
+        inc = db.query(Incident).filter(Incident.id == incident_id).first()
+        if inc:
+            inc.center_lat = c_lat
+            inc.center_lon = c_lon
+        
+        detection = db.query(SpillDetection).filter(SpillDetection.incident_id == incident_id).first()
+        if detection:
+            detection.geojson_geometry = default_data.get("geojson", {})
+            detection.area_km2 = default_data.get("area_km2", 14.68)
+            detection.perimeter_km = default_data.get("perimeter_km", 21.4)
+            detection.morphology_type = "LINEAR_CONTINUOUS_SLICK"
+            
+        db.commit()
+    return get_incident_detail(incident_id, db)
 
 @router.post("/reports/{incident_id}", response_model=ReportResponse)
 def generate_incident_report(incident_id: str, db: Session = Depends(get_db)):

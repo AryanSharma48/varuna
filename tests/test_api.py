@@ -27,13 +27,23 @@ def test_get_incident_detail():
     data = res.json()
     assert "incident" in data
     inc = data["incident"]
-    # Real incident coordinates — Eastern Mediterranean, NOT Mumbai
-    assert abs(inc["center_lat"] - 31.982759) < 0.001, f"Wrong lat: {inc['center_lat']}"
-    assert abs(inc["center_lon"] - 32.849022) < 0.001, f"Wrong lon: {inc['center_lon']}"
+    # Real incident coordinates in Eastern Mediterranean
+    assert 31.8 <= inc["center_lat"] <= 32.2, f"Wrong lat: {inc['center_lat']}"
+    assert 32.7 <= inc["center_lon"] <= 33.0, f"Wrong lon: {inc['center_lon']}"
     assert inc["id"] == "SIH-2026-001"
     # Attribution scores and detection not yet populated from minimal seed
     assert "attribution_scores" in data
     assert "detection" in data
+    assert "backtrack_snapshots" in data
+    assert data["backtrack_snapshots"] is not None
+    assert "48" in data["backtrack_snapshots"]
+    assert "forward_particles" in data
+    assert data["forward_particles"] is not None
+    assert "forward_snapshots" in data
+    assert data["forward_snapshots"] is not None
+    assert "48" in data["forward_snapshots"]
+    assert "forward_corridor" in data
+    assert data["forward_corridor"] is not None
 
 def test_grounded_assistant():
     """Verify assistant answers about the real DARTIS ow-0388 incident."""

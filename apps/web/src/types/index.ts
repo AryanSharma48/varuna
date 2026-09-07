@@ -40,6 +40,28 @@ export interface IncidentData {
     morphology_type: string;
     geojson: any;
   } | null;
+  unet_prediction?: any;
+  dartis_reference?: any;
+  backtrack_particles?: any;
+  origin_corridor?: any;
+  backtrack_snapshots?: Record<string, {
+    hours: number;
+    t_index: number;
+    active_particles: number;
+    centroid: { lon: number; lat: number };
+    point_cloud: any;
+    hull: any;
+  }>;
+  forward_particles?: any;
+  forward_corridor?: any;
+  forward_snapshots?: Record<string, {
+    hours: number;
+    t_index: number;
+    active_particles: number;
+    centroid: { lon: number; lat: number };
+    point_cloud: any;
+    hull: any;
+  }>;
   origin_estimate: {
     id: string;
     origin_center_lat: number;

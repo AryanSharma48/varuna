@@ -82,63 +82,66 @@ def seed_demo_data():
                 sg = json.load(f)
             if sg.get("status") == "available":
                 det = SpillDetection(
-                    id=sg["detection_id"],
+                    id=sg.get("detection_id", f"DET-{incident.id}"),
                     incident_id=incident.id,
                     scene_id=scene.id,
-                    detection_time=datetime.datetime.fromisoformat(sg["sensing_time"].replace("Z", "+00:00")),
-                    oil_confidence=sg["oil_confidence"],
-                    look_alike_risk=sg["look_alike_risk"],
-                    look_alike_type=sg["look_alike_type"],
-                    decision_state=sg["decision_state"],
+                    detection_time=datetime.datetime.fromisoformat(sg.get("sensing_time", "2019-06-10T15:48:13+00:00").replace("Z", "+00:00")),
+                    oil_confidence=sg.get("oil_confidence", 0.94),
+                    look_alike_risk=sg.get("look_alike_risk", "LOW"),
+                    look_alike_type=sg.get("look_alike_type", "BIOMEMBRANE_NATURAL_FILM_RULED_OUT"),
+                    decision_state=sg.get("decision_state", "VERIFIED_OIL_SPILL"),
                     model_name="unet_oil_segmentation_v1",
                     model_version="1.0.0",
-                    area_km2=sg["area_km2"],
-                    perimeter_km=sg["perimeter_km"],
-                    length_km=sg["length_km"],
-                    width_km=sg["width_km"],
-                    orientation_deg=sg["orientation_deg"],
-                    morphology_type=sg["morphology_type"],
-                    geojson_geometry=sg["geojson"]
+                    area_km2=sg.get("area_km2", 14.68),
+                    perimeter_km=sg.get("perimeter_km", 21.4),
+                    length_km=sg.get("length_km", 8.5),
+                    width_km=sg.get("width_km", 2.2),
+                    orientation_deg=sg.get("orientation_deg", 45.0),
+                    morphology_type=sg.get("morphology_type", "LINEAR_CONTINUOUS_SLICK"),
+                    geojson_geometry=sg.get("geojson", {})
                 )
                 db.add(det)
 
         # 4. Origin Estimate
+        org = None
         origin_path = os.path.join(base_dir, "derived", "origin.json")
         if os.path.exists(origin_path):
             with open(origin_path) as f:
                 og = json.load(f)
-            if og.get("status") == "available":
-                org = OriginEstimate(
-                    id=f"ORIGIN-{incident.id}",
-                    incident_id=incident.id,
-                    calculation_time=datetime.datetime.now(),
-                    origin_window_start=datetime.datetime.fromisoformat(og["origin_window_start"].replace("Z", "+00:00")),
-                    origin_window_end=datetime.datetime.fromisoformat(og["origin_window_end"].replace("Z", "+00:00")),
-                    center_lat=og["origin_center_lat"],
-                    center_lon=og["origin_center_lon"],
-                    uncertainty_radius_km=og["uncertainty_radius_km"],
-                    probability_contour_geojson=og["geojson"],
-                    forcing_used=og["forcing_used"]
-                )
-                db.add(org)
+            
+            # Extract safe values with fallbacks
+            org = OriginEstimate(
+                id=f"ORIGIN-{incident.id}",
+                incident_id=incident.id,
+                calculation_time=datetime.datetime.now(),
+                origin_window_start=datetime.datetime.fromisoformat(og.get("origin_window_start", "2019-06-10T12:48:13+00:00").replace("Z", "+00:00")),
+                origin_window_end=datetime.datetime.fromisoformat(og.get("origin_window_end", "2019-06-10T14:48:13+00:00").replace("Z", "+00:00")),
+                center_lat=og.get("origin_center_lat", incident.center_lat),
+                center_lon=og.get("origin_center_lon", incident.center_lon),
+                uncertainty_radius_km=og.get("uncertainty_radius_km", 1.0),
+                probability_contour_geojson=og.get("geojson", {}),
+                forcing_used=og.get("forcing_used", [])
+            )
+            db.add(org)
 
         # 5. Drift Run (Forward Forecast)
+        drift_obj = None
         drift_path = os.path.join(base_dir, "derived", "drift.json")
         if os.path.exists(drift_path):
             with open(drift_path) as f:
                 dr = json.load(f)
-            if dr.get("status") == "available":
-                drift_obj = DriftRun(
-                    id=f"DRIFT-FWD-{incident.id}",
-                    incident_id=incident.id,
-                    run_type="FORWARD_FORECAST",
-                    start_time=datetime.datetime.fromisoformat(dr["start_time"].replace("Z", "+00:00")),
-                    duration_hours=48.0,
-                    particle_count=500,
-                    forecast_steps=dr["forecast_steps"],
-                    environmental_parameters={"wind_speed_ms": 2.56, "current_speed_ms": 0.35}
-                )
-                db.add(drift_obj)
+            
+            drift_obj = DriftRun(
+                id=f"DRIFT-FWD-{incident.id}",
+                incident_id=incident.id,
+                run_type="FORWARD_FORECAST",
+                start_time=datetime.datetime.fromisoformat(dr.get("start_time", "2019-06-10T15:48:13+00:00").replace("Z", "+00:00")),
+                duration_hours=48.0,
+                particle_count=500,
+                forecast_steps=dr.get("forecast_steps", dr.get("forecast_horizons", [])),
+                environmental_parameters={"wind_speed_ms": 2.56, "current_speed_ms": 0.35}
+            )
+            db.add(drift_obj)
 
         # 6. Vessels
         vessels_path = os.path.join(base_dir, "ais", "vessels.json")
@@ -226,7 +229,7 @@ def seed_demo_data():
             incident_id=incident.id,
             category="SATELLITE",
             title="Copernicus Sentinel-1B SAR Detection",
-            content="Verified 14.68 km² oil slick from product S1B_IW_GRDH_1SDV_20190610T154813 near 31.983° N, 32.849° E. Spatial confidence 94%.",
+            content=f"Verified 14.68 km² oil slick from product S1B_IW_GRDH_1SDV_20190610T154813 near {incident.center_lat:.3f}° N, {incident.center_lon:.3f}° E. Spatial confidence 94%.",
             confidence=0.94
         ))
         db.add(EvidenceItem(
@@ -234,7 +237,7 @@ def seed_demo_data():
             incident_id=incident.id,
             category="DRIFT",
             title="Lagrangian Reverse Particle Backtrack",
-            content="Hydrodynamic reverse drift simulation computed probable spill origin centroid at 31.9815° N, 32.8272° E between 13:45 and 14:45 UTC.",
+            content=f"Hydrodynamic reverse drift simulation computed probable spill origin centroid at {org.center_lat:.4f}° N, {org.center_lon:.4f}° E between 13:45 and 14:45 UTC.",
             confidence=0.89
         ))
         db.add(EvidenceItem(
