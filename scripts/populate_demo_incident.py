@@ -10,12 +10,12 @@ def generate_demo_dataset():
     os.makedirs(os.path.join(base_dir, "ais"), exist_ok=True)
     os.makedirs(os.path.join(base_dir, "environment"), exist_ok=True)
 
-    center_lat = 31.982759
-    center_lon = 32.849022
+    center_lat = 32.006759
+    center_lon = 32.815022
     sensing_time = datetime(2019, 6, 10, 15, 48, 13, tzinfo=timezone.utc)
 
     # 1. Real DARTIS Spill Geometry (ow-0388-02 main slick)
-    # Extracted coordinates around 32.85°E, 31.98°N
+    # Extracted coordinates around 32.815°E, 32.007°N
     m_per_deg_lat = 111320.0
     m_per_deg_lon = 111320.0 * math.cos(math.radians(center_lat))
 
@@ -85,13 +85,9 @@ def generate_demo_dataset():
     # 3. Lagrangian Backward Origin Backtrack
     # Calculate backtrack origin ~1.5 - 2 hours prior (around 14:15 UTC)
     # Drift net velocity: Current vector + 3% Wind vector
-    # Current (0.35 m/s @ 75°): u_c = 0.35*sin(75°)=0.338, v_c = 0.35*cos(75°)=0.0906
-    # Wind (2.56 m/s FROM 325° -> TO 145°): u_w = 0.03*2.56*sin(145°)=0.044, v_w = 0.03*2.56*cos(145°)=-0.063
-    # u_net = 0.382 m/s, v_net = 0.0276 m/s  (~Heading ~86° Eastward at ~0.383 m/s = 1.38 km/h)
-    # In 1.5h (5400s), drifted ~2.06 km Eastward.
-    # Therefore, origin center was ~2.06 km West of current slick centroid (32.827°E, 31.981°N).
-    origin_center_lat = 31.981500
-    origin_center_lon = 32.827200
+    # Origin center is ~2.06 km West of current slick centroid (32.793°E, 32.006°N).
+    origin_center_lat = 32.005500
+    origin_center_lon = 32.793200
     uncertainty_radius_km = 2.45
 
     origin_contours = []
@@ -237,8 +233,8 @@ def generate_demo_dataset():
             continue
             
         frac = i / 29.0
-        lat = 31.82 + frac * (32.12 - 31.82)
-        lon = 32.75 + frac * (32.90 - 32.75)
+        lat = 31.844 + frac * (32.144 - 31.844)
+        lon = 32.716 + frac * (32.866 - 32.716)
         
         ais_points.append({
             "mmsi": 636018245,
@@ -256,8 +252,8 @@ def generate_demo_dataset():
         t = t_start + timedelta(minutes=i * 10)
         t_str = t.isoformat()
         frac = i / 29.0
-        lat = 32.15 - frac * (32.15 - 31.85)
-        lon = 32.78 + frac * (32.82 - 32.78)
+        lat = 32.174 - frac * (32.174 - 31.874)
+        lon = 32.746 + frac * (32.786 - 32.746)
         sog = 7.2 if 13.8 <= (i*10/60.0) <= 14.8 else 13.5 # Speed drop near origin
         
         ais_points.append({
@@ -276,8 +272,8 @@ def generate_demo_dataset():
         t = t_start + timedelta(minutes=i * 10)
         t_str = t.isoformat()
         frac = i / 29.0
-        lat = 32.12 + frac * 0.05
-        lon = 32.60 + frac * (33.00 - 32.60)
+        lat = 32.144 + frac * 0.05
+        lon = 32.566 + frac * (32.966 - 32.566)
         
         ais_points.append({
             "mmsi": 352884000,
@@ -299,8 +295,8 @@ def generate_demo_dataset():
             "id": "ANOM-001",
             "mmsi": 636018245,
             "timestamp": "2019-06-10T14:15:00Z",
-            "latitude": 31.9810,
-            "longitude": 32.8265,
+            "latitude": 32.0050,
+            "longitude": 32.7925,
             "anomaly_type": "AIS_GAP",
             "severity": "HIGH",
             "description": "Unannounced 22-minute AIS transmission blackout while transiting estimated spill origin centroid.",
@@ -310,8 +306,8 @@ def generate_demo_dataset():
             "id": "ANOM-002",
             "mmsi": 241319000,
             "timestamp": "2019-06-10T14:05:00Z",
-            "latitude": 31.9890,
-            "longitude": 32.8010,
+            "latitude": 32.0130,
+            "longitude": 32.7670,
             "anomaly_type": "SPEED_JUMP",
             "severity": "MEDIUM",
             "description": "Abrupt speed reduction from 13.5 kts to 7.2 kts near origin boundary.",

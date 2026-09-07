@@ -1,0 +1,28 @@
+{
+  "source": "Copernicus Marine & CDS API",
+  "currents_product_id": "cmems_mod_med_phy-cur_my_4.2km_PT1H-m",
+  "winds_product_id": "reanalysis-era5-single-levels",
+  "retrieval_timestamp": "2026-09-07T19:41:10.007542Z",
+  "spatial_bounds": {
+    "lon_min": 31.0,
+    "lon_max": 35.0,
+    "lat_min": 30.0,
+    "lat_max": 34.0
+  },
+  "temporal_bounds": {
+    "start": "2019-06-08T00:00:00Z",
+    "end": "2019-06-13T00:00:00Z"
+  },
+  "variables": {
+    "currents": [
+      "uo",
+      "vo"
+    ],
+    "winds": [
+      "10m_u_component_of_wind",
+      "10m_v_component_of_wind"
+    ]
+  },
+  "resolution": "Hourly",
+  "units": "m/s"
+}

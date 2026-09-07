@@ -3,8 +3,8 @@
   "title": "Eastern Mediterranean DARTIS Investigation",
   "description": "Real Demonstration Incident using Sentinel-1B and DARTIS ow-0388 reference.",
   "status": "INVESTIGATING",
-  "center_lat": 31.982759,
-  "center_lon": 32.849022,
+  "center_lat": 32.006759,
+  "center_lon": 32.815022,
   "spill_window_start": "2019-06-10T14:00:00Z",
   "spill_window_end": "2019-06-10T16:00:00Z",
   "provenance": {

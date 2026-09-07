@@ -1,0 +1,58 @@
+{
+  "observed_spill_centroid": {
+    "lat": 31.930486249999998,
+    "lon": 32.8922835
+  },
+  "satellite_acquisition_time": "2019-06-10T15:48:13Z",
+  "backtrack_duration_hours": 48,
+  "number_of_particles": 1000,
+  "wind_data_source": "ERA5 (CDS API)",
+  "current_data_source": "Copernicus Mediterranean Reanalysis",
+  "simulation_timestep_minutes": 15,
+  "output_step_minutes": 30,
+  "n_timesteps": 97,
+  "snapshots": {
+    "1": {
+      "hours_back": 1,
+      "centroid": {
+        "lon": 32.89674377441406,
+        "lat": 31.92428207397461
+      },
+      "active_particles": 1000
+    },
+    "6": {
+      "hours_back": 6,
+      "centroid": {
+        "lon": 32.90748596191406,
+        "lat": 31.949668884277344
+      },
+      "active_particles": 1000
+    },
+    "12": {
+      "hours_back": 12,
+      "centroid": {
+        "lon": 32.90442657470703,
+        "lat": 31.95476531982422
+      },
+      "active_particles": 1000
+    },
+    "24": {
+      "hours_back": 24,
+      "centroid": {
+        "lon": 32.9375,
+        "lat": 31.945205688476562
+      },
+      "active_particles": 1000
+    },
+    "48": {
+      "hours_back": 48,
+      "centroid": {
+        "lon": 32.8737907409668,
+        "lat": 31.992494583129883
+      },
+      "active_particles": 1000
+    }
+  },
+  "earliest_backtracked_time": "2019-06-08 15:48:13Z",
+  "latest_backtracked_time": "2019-06-10 15:48:13Z"
+}
