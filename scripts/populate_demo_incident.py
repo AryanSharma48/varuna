@@ -232,9 +232,10 @@ def generate_demo_dataset():
         if datetime(2019, 6, 10, 14, 15, tzinfo=timezone.utc) <= t <= datetime(2019, 6, 10, 14, 35, tzinfo=timezone.utc):
             continue
             
+        # Shift coordinates to align with active spill polygon (d_lat=-0.081222, d_lon=+0.079915)
         frac = i / 29.0
-        lat = 31.844 + frac * (32.144 - 31.844)
-        lon = 32.716 + frac * (32.866 - 32.716)
+        lat = 31.844 + frac * (32.144 - 31.844) - 0.081222
+        lon = 32.716 + frac * (32.866 - 32.716) + 0.079915
         
         ais_points.append({
             "mmsi": 636018245,
@@ -252,8 +253,8 @@ def generate_demo_dataset():
         t = t_start + timedelta(minutes=i * 10)
         t_str = t.isoformat()
         frac = i / 29.0
-        lat = 32.174 - frac * (32.174 - 31.874)
-        lon = 32.746 + frac * (32.786 - 32.746)
+        lat = 32.174 - frac * (32.174 - 31.874) - 0.081222
+        lon = 32.746 + frac * (32.786 - 32.746) + 0.079915
         sog = 7.2 if 13.8 <= (i*10/60.0) <= 14.8 else 13.5 # Speed drop near origin
         
         ais_points.append({
@@ -272,8 +273,8 @@ def generate_demo_dataset():
         t = t_start + timedelta(minutes=i * 10)
         t_str = t.isoformat()
         frac = i / 29.0
-        lat = 32.144 + frac * 0.05
-        lon = 32.566 + frac * (32.966 - 32.566)
+        lat = 32.144 + frac * 0.05 - 0.081222
+        lon = 32.566 + frac * (32.966 - 32.566) + 0.079915
         
         ais_points.append({
             "mmsi": 352884000,
@@ -295,8 +296,8 @@ def generate_demo_dataset():
             "id": "ANOM-001",
             "mmsi": 636018245,
             "timestamp": "2019-06-10T14:15:00Z",
-            "latitude": 32.0050,
-            "longitude": 32.7925,
+            "latitude": 31.923778,
+            "longitude": 32.872415,
             "anomaly_type": "AIS_GAP",
             "severity": "HIGH",
             "description": "Unannounced 22-minute AIS transmission blackout while transiting estimated spill origin centroid.",
@@ -306,8 +307,8 @@ def generate_demo_dataset():
             "id": "ANOM-002",
             "mmsi": 241319000,
             "timestamp": "2019-06-10T14:05:00Z",
-            "latitude": 32.0130,
-            "longitude": 32.7670,
+            "latitude": 31.931778,
+            "longitude": 32.846915,
             "anomaly_type": "SPEED_JUMP",
             "severity": "MEDIUM",
             "description": "Abrupt speed reduction from 13.5 kts to 7.2 kts near origin boundary.",

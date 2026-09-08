@@ -4,18 +4,18 @@
     "vessel_name": "MT AL NAJAF",
     "vessel_type": "Oil/Chemical Tanker",
     "flag": "Liberia",
-    "total_score": 61.6,
-    "priority_level": "MEDIUM",
+    "total_score": 89.9,
+    "priority_level": "HIGH",
     "breakdown": {
-      "proximity": 1.7,
+      "proximity": 30.0,
       "timing": 25.0,
       "trajectory": 19.9,
       "ais_gap": 15.0,
       "behaviour_anomaly": 0.0
     },
     "reasons": [
-      "Close spatial proximity (9.6 km) to probable origin boundary",
-      "Closest approach (13:50 UTC) coincided exactly with estimated spill window",
+      "Direct passage (1.3 km) through probable origin centroid",
+      "Closest approach (14:40 UTC) coincided exactly with estimated spill window",
       "Transit course (44.5\u00b0) strongly aligns with slick elongation axis (45.0\u00b0)",
       "Identified unannounced AIS transmission outage / gap in origin vicinity"
     ],
@@ -27,18 +27,18 @@
     "vessel_name": "MT LEVANT STAR",
     "vessel_type": "Crude Oil Tanker",
     "flag": "Greece",
-    "total_score": 41.2,
-    "priority_level": "MEDIUM",
+    "total_score": 72.7,
+    "priority_level": "HIGH",
     "breakdown": {
-      "proximity": 7.1,
-      "timing": 16.5,
+      "proximity": 30.0,
+      "timing": 25.0,
       "trajectory": 12.7,
       "ais_gap": 0.0,
       "behaviour_anomaly": 5.0
     },
     "reasons": [
-      "Close spatial proximity (8.1 km) to probable origin boundary",
-      "Passed within 1.4 hours of estimated spill window",
+      "Direct passage (1.7 km) through probable origin centroid",
+      "Closest approach (14:40 UTC) coincided exactly with estimated spill window",
       "Exhibited atypical kinematic behavior (speed reduction or sharp course change)"
     ],
     "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
@@ -49,17 +49,18 @@
     "vessel_name": "MV MEDITERRANEAN EXPRESS",
     "vessel_type": "Container Ship",
     "flag": "Panama",
-    "total_score": 34.5,
-    "priority_level": "LOW",
+    "total_score": 42.1,
+    "priority_level": "MEDIUM",
     "breakdown": {
-      "proximity": 0.0,
-      "timing": 22.7,
+      "proximity": 5.4,
+      "timing": 25.0,
       "trajectory": 11.8,
       "ais_gap": 0.0,
       "behaviour_anomaly": 0.0
     },
     "reasons": [
-      "Passed within 0.4 hours of estimated spill window"
+      "Moderate distance (18.3 km) from origin zone",
+      "Closest approach (14:20 UTC) coincided exactly with estimated spill window"
     ],
     "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
     "priority_rank": 3

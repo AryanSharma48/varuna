@@ -396,16 +396,16 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
               id="origin-contour-fill"
               type="fill"
               paint={{
-                'fill-color': '#0284c7',
-                'fill-opacity': 0.12
+                'fill-color': '#ffffffff',
+                'fill-opacity': 0.10
               }}
             />
             <Layer
               id="origin-contour-line"
               type="line"
               paint={{
-                'line-color': '#38bdf8',
-                'line-width': 1.8,
+                'line-color': '#ffffffff',
+                'line-width': 1.5,
                 'line-dasharray': [4, 3]
               }}
             />
@@ -435,15 +435,15 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
               id="forward-corridor-fill"
               type="fill"
               paint={{
-                'fill-color': '#2563eb',
-                'fill-opacity': 0.15
+                'fill-color': '#040f56ff',
+                'fill-opacity': 0.35
               }}
             />
             <Layer
               id="forward-corridor-line"
               type="line"
               paint={{
-                'line-color': '#60a5fa',
+                'line-color': '#07029eff',
                 'line-width': 1.8,
                 'line-dasharray': [4, 3]
               }}
