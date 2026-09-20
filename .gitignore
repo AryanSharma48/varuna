@@ -53,13 +53,13 @@ apps/web/dist-ssr/
 *.db
 *.sqlite3
 sih_investigation.db
+varuna_investigation.db
 
 # Logs & Temporary Files
 *.log
 logs/
 *.tmp
 *.bak
-PRD.md
 
 # IDE & System Files
 .idea/
@@ -86,7 +86,7 @@ artifacts/
 
 # Derived Heavy ML Outputs & Visualizations
 demo/incidents/*/derived/*.tif
-demo/incidents/*/derived/*.png
 demo/incidents/*/derived/pretrained_candidate.json
+demo/incidents/*/satellite/candidate_overlay.png
 training-data
 training_data
