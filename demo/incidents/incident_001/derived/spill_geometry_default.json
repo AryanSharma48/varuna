@@ -1,6 +1,6 @@
 {
   "status": "available",
-  "detection_id": "DET-SIH-2026-001",
+  "detection_id": "DET-VARUNA-2026-001",
   "sensing_time": "2019-06-10T15:48:13+00:00",
   "oil_confidence": 0.94,
   "look_alike_risk": "LOW",
@@ -15,7 +15,7 @@
   "geojson": {
     "type": "Feature",
     "properties": {
-      "id": "DET-SIH-2026-001",
+      "id": "DET-VARUNA-2026-001",
       "center_lat": 32.006759,
       "center_lon": 32.815022,
       "area_km2": 14.68,

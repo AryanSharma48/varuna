@@ -5,7 +5,7 @@
       "type": "Feature",
       "properties": {
         "source": "manual_demo_delineation",
-        "incident_id": "SIH-2026-001",
+        "incident_id": "VARUNA-2026-001",
         "reference_source": "DARTIS ow-0388",
         "disclaimer": "Manual delineation within published DARTIS reference region; not an automated ML prediction.",
         "area_km2": 87.18,

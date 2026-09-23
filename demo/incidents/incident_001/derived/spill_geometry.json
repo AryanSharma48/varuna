@@ -1,6 +1,6 @@
 {
   "status": "available",
-  "detection_id": "DET-CUSTOM-SIH-2026-001",
+  "detection_id": "DET-CUSTOM-VARUNA-2026-001",
   "sensing_time": "2019-06-10T15:48:13+00:00",
   "oil_confidence": 0.96,
   "look_alike_risk": "LOW",
@@ -15,7 +15,7 @@
   "geojson": {
     "type": "Feature",
     "properties": {
-      "id": "CUSTOM-SIH-2026-001",
+      "id": "CUSTOM-VARUNA-2026-001",
       "center_lat": 31.925537,
       "center_lon": 32.894937,
       "area_km2": 53.15,
