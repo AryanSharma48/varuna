@@ -24,6 +24,7 @@ class Incident(Base):
     attribution_scores = relationship("AttributionScore", back_populates="incident", cascade="all, delete-orphan")
     drift_runs = relationship("DriftRun", back_populates="incident", cascade="all, delete-orphan")
     evidence_items = relationship("EvidenceItem", back_populates="incident", cascade="all, delete-orphan")
+    reports = relationship("InvestigationReport", back_populates="incident", cascade="all, delete-orphan")
 
 class SatelliteScene(Base):
     __tablename__ = "satellite_scenes"
@@ -183,3 +184,16 @@ class EvidenceItem(Base):
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     
     incident = relationship("Incident", back_populates="evidence_items")
+
+class InvestigationReport(Base):
+    __tablename__ = "investigation_reports"
+    
+    id = Column(String, primary_key=True, index=True)
+    incident_id = Column(String, ForeignKey("incidents.id"), nullable=False)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    sha256_fingerprint = Column(String(64), nullable=False, index=True)
+    canonical_payload = Column(Text, nullable=False)
+    status = Column(String, default="OFFICIAL") # OFFICIAL, DRAFT
+    
+    incident = relationship("Incident", back_populates="reports")
+

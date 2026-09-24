@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./sih_investigation.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./varuna_investigation.db")
 
 # Handle SQLite vs PostgreSQL arguments
 connect_args = {"check_same_thread": False} if "sqlite" in DATABASE_URL else {}

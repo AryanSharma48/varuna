@@ -15,23 +15,23 @@ def seed_demo_data():
     db: Session = SessionLocal()
     
     try:
-        # Check if already seeded
-        existing = db.query(Incident).filter(Incident.id == "SIH-2026-001").first()
-        if existing:
-            print("Demo incident SIH-2026-001 already exists in database. Overwriting...")
-            db.query(AttributionScore).filter(AttributionScore.incident_id == "SIH-2026-001").delete()
-            db.query(AISAnomaly).filter(AISAnomaly.incident_id == "SIH-2026-001").delete()
-            db.query(AISPoint).delete()
-            db.query(Vessel).delete()
-            db.query(DriftRun).filter(DriftRun.incident_id == "SIH-2026-001").delete()
-            db.query(OriginEstimate).filter(OriginEstimate.incident_id == "SIH-2026-001").delete()
-            db.query(SpillDetection).filter(SpillDetection.incident_id == "SIH-2026-001").delete()
-            db.query(SatelliteScene).filter(SatelliteScene.incident_id == "SIH-2026-001").delete()
-            db.query(EvidenceItem).filter(EvidenceItem.incident_id == "SIH-2026-001").delete()
-            db.query(Incident).filter(Incident.id == "SIH-2026-001").delete()
-            db.commit()
+        # Check if already seeded (VARUNA or legacy SIH)
+        for old_id in ["VARUNA-2026-001", "SIH-2026-001"]:
+            existing = db.query(Incident).filter(Incident.id == old_id).first()
+            if existing:
+                db.query(AttributionScore).filter(AttributionScore.incident_id == old_id).delete()
+                db.query(AISAnomaly).filter(AISAnomaly.incident_id == old_id).delete()
+                db.query(DriftRun).filter(DriftRun.incident_id == old_id).delete()
+                db.query(OriginEstimate).filter(OriginEstimate.incident_id == old_id).delete()
+                db.query(SpillDetection).filter(SpillDetection.incident_id == old_id).delete()
+                db.query(SatelliteScene).filter(SatelliteScene.incident_id == old_id).delete()
+                db.query(EvidenceItem).filter(EvidenceItem.incident_id == old_id).delete()
+                db.query(Incident).filter(Incident.id == old_id).delete()
+        db.query(AISPoint).delete()
+        db.query(Vessel).delete()
+        db.commit()
 
-        print("Seeding SIH-2026-001 Maritime Investigation Real DARTIS Demo Data...")
+        print("Seeding VARUNA-2026-001 Maritime Investigation Real DARTIS Demo Data...")
         
         base_dir = os.path.join("demo", "incidents", "incident_001")
         meta_path = os.path.join(base_dir, "metadata.json")
