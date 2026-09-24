@@ -237,7 +237,7 @@ class SyntheticAISGenerator:
             })
             
         return {
-            "scenario_name": "SIH-26143 Controlled Demo Scenario",
+            "scenario_name": "VARUNA Controlled Maritime Scenario",
             "source_type": "synthetic",
             "generator_version": "1.0.0",
             "random_seed": self.random_seed,

@@ -1,6 +1,306 @@
 [
   {
     "mmsi": 636018245,
+    "timestamp": "2019-06-10T07:00:00+00:00",
+    "latitude": 31.452433,
+    "longitude": 32.640743,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T07:10:00+00:00",
+    "latitude": 31.462778,
+    "longitude": 32.645915,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T07:20:00+00:00",
+    "latitude": 31.473123,
+    "longitude": 32.651087,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T07:30:00+00:00",
+    "latitude": 31.483468,
+    "longitude": 32.65626,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T07:40:00+00:00",
+    "latitude": 31.493812,
+    "longitude": 32.661432,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T07:50:00+00:00",
+    "latitude": 31.504157,
+    "longitude": 32.666605,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T08:00:00+00:00",
+    "latitude": 31.514502,
+    "longitude": 32.671777,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T08:10:00+00:00",
+    "latitude": 31.524847,
+    "longitude": 32.676949,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T08:20:00+00:00",
+    "latitude": 31.535192,
+    "longitude": 32.682122,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T08:30:00+00:00",
+    "latitude": 31.545537,
+    "longitude": 32.687294,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T08:40:00+00:00",
+    "latitude": 31.555881,
+    "longitude": 32.692467,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T08:50:00+00:00",
+    "latitude": 31.566226,
+    "longitude": 32.697639,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T09:00:00+00:00",
+    "latitude": 31.576571,
+    "longitude": 32.702812,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T09:10:00+00:00",
+    "latitude": 31.586916,
+    "longitude": 32.707984,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T09:20:00+00:00",
+    "latitude": 31.597261,
+    "longitude": 32.713156,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T09:30:00+00:00",
+    "latitude": 31.607606,
+    "longitude": 32.718329,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T09:40:00+00:00",
+    "latitude": 31.61795,
+    "longitude": 32.723501,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T09:50:00+00:00",
+    "latitude": 31.628295,
+    "longitude": 32.728674,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T10:00:00+00:00",
+    "latitude": 31.63864,
+    "longitude": 32.733846,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T10:10:00+00:00",
+    "latitude": 31.648985,
+    "longitude": 32.739018,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T10:20:00+00:00",
+    "latitude": 31.65933,
+    "longitude": 32.744191,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T10:30:00+00:00",
+    "latitude": 31.669675,
+    "longitude": 32.749363,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T10:40:00+00:00",
+    "latitude": 31.680019,
+    "longitude": 32.754536,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T10:50:00+00:00",
+    "latitude": 31.690364,
+    "longitude": 32.759708,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T11:00:00+00:00",
+    "latitude": 31.700709,
+    "longitude": 32.764881,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T11:10:00+00:00",
+    "latitude": 31.711054,
+    "longitude": 32.770053,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T11:20:00+00:00",
+    "latitude": 31.721399,
+    "longitude": 32.775225,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T11:30:00+00:00",
+    "latitude": 31.731744,
+    "longitude": 32.780398,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T11:40:00+00:00",
+    "latitude": 31.742088,
+    "longitude": 32.78557,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T11:50:00+00:00",
+    "latitude": 31.752433,
+    "longitude": 32.790743,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
     "timestamp": "2019-06-10T12:00:00+00:00",
     "latitude": 31.762778,
     "longitude": 32.795915,
@@ -278,6 +578,606 @@
     "cog": 44.5,
     "heading": 45,
     "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T17:00:00+00:00",
+    "latitude": 32.073123,
+    "longitude": 32.951087,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T17:10:00+00:00",
+    "latitude": 32.083468,
+    "longitude": 32.95626,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T17:20:00+00:00",
+    "latitude": 32.093812,
+    "longitude": 32.961432,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T17:30:00+00:00",
+    "latitude": 32.104157,
+    "longitude": 32.966605,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T17:40:00+00:00",
+    "latitude": 32.114502,
+    "longitude": 32.971777,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T17:50:00+00:00",
+    "latitude": 32.124847,
+    "longitude": 32.976949,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T18:00:00+00:00",
+    "latitude": 32.135192,
+    "longitude": 32.982122,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T18:10:00+00:00",
+    "latitude": 32.145537,
+    "longitude": 32.987294,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T18:20:00+00:00",
+    "latitude": 32.155881,
+    "longitude": 32.992467,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T18:30:00+00:00",
+    "latitude": 32.166226,
+    "longitude": 32.997639,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T18:40:00+00:00",
+    "latitude": 32.176571,
+    "longitude": 33.002812,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T18:50:00+00:00",
+    "latitude": 32.186916,
+    "longitude": 33.007984,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T19:00:00+00:00",
+    "latitude": 32.197261,
+    "longitude": 33.013156,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T19:10:00+00:00",
+    "latitude": 32.207606,
+    "longitude": 33.018329,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T19:20:00+00:00",
+    "latitude": 32.21795,
+    "longitude": 33.023501,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T19:30:00+00:00",
+    "latitude": 32.228295,
+    "longitude": 33.028674,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T19:40:00+00:00",
+    "latitude": 32.23864,
+    "longitude": 33.033846,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T19:50:00+00:00",
+    "latitude": 32.248985,
+    "longitude": 33.039018,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T20:00:00+00:00",
+    "latitude": 32.25933,
+    "longitude": 33.044191,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T20:10:00+00:00",
+    "latitude": 32.269675,
+    "longitude": 33.049363,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T20:20:00+00:00",
+    "latitude": 32.280019,
+    "longitude": 33.054536,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T20:30:00+00:00",
+    "latitude": 32.290364,
+    "longitude": 33.059708,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T20:40:00+00:00",
+    "latitude": 32.300709,
+    "longitude": 33.064881,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T20:50:00+00:00",
+    "latitude": 32.311054,
+    "longitude": 33.070053,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T21:00:00+00:00",
+    "latitude": 32.321399,
+    "longitude": 33.075225,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T21:10:00+00:00",
+    "latitude": 32.331744,
+    "longitude": 33.080398,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T21:20:00+00:00",
+    "latitude": 32.342088,
+    "longitude": 33.08557,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T21:30:00+00:00",
+    "latitude": 32.352433,
+    "longitude": 33.090743,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T21:40:00+00:00",
+    "latitude": 32.362778,
+    "longitude": 33.095915,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 636018245,
+    "timestamp": "2019-06-10T21:50:00+00:00",
+    "latitude": 32.373123,
+    "longitude": 33.101087,
+    "sog": 12.8,
+    "cog": 44.5,
+    "heading": 45,
+    "source_type": "TERRESTRIAL_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T07:00:00+00:00",
+    "latitude": 32.403123,
+    "longitude": 32.784536,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T07:10:00+00:00",
+    "latitude": 32.392778,
+    "longitude": 32.785915,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T07:20:00+00:00",
+    "latitude": 32.382433,
+    "longitude": 32.787294,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T07:30:00+00:00",
+    "latitude": 32.372088,
+    "longitude": 32.788674,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T07:40:00+00:00",
+    "latitude": 32.361744,
+    "longitude": 32.790053,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T07:50:00+00:00",
+    "latitude": 32.351399,
+    "longitude": 32.791432,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T08:00:00+00:00",
+    "latitude": 32.341054,
+    "longitude": 32.792812,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T08:10:00+00:00",
+    "latitude": 32.330709,
+    "longitude": 32.794191,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T08:20:00+00:00",
+    "latitude": 32.320364,
+    "longitude": 32.79557,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T08:30:00+00:00",
+    "latitude": 32.310019,
+    "longitude": 32.796949,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T08:40:00+00:00",
+    "latitude": 32.299675,
+    "longitude": 32.798329,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T08:50:00+00:00",
+    "latitude": 32.28933,
+    "longitude": 32.799708,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T09:00:00+00:00",
+    "latitude": 32.278985,
+    "longitude": 32.801087,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T09:10:00+00:00",
+    "latitude": 32.26864,
+    "longitude": 32.802467,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T09:20:00+00:00",
+    "latitude": 32.258295,
+    "longitude": 32.803846,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T09:30:00+00:00",
+    "latitude": 32.24795,
+    "longitude": 32.805225,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T09:40:00+00:00",
+    "latitude": 32.237606,
+    "longitude": 32.806605,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T09:50:00+00:00",
+    "latitude": 32.227261,
+    "longitude": 32.807984,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T10:00:00+00:00",
+    "latitude": 32.216916,
+    "longitude": 32.809363,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T10:10:00+00:00",
+    "latitude": 32.206571,
+    "longitude": 32.810743,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T10:20:00+00:00",
+    "latitude": 32.196226,
+    "longitude": 32.812122,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T10:30:00+00:00",
+    "latitude": 32.185881,
+    "longitude": 32.813501,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T10:40:00+00:00",
+    "latitude": 32.175537,
+    "longitude": 32.814881,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T10:50:00+00:00",
+    "latitude": 32.165192,
+    "longitude": 32.81626,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T11:00:00+00:00",
+    "latitude": 32.154847,
+    "longitude": 32.817639,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T11:10:00+00:00",
+    "latitude": 32.144502,
+    "longitude": 32.819018,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T11:20:00+00:00",
+    "latitude": 32.134157,
+    "longitude": 32.820398,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T11:30:00+00:00",
+    "latitude": 32.123812,
+    "longitude": 32.821777,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T11:40:00+00:00",
+    "latitude": 32.113468,
+    "longitude": 32.823156,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T11:50:00+00:00",
+    "latitude": 32.103123,
+    "longitude": 32.824536,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
   },
   {
     "mmsi": 241319000,
@@ -580,6 +1480,606 @@
     "source_type": "SATELLITE_AIS"
   },
   {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T17:00:00+00:00",
+    "latitude": 31.782433,
+    "longitude": 32.867294,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T17:10:00+00:00",
+    "latitude": 31.772088,
+    "longitude": 32.868674,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T17:20:00+00:00",
+    "latitude": 31.761744,
+    "longitude": 32.870053,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T17:30:00+00:00",
+    "latitude": 31.751399,
+    "longitude": 32.871432,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T17:40:00+00:00",
+    "latitude": 31.741054,
+    "longitude": 32.872812,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T17:50:00+00:00",
+    "latitude": 31.730709,
+    "longitude": 32.874191,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T18:00:00+00:00",
+    "latitude": 31.720364,
+    "longitude": 32.87557,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T18:10:00+00:00",
+    "latitude": 31.710019,
+    "longitude": 32.876949,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T18:20:00+00:00",
+    "latitude": 31.699675,
+    "longitude": 32.878329,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T18:30:00+00:00",
+    "latitude": 31.68933,
+    "longitude": 32.879708,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T18:40:00+00:00",
+    "latitude": 31.678985,
+    "longitude": 32.881087,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T18:50:00+00:00",
+    "latitude": 31.66864,
+    "longitude": 32.882467,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T19:00:00+00:00",
+    "latitude": 31.658295,
+    "longitude": 32.883846,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T19:10:00+00:00",
+    "latitude": 31.64795,
+    "longitude": 32.885225,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T19:20:00+00:00",
+    "latitude": 31.637606,
+    "longitude": 32.886605,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T19:30:00+00:00",
+    "latitude": 31.627261,
+    "longitude": 32.887984,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T19:40:00+00:00",
+    "latitude": 31.616916,
+    "longitude": 32.889363,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T19:50:00+00:00",
+    "latitude": 31.606571,
+    "longitude": 32.890743,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T20:00:00+00:00",
+    "latitude": 31.596226,
+    "longitude": 32.892122,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T20:10:00+00:00",
+    "latitude": 31.585881,
+    "longitude": 32.893501,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T20:20:00+00:00",
+    "latitude": 31.575537,
+    "longitude": 32.894881,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T20:30:00+00:00",
+    "latitude": 31.565192,
+    "longitude": 32.89626,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T20:40:00+00:00",
+    "latitude": 31.554847,
+    "longitude": 32.897639,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T20:50:00+00:00",
+    "latitude": 31.544502,
+    "longitude": 32.899018,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T21:00:00+00:00",
+    "latitude": 31.534157,
+    "longitude": 32.900398,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T21:10:00+00:00",
+    "latitude": 31.523812,
+    "longitude": 32.901777,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T21:20:00+00:00",
+    "latitude": 31.513468,
+    "longitude": 32.903156,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T21:30:00+00:00",
+    "latitude": 31.503123,
+    "longitude": 32.904536,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T21:40:00+00:00",
+    "latitude": 31.492778,
+    "longitude": 32.905915,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 241319000,
+    "timestamp": "2019-06-10T21:50:00+00:00",
+    "latitude": 31.482433,
+    "longitude": 32.907294,
+    "sog": 13.5,
+    "cog": 192.0,
+    "heading": 190,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T07:00:00+00:00",
+    "latitude": 32.011054,
+    "longitude": 32.232122,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T07:10:00+00:00",
+    "latitude": 32.012778,
+    "longitude": 32.245915,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T07:20:00+00:00",
+    "latitude": 32.014502,
+    "longitude": 32.259708,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T07:30:00+00:00",
+    "latitude": 32.016226,
+    "longitude": 32.273501,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T07:40:00+00:00",
+    "latitude": 32.01795,
+    "longitude": 32.287294,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T07:50:00+00:00",
+    "latitude": 32.019675,
+    "longitude": 32.301087,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T08:00:00+00:00",
+    "latitude": 32.021399,
+    "longitude": 32.314881,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T08:10:00+00:00",
+    "latitude": 32.023123,
+    "longitude": 32.328674,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T08:20:00+00:00",
+    "latitude": 32.024847,
+    "longitude": 32.342467,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T08:30:00+00:00",
+    "latitude": 32.026571,
+    "longitude": 32.35626,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T08:40:00+00:00",
+    "latitude": 32.028295,
+    "longitude": 32.370053,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T08:50:00+00:00",
+    "latitude": 32.030019,
+    "longitude": 32.383846,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T09:00:00+00:00",
+    "latitude": 32.031744,
+    "longitude": 32.397639,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T09:10:00+00:00",
+    "latitude": 32.033468,
+    "longitude": 32.411432,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T09:20:00+00:00",
+    "latitude": 32.035192,
+    "longitude": 32.425225,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T09:30:00+00:00",
+    "latitude": 32.036916,
+    "longitude": 32.439018,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T09:40:00+00:00",
+    "latitude": 32.03864,
+    "longitude": 32.452812,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T09:50:00+00:00",
+    "latitude": 32.040364,
+    "longitude": 32.466605,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T10:00:00+00:00",
+    "latitude": 32.042088,
+    "longitude": 32.480398,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T10:10:00+00:00",
+    "latitude": 32.043812,
+    "longitude": 32.494191,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T10:20:00+00:00",
+    "latitude": 32.045537,
+    "longitude": 32.507984,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T10:30:00+00:00",
+    "latitude": 32.047261,
+    "longitude": 32.521777,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T10:40:00+00:00",
+    "latitude": 32.048985,
+    "longitude": 32.53557,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T10:50:00+00:00",
+    "latitude": 32.050709,
+    "longitude": 32.549363,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T11:00:00+00:00",
+    "latitude": 32.052433,
+    "longitude": 32.563156,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T11:10:00+00:00",
+    "latitude": 32.054157,
+    "longitude": 32.576949,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T11:20:00+00:00",
+    "latitude": 32.055881,
+    "longitude": 32.590743,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T11:30:00+00:00",
+    "latitude": 32.057606,
+    "longitude": 32.604536,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T11:40:00+00:00",
+    "latitude": 32.05933,
+    "longitude": 32.618329,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T11:50:00+00:00",
+    "latitude": 32.061054,
+    "longitude": 32.632122,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
     "mmsi": 352884000,
     "timestamp": "2019-06-10T12:00:00+00:00",
     "latitude": 32.062778,
@@ -874,6 +2374,306 @@
     "timestamp": "2019-06-10T16:50:00+00:00",
     "latitude": 32.112778,
     "longitude": 33.045915,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T17:00:00+00:00",
+    "latitude": 32.114502,
+    "longitude": 33.059708,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T17:10:00+00:00",
+    "latitude": 32.116226,
+    "longitude": 33.073501,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T17:20:00+00:00",
+    "latitude": 32.11795,
+    "longitude": 33.087294,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T17:30:00+00:00",
+    "latitude": 32.119675,
+    "longitude": 33.101087,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T17:40:00+00:00",
+    "latitude": 32.121399,
+    "longitude": 33.114881,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T17:50:00+00:00",
+    "latitude": 32.123123,
+    "longitude": 33.128674,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T18:00:00+00:00",
+    "latitude": 32.124847,
+    "longitude": 33.142467,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T18:10:00+00:00",
+    "latitude": 32.126571,
+    "longitude": 33.15626,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T18:20:00+00:00",
+    "latitude": 32.128295,
+    "longitude": 33.170053,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T18:30:00+00:00",
+    "latitude": 32.130019,
+    "longitude": 33.183846,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T18:40:00+00:00",
+    "latitude": 32.131744,
+    "longitude": 33.197639,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T18:50:00+00:00",
+    "latitude": 32.133468,
+    "longitude": 33.211432,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T19:00:00+00:00",
+    "latitude": 32.135192,
+    "longitude": 33.225225,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T19:10:00+00:00",
+    "latitude": 32.136916,
+    "longitude": 33.239018,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T19:20:00+00:00",
+    "latitude": 32.13864,
+    "longitude": 33.252812,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T19:30:00+00:00",
+    "latitude": 32.140364,
+    "longitude": 33.266605,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T19:40:00+00:00",
+    "latitude": 32.142088,
+    "longitude": 33.280398,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T19:50:00+00:00",
+    "latitude": 32.143812,
+    "longitude": 33.294191,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T20:00:00+00:00",
+    "latitude": 32.145537,
+    "longitude": 33.307984,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T20:10:00+00:00",
+    "latitude": 32.147261,
+    "longitude": 33.321777,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T20:20:00+00:00",
+    "latitude": 32.148985,
+    "longitude": 33.33557,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T20:30:00+00:00",
+    "latitude": 32.150709,
+    "longitude": 33.349363,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T20:40:00+00:00",
+    "latitude": 32.152433,
+    "longitude": 33.363156,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T20:50:00+00:00",
+    "latitude": 32.154157,
+    "longitude": 33.376949,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T21:00:00+00:00",
+    "latitude": 32.155881,
+    "longitude": 33.390743,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T21:10:00+00:00",
+    "latitude": 32.157606,
+    "longitude": 33.404536,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T21:20:00+00:00",
+    "latitude": 32.15933,
+    "longitude": 33.418329,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T21:30:00+00:00",
+    "latitude": 32.161054,
+    "longitude": 33.432122,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T21:40:00+00:00",
+    "latitude": 32.162778,
+    "longitude": 33.445915,
+    "sog": 18.2,
+    "cog": 82.0,
+    "heading": 82,
+    "source_type": "SATELLITE_AIS"
+  },
+  {
+    "mmsi": 352884000,
+    "timestamp": "2019-06-10T21:50:00+00:00",
+    "latitude": 32.164502,
+    "longitude": 33.459708,
     "sog": 18.2,
     "cog": 82.0,
     "heading": 82,
