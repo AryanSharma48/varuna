@@ -15,44 +15,64 @@ class SensitiveImpactService:
     def __init__(self):
         self.default_assets = [
             {
-                "id": "asset_mpa_01",
-                "name": "Malvan Marine Wildlife Sanctuary",
-                "asset_type": "MARINE_PROTECTED_AREA",
-                "center_lat": 18.98,
-                "center_lon": 72.88,
-                "radius_km": 6.5,
+                "id": "asset_eez_egypt",
+                "name": "Egypt Sovereign EEZ & Coastal Waters",
+                "asset_type": "EXCLUSIVE_ECONOMIC_ZONE",
+                "center_lat": 31.65,
+                "center_lon": 32.95,
+                "radius_km": 35.0,
                 "vulnerability_index": 0.95,
-                "description": "Critical biodiversity zone, mangrove nursery & coral habitat"
+                "description": "Direct offshore maritime jurisdiction & sovereign continental shelf waters of Egypt."
             },
             {
-                "id": "asset_fish_02",
-                "name": "Thane Creek Coastal Fishing Zone",
-                "asset_type": "FISHING_ZONE",
-                "center_lat": 18.96,
-                "center_lon": 72.86,
-                "radius_km": 8.0,
-                "vulnerability_index": 0.80,
-                "description": "Active artisanal and commercial coastal fishery waters"
+                "id": "asset_fish_portsaid",
+                "name": "Port Said & Damietta Commercial Trawling Grounds",
+                "asset_type": "COMMERCIAL_FISHERY",
+                "center_lat": 31.55,
+                "center_lon": 32.55,
+                "radius_km": 20.0,
+                "vulnerability_index": 0.90,
+                "description": "High-density demersal fishery for Mediterranean red mullet, seabream & penaeid shrimp."
             },
             {
-                "id": "asset_port_03",
-                "name": "Jawaharlal Nehru Port Outer Approach Channel",
-                "asset_type": "COMMERCIAL_PORT",
-                "center_lat": 18.94,
-                "center_lon": 72.84,
-                "radius_km": 5.0,
-                "vulnerability_index": 0.70,
-                "description": "Major container shipping fairway and pilot boarding station"
+                "id": "asset_mpa_zaranik",
+                "name": "Zaranik Protected Area & Lake Bardawil Lagoon",
+                "asset_type": "ENDANGERED_HABITAT",
+                "center_lat": 31.25,
+                "center_lon": 33.25,
+                "radius_km": 18.0,
+                "vulnerability_index": 0.98,
+                "description": "Ramsar sanctuary. Critical nesting beach for endangered Loggerhead (Caretta caretta) & Green Sea Turtles."
             },
             {
-                "id": "asset_beach_04",
-                "name": "Alibaug Public Coastal Beach & Tourism Strip",
-                "asset_type": "COASTAL_BEACH",
-                "center_lat": 18.88,
-                "center_lon": 72.89,
-                "radius_km": 7.0,
+                "id": "asset_fish_sinai",
+                "name": "North Sinai Artisanal Gillnet Fishery (El Arish)",
+                "asset_type": "ARTISANAL_FISHERY",
+                "center_lat": 31.35,
+                "center_lon": 33.50,
+                "radius_km": 18.0,
                 "vulnerability_index": 0.85,
-                "description": "High-density recreational coastline & resort waterfront"
+                "description": "Artisanal inshore fishing community waters and pelagic seasonal migration corridor."
+            },
+            {
+                "id": "asset_mpa_manzala",
+                "name": "Ashtoum El Gamil & Lake Manzala Estuarine Reserve",
+                "asset_type": "RAMSAR_SANCTUARY",
+                "center_lat": 31.32,
+                "center_lon": 32.22,
+                "radius_km": 15.0,
+                "vulnerability_index": 0.88,
+                "description": "Coastal barrier lagoon and mullet fry nursery providing vital estuarine biodiversity habitat."
+            },
+            {
+                "id": "asset_eez_levant",
+                "name": "Levant Maritime Border & Gaza Marine Sector",
+                "asset_type": "TRANSBOUNDARY_EEZ",
+                "center_lat": 31.55,
+                "center_lon": 34.15,
+                "radius_km": 28.0,
+                "vulnerability_index": 0.78,
+                "description": "Transboundary coastal current trajectory watch (72h downwind advection window)."
             }
         ]
 
