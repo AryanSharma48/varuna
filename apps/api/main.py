@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 
 from apps.api.config import settings
-from apps.api.routes import incidents
+from apps.api.routes import incidents, reports
 from db.database import engine, Base, get_db
 from db.seed import seed_demo_data
 
@@ -15,7 +15,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version="1.0.0",
-    description="SIH 26143 — AI-Powered Oil Spill Investigation & Attribution Platform API"
+    description="VARUNA — Automated Sentinel-1 Oil Spill Detection, Backtracking & AIS Vessel Attribution Platform API"
 )
 
 # CORS Setup
@@ -35,12 +35,12 @@ def startup_event():
     except Exception as e:
         print(f"Startup seed notice: {e}")
 
-# Health Check Endpoints (PRD Section 10 / Phase 0)
+# Health Check Endpoints (Phase 0)
 @app.get("/health", status_code=status.HTTP_200_OK, tags=["Health"])
 def health_check():
     return {
         "status": "HEALTHY",
-        "service": "SIH-26143 API",
+        "service": "VARUNA API",
         "version": "1.0.0",
         "timestamp": os.getenv("CURRENT_TIME", "2026-09-04T16:00:00Z")
     }
@@ -57,9 +57,11 @@ def health_db_check(db: Session = Depends(get_db)):
 def health_redis_check():
     return {"status": "HEALTHY", "redis": "MOCK_LOCAL_STANDBY"}
 
-# Include Incidents Router
+# Include Incidents & Reports Routers
 app.include_router(incidents.router, prefix="/api/v1", tags=["Investigation"])
 app.include_router(incidents.router, prefix="", tags=["Investigation-Root"])
+app.include_router(reports.router, prefix="/api/v1", tags=["Reports"])
+app.include_router(reports.router, prefix="", tags=["Reports-Root"])
 
 if __name__ == "__main__":
     import uvicorn

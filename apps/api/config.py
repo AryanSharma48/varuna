@@ -5,12 +5,16 @@ from pydantic_settings import BaseSettings
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "SIH 26143 — Oil Spill Investigation & Attribution"
+    PROJECT_NAME: str = "VARUNA — AI-Powered Maritime Oil Spill Investigation & Attribution Platform"
     API_V1_STR: str = "/api/v1"
     
     # Environment & Database
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./sih_investigation.db")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./varuna_investigation.db")
     REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+    
+    # Groq LLM API Configuration
+    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
+    GROQ_MODEL: str = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
     
     # Storage Paths
     DATA_ROOT: Path = BASE_DIR / "data"
