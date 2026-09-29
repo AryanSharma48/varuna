@@ -70,17 +70,22 @@ class AttributionResponse(BaseModel):
 class AssistantRequest(BaseModel):
     incident_id: str
     query: str
+    history: Optional[List[Dict[str, str]]] = None
 
 class AssistantResponse(BaseModel):
     answer: str
     tool_used: str
     citations: List[Dict[str, Any]]
+    model_used: Optional[str] = "groq-openai/gpt-oss-120b"
 
 class ReportResponse(BaseModel):
     report_id: str
     incident_id: str
     generated_at: str
-    content_markdown: str
+    sha256_fingerprint: Optional[str] = None
+    pdf_download_url: Optional[str] = None
+    content_markdown: Optional[str] = None
+    report: Optional[Dict[str, Any]] = None
 
 class TraceOriginRequest(BaseModel):
     slick_lat: Optional[float] = None

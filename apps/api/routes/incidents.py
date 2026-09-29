@@ -23,7 +23,7 @@ from services.characterisation.morphology import characterisation_service
 from services.drift.lagrangian import drift_engine
 from services.drift.environmental import EnvironmentalSnapshot
 from services.ais.trajectory import ais_trajectory_service
-from services.ais.synthetic import synthetic_ais_generator
+from services.ais.mock_data import synthetic_ais_generator
 from services.ais.anomaly import ais_anomaly_detector
 from services.attribution.engine import attribution_engine
 from services.impact.assessment import sensitive_impact_service
@@ -139,43 +139,43 @@ def get_incident_detail(incident_id: str, db: Session = Depends(get_db)):
             "geojson": detection.geojson_geometry
         } if detection else None,
         "unet_prediction": (
-            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "unet_prediction.geojson"), "r"))
-            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "unet_prediction.geojson"))
+            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id, "derived", "unet_prediction.geojson"), "r"))
+            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id, "derived", "unet_prediction.geojson"))
             else None
         ),
         "dartis_reference": (
-            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "dartis_reference.json"), "r"))
-            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "dartis_reference.json"))
+            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id, "derived", "dartis_reference.json"), "r"))
+            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id, "derived", "dartis_reference.json"))
             else None
         ),
         "backtrack_particles": (
-            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "backtrack_particles.geojson"), "r"))
-            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "backtrack_particles.geojson"))
+            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id, "derived", "backtrack_particles.geojson"), "r"))
+            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id, "derived", "backtrack_particles.geojson"))
             else None
         ),
         "origin_corridor": (
-            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "origin_corridor.geojson"), "r"))
-            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "origin_corridor.geojson"))
+            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id, "derived", "origin_corridor.geojson"), "r"))
+            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id, "derived", "origin_corridor.geojson"))
             else None
         ),
         "backtrack_snapshots": (
-            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "backtrack_snapshots.json"), "r"))
-            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "backtrack_snapshots.json"))
+            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id, "derived", "backtrack_snapshots.json"), "r"))
+            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id, "derived", "backtrack_snapshots.json"))
             else None
         ),
         "forward_particles": (
-            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "forward_particles.geojson"), "r"))
-            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "forward_particles.geojson"))
+            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id, "derived", "forward_particles.geojson"), "r"))
+            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id, "derived", "forward_particles.geojson"))
             else None
         ),
         "forward_corridor": (
-            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "forward_corridor.geojson"), "r"))
-            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "forward_corridor.geojson"))
+            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id, "derived", "forward_corridor.geojson"), "r"))
+            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id, "derived", "forward_corridor.geojson"))
             else None
         ),
         "forward_snapshots": (
-            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "forward_snapshots.json"), "r"))
-            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id, "derived", "forward_snapshots.json"))
+            json.load(open(os.path.join("demo", "incidents", "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id, "derived", "forward_snapshots.json"), "r"))
+            if os.path.exists(os.path.join("demo", "incidents", "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id, "derived", "forward_snapshots.json"))
             else None
         ),
         "origin_estimate": {
@@ -300,7 +300,9 @@ def ask_grounded_assistant(req: AssistantRequest, db: Session = Depends(get_db))
         
     incident_detail["quality_gate"] = incident_detail.get("scene", {}).get("quality_details", {})
     
-    res = grounded_assistant.answer_question(req.query, incident_detail)
+    res = grounded_assistant.answer_question(req.query, incident_detail, req.history)
+    if "model_used" not in res:
+        res["model_used"] = "groq-openai/gpt-oss-120b"
     return res
 
 @router.post("/incidents/{incident_id}/analyze-sar")
@@ -322,7 +324,7 @@ def analyze_satellite_sar(incident_id: str, db: Session = Depends(get_db)):
     vv_path = os.path.join(base_dir, "satellite", "vv.tif")
     vh_path = os.path.join(base_dir, "satellite", "vh.tif")
     
-    if incident_id != "SIH-2026-001" and scene.file_path and os.path.exists(scene.file_path):
+    if incident_id not in ("VARUNA-2026-001", "SIH-2026-001") and scene.file_path and os.path.exists(scene.file_path):
         vv_path = scene.file_path
         vh_path = scene.file_path # For dual pol in one file, simplified here
         
@@ -587,7 +589,7 @@ def apply_custom_spill_geometry(incident_id: str, req: CustomSpillRequest, db: S
         db.add(detection)
     
     # 3. Save to disk in demo folder for persistent storage
-    target_folder = "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id
+    target_folder = "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id
     derived_dir = os.path.join("demo", "incidents", target_folder, "derived")
     os.makedirs(derived_dir, exist_ok=True)
     
@@ -736,7 +738,7 @@ def apply_custom_spill_geometry(incident_id: str, req: CustomSpillRequest, db: S
 
 @router.post("/incidents/{incident_id}/revert-spill-geometry")
 def revert_spill_geometry(incident_id: str, db: Session = Depends(get_db)):
-    target_folder = "incident_001" if incident_id in ("SIH-2026-001", "incident_001") else incident_id
+    target_folder = "incident_001" if incident_id in ("VARUNA-2026-001", "SIH-2026-001", "incident_001") else incident_id
     derived_dir = os.path.join("demo", "incidents", target_folder, "derived")
     default_backup = os.path.join(derived_dir, "spill_geometry_default.json")
     if os.path.exists(default_backup):
@@ -763,14 +765,16 @@ def revert_spill_geometry(incident_id: str, db: Session = Depends(get_db)):
 
 @router.post("/reports/{incident_id}", response_model=ReportResponse)
 def generate_incident_report(incident_id: str, db: Session = Depends(get_db)):
-    incident_detail = get_incident_detail(incident_id, db)
-    incident_detail["quality_gate"] = incident_detail.get("scene", {}).get("quality_details", {})
-    res = report_generator.generate_report(incident_detail)
+    from apps.api.routes.reports import create_investigation_report
+    res = create_investigation_report(incident_id, db)
     return {
         "report_id": res["report_id"],
         "incident_id": incident_id,
-        "generated_at": res["generated_at"],
-        "content_markdown": res["content_markdown"]
+        "generated_at": res["report"]["metadata"]["generated_at"],
+        "sha256_fingerprint": res["sha256_fingerprint"],
+        "pdf_download_url": res["pdf_download_url"],
+        "content_markdown": res.get("content_markdown"),
+        "report": res["report"]
     }
 
 @router.post("/incidents/inspect-raster")
@@ -1061,13 +1065,18 @@ from fastapi.responses import StreamingResponse
 import io
 
 @router.get("/incidents/{incident_id}/satellite/image")
-def get_satellite_image(incident_id: str, db: Session = Depends(get_db)):
+def get_satellite_image(incident_id: str, overlay: bool = False, db: Session = Depends(get_db)):
     import os
     import rasterio
     import numpy as np
     from PIL import Image
     
     base_dir = os.path.join("demo", "incidents", "incident_001")
+    custom_path = os.path.join(base_dir, "satellite", "final-mark.png")
+    if overlay and os.path.exists(custom_path):
+        from fastapi.responses import FileResponse
+        return FileResponse(custom_path, media_type="image/png")
+
     vv_path = os.path.join(base_dir, "satellite", "vv.tif")
         
     if not os.path.exists(vv_path):
@@ -1098,11 +1107,23 @@ def get_satellite_image(incident_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"Failed to read raster: {e}")
 
 @router.get("/incidents/{incident_id}/satellite/bounds")
-def get_satellite_bounds(incident_id: str, db: Session = Depends(get_db)):
+def get_satellite_bounds(incident_id: str, overlay: bool = False, db: Session = Depends(get_db)):
     import os
     import rasterio
     
     base_dir = os.path.join("demo", "incidents", "incident_001")
+    final_mark_path = os.path.join(base_dir, "satellite", "final-mark.png")
+    if overlay and os.path.exists(final_mark_path):
+        # Precise GCP-derived coordinates for final-mark.png [Top-Left, Top-Right, Bottom-Right, Bottom-Left]
+        return {
+            "coordinates": [
+                [32.790459, 32.001234],
+                [33.037687, 32.039857],
+                [33.080393, 31.858586],
+                [32.826188, 31.816656]
+            ]
+        }
+
     vv_path = os.path.join(base_dir, "satellite", "vv.tif")
         
     if os.path.exists(vv_path):
