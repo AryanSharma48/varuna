@@ -1,8 +1,8 @@
-import { IncidentData } from '../types';
+import { IncidentData, InvestigationReportResponse, CanonicalInvestigationReport } from '../types';
 
 const API_BASE = '/api/v1';
 
-export async function fetchIncident(incidentId: string = 'SIH-2026-001'): Promise<IncidentData> {
+export async function fetchIncident(incidentId: string = 'VARUNA-2026-001'): Promise<IncidentData> {
   const res = await fetch(`${API_BASE}/incidents/${incidentId}`);
   if (!res.ok) {
     throw new Error(`Failed to fetch incident: ${res.statusText}`);
@@ -10,7 +10,7 @@ export async function fetchIncident(incidentId: string = 'SIH-2026-001'): Promis
   return res.json();
 }
 
-export async function fetchSatelliteBounds(incidentId: string = 'SIH-2026-001'): Promise<{ coordinates: [[number, number], [number, number], [number, number], [number, number]] }> {
+export async function fetchSatelliteBounds(incidentId: string = 'VARUNA-2026-001'): Promise<{ coordinates: [[number, number], [number, number], [number, number], [number, number]] }> {
   const res = await fetch(`${API_BASE}/incidents/${incidentId}/satellite/bounds`);
   if (!res.ok) {
     throw new Error(`Failed to fetch satellite bounds: ${res.statusText}`);
@@ -38,23 +38,47 @@ export async function replayAIS(incidentId: string, targetTime: string): Promise
   return res.json();
 }
 
-export async function askAssistant(incidentId: string, query: string): Promise<{ answer: string; tool_used: string; citations: any[] }> {
+export async function askAssistant(
+  incidentId: string, 
+  query: string,
+  history?: { role: string; content: string }[]
+): Promise<{ answer: string; tool_used: string; citations: any[]; model_used?: string }> {
   const res = await fetch(`${API_BASE}/investigation/ask`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ incident_id: incidentId, query })
+    body: JSON.stringify({ incident_id: incidentId, query, history })
   });
   if (!res.ok) throw new Error('Failed to query assistant');
   return res.json();
 }
 
-export async function generateReport(incidentId: string): Promise<{ report_id: string; content_markdown: string; generated_at: string }> {
+export async function generateReport(incidentId: string = 'VARUNA-2026-001'): Promise<InvestigationReportResponse> {
   const res = await fetch(`${API_BASE}/reports/${incidentId}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' }
   });
-  if (!res.ok) throw new Error('Failed to generate report');
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Failed to generate report' }));
+    throw new Error(err.detail || 'Failed to generate report');
+  }
   return res.json();
+}
+
+export async function fetchReportById(reportId: string): Promise<{
+  report_id: string;
+  incident_id: string;
+  created_at: string;
+  sha256_fingerprint: string;
+  status: string;
+  report: CanonicalInvestigationReport;
+}> {
+  const res = await fetch(`${API_BASE}/reports/${reportId}`);
+  if (!res.ok) throw new Error(`Failed to fetch report ${reportId}`);
+  return res.json();
+}
+
+export function getReportPdfUrl(reportId: string): string {
+  return `${API_BASE}/reports/${reportId}/pdf`;
 }
 
 export async function traceOrigin(incidentId: string, params: any = {}): Promise<any> {
