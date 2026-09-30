@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({ data }) => {
           <span className="font-bold text-black tracking-wider uppercase">VARUNA</span>
           <span className="text-zinc-300">/</span>
           <span className="text-zinc-800 uppercase font-bold">
-            {data?.incident.id ? data.incident.id.replace('SIH', 'VARUNA') : 'VARUNA-2026-001'}
+            {data?.incident?.id || 'VARUNA-2026-001'}
           </span>
           <span className="text-zinc-500 text-[11px] truncate max-w-xs font-sans">
             ({data?.incident.title})

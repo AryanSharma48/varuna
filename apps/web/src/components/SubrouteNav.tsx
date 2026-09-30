@@ -17,7 +17,7 @@ interface SubrouteNavProps {
 }
 
 export const SubrouteNav: React.FC<SubrouteNavProps> = ({ onOpenReport, onOpenAssistant }) => {
-  const { id = 'SIH-2026-001' } = useParams();
+  const { id = 'VARUNA-2026-001' } = useParams();
 
   const links = [
     { to: `/investigation/${id}/overview`, label: '01. Overview', icon: LayoutDashboard },

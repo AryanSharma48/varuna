@@ -162,3 +162,100 @@ export interface EvidenceItem {
   content: string;
   confidence: number | null;
 }
+
+export interface ReportMetadata {
+  report_id: string;
+  incident_id: string;
+  incident_title: string;
+  target_region: string;
+  sensing_timestamp: string;
+  generated_at: string;
+  system_version: string;
+}
+
+export interface SpillVerificationGeometry {
+  decision_state: string;
+  oil_confidence: number;
+  look_alike_risk: string;
+  image_quality: string;
+  area_km2: number;
+  perimeter_km: number;
+  length_km: number;
+  width_km: number;
+  estimated_metric_tons: number;
+  morphology_type: string;
+  geojson_geometry?: any;
+}
+
+export interface OriginBacktrackData {
+  time_window_start: string;
+  time_window_end: string;
+  origin_center_lat: number;
+  origin_center_lon: number;
+  uncertainty_radius_km: number;
+  forcing_used: {
+    wind_speed_ms?: number;
+    wind_direction_deg?: number;
+    current_speed_ms?: number;
+    current_direction_deg?: number;
+    source_name?: string;
+  };
+  geojson_contour?: any;
+}
+
+export interface VesselAttributionItem {
+  priority_rank: number;
+  vessel_name: string;
+  mmsi: number;
+  vessel_type: string;
+  flag: string;
+  total_score: number;
+  priority_level: string;
+  proximity_score: number;
+  timing_score: number;
+  trajectory_score: number;
+  ais_gap_score: number;
+  anomaly_score: number;
+  reasons: string[];
+  anomalies: any[];
+}
+
+export interface ForwardImpactItem {
+  asset_name: string;
+  category: string;
+  jurisdiction: string;
+  vulnerability_index: number;
+  distance_km: number;
+  estimated_arrival: string;
+  severity: string;
+  resource_at_risk: string;
+}
+
+export interface LegalDisclaimer {
+  notice: string;
+  operational_limitations: string[];
+}
+
+export interface TamperEvidentBlock {
+  report_id: string;
+  sha256_fingerprint: string;
+  signed_at: string;
+}
+
+export interface CanonicalInvestigationReport {
+  metadata: ReportMetadata;
+  spill_verification: SpillVerificationGeometry;
+  origin_backtrack: OriginBacktrackData;
+  vessel_attribution: VesselAttributionItem[];
+  forward_impact: ForwardImpactItem[];
+  legal_disclaimer: LegalDisclaimer;
+  tamper_evident: TamperEvidentBlock;
+}
+
+export interface InvestigationReportResponse {
+  status: string;
+  report_id: string;
+  sha256_fingerprint: string;
+  pdf_download_url: string;
+  report: CanonicalInvestigationReport;
+}
