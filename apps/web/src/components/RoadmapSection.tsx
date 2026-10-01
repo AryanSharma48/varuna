@@ -18,7 +18,7 @@ const stepsData: RoadmapStep[] = [
     description:
       'Synthetic aperture radar on Sentinel-1 pierces cloud cover and darkness. Oil dampens surface capillary ripples, creating dark contrast patches against rough sea clutter.',
     tags: ['Sentinel-1 SAR', 'Cloud Penetration', 'Surface Roughness'],
-    route: '/investigation/SIH-2026-001/satellite',
+    route: '/investigation/VARUNA-2026-001/satellite',
     buttonLabel: 'View Radar Scan →',
   },
   {
@@ -28,7 +28,7 @@ const stepsData: RoadmapStep[] = [
     description:
       'Low-wind zones, algal blooms, and upwelling also appear dark on radar. We evaluate boundary gradients, damping ratios, and wind speeds so patrol teams do not chase false alarms.',
     tags: ['Damping Ratio', 'False Alarm Filter', 'Confirmed Oil'],
-    route: '/investigation/SIH-2026-001/overview',
+    route: '/investigation/VARUNA-2026-001/overview',
     buttonLabel: 'Check Verification →',
   },
   {
@@ -38,7 +38,7 @@ const stepsData: RoadmapStep[] = [
     description:
       'Surface currents and wind push oil miles away from where the vessel dumped it. We run reverse Lagrangian particle simulations using NOAA winds and Copernicus currents to pinpoint the release point and time.',
     tags: ['NOAA Wind Fields', 'Copernicus Currents', 'Origin GPS Coordinates'],
-    route: '/investigation/SIH-2026-001/origin',
+    route: '/investigation/VARUNA-2026-001/origin',
     buttonLabel: 'Trace Origin Backtrack →',
   },
   {
@@ -48,7 +48,7 @@ const stepsData: RoadmapStep[] = [
     description:
       'We cross-reference the origin window with historical AIS ship broadcasts. Ships that crossed the release zone, slowed down, turned sharply, or switched off their transponders are scored as suspects.',
     tags: ['AIS Transponder Logs', 'Track Anomalies', 'Suspect Scoring'],
-    route: '/investigation/SIH-2026-001/attribution',
+    route: '/investigation/VARUNA-2026-001/attribution',
     buttonLabel: 'Inspect Suspect Ships →',
   },
 ];

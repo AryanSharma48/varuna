@@ -21,7 +21,7 @@ export const LandingPage: React.FC = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const handleLaunchDemo = () => {
-    navigate('/investigation/SIH-2026-001/overview');
+    navigate('/investigation/VARUNA-2026-001/overview');
   };
 
   const handleFileSelection = async (file: File) => {
@@ -123,60 +123,6 @@ export const LandingPage: React.FC = () => {
             </span>
           </h1>
         </section>
-
-        {/* The Crisis & The Solution Spotlight */}
-        <section className="liquid-glass rounded-3xl overflow-hidden shadow-2xl w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 items-stretch">
-            
-            {/* Left Content Column */}
-            <div className="lg:col-span-6 p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-center space-y-6 sm:space-y-8">
-              
-              {/* Problem */}
-              <div className="space-y-3">
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading text-white tracking-tight leading-tight">
-                  Tankers dump oily bilge at night and turn off transponders to avoid fines.
-                </h2>
-
-                <p className="text-base sm:text-lg text-slate-200 leading-relaxed font-normal font-sans">
-                  Most marine oil pollution does not come from tanker shipwrecks. It comes from cargo vessels routinely washing tanks and flushing oily engine bilge into open waters, knowing coast guards rarely catch them.
-                </p>
-              </div>
-
-              {/* Solution */}
-              <div className="space-y-4">
-                <p className="text-base sm:text-lg text-slate-200 leading-relaxed">
-                  <strong className="text-white font-bold">Varuna traces the slick back to the ship.</strong> We analyze satellite radar to spot fresh slicks, simulate ocean currents backward to find where the oil was dropped, and match that window with ship tracking data.
-                </p>
-
-                <div className="flex flex-wrap gap-2.5 pt-2 text-xs sm:text-sm font-medium text-slate-200">
-                  <span className="liquid-glass-interactive px-3.5 py-1.5 rounded-xl text-white font-medium text-xs sm:text-sm">
-                    Satellite Radar Detection
-                  </span>
-                  <span className="liquid-glass-interactive px-3.5 py-1.5 rounded-xl text-white font-medium text-xs sm:text-sm">
-                    Reverse Drift Backtrack
-                  </span>
-                  <span className="liquid-glass-interactive px-3.5 py-1.5 rounded-xl text-white font-medium text-xs sm:text-sm">
-                    Vessel AIS Forensics
-                  </span>
-                </div>
-              </div>
-
-            </div>
-
-            {/* Right Column: Oil Spill Image */}
-            <div className="lg:col-span-6 relative min-h-[300px] sm:min-h-[360px] lg:min-h-full overflow-hidden">
-              <img
-                src="/oil_spill_disaster.jpg?v=2"
-                alt="Aerial view of marine oil spill disaster and response vessel"
-                className="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-700 ease-out"
-              />
-            </div>
-
-          </div>
-        </section>
-
-        {/* 4-Step Investigation Roadmap */}
-        <RoadmapSection />
 
         {/* Primary Investigation Hub */}
         <section className="liquid-glass rounded-2xl shadow-2xl overflow-hidden">
@@ -435,6 +381,61 @@ export const LandingPage: React.FC = () => {
           )}
         </section>
 
+{/* The Crisis & The Solution Spotlight */}
+        <section className="liquid-glass rounded-3xl overflow-hidden shadow-2xl w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 items-stretch">
+            
+            {/* Left Content Column */}
+            <div className="lg:col-span-6 p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-center space-y-6 sm:space-y-8">
+              
+              {/* Problem */}
+              <div className="space-y-3">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading text-white tracking-tight leading-tight">
+                  Tankers dump oily bilge at night and turn off transponders to avoid fines.
+                </h2>
+
+                <p className="text-base sm:text-lg text-slate-200 leading-relaxed font-normal font-sans">
+                  Most marine oil pollution does not come from tanker shipwrecks. It comes from cargo vessels routinely washing tanks and flushing oily engine bilge into open waters, knowing coast guards rarely catch them.
+                </p>
+              </div>
+
+              {/* Solution */}
+              <div className="space-y-4">
+                <p className="text-base sm:text-lg text-slate-200 leading-relaxed">
+                  <strong className="text-white font-bold">Varuna traces the slick back to the ship.</strong> We analyze satellite radar to spot fresh slicks, simulate ocean currents backward to find where the oil was dropped, and match that window with ship tracking data.
+                </p>
+
+                <div className="flex flex-wrap gap-2.5 pt-2 text-xs sm:text-sm font-medium text-slate-200">
+                  <span className="liquid-glass-interactive px-3.5 py-1.5 rounded-xl text-white font-medium text-xs sm:text-sm">
+                    Satellite Radar Detection
+                  </span>
+                  <span className="liquid-glass-interactive px-3.5 py-1.5 rounded-xl text-white font-medium text-xs sm:text-sm">
+                    Reverse Drift Backtrack
+                  </span>
+                  <span className="liquid-glass-interactive px-3.5 py-1.5 rounded-xl text-white font-medium text-xs sm:text-sm">
+                    Vessel AIS Forensics
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right Column: Oil Spill Image */}
+            <div className="lg:col-span-6 relative min-h-[300px] sm:min-h-[360px] lg:min-h-full overflow-hidden">
+              <img
+                src="/oil_spill_disaster.jpg?v=2"
+                alt="Aerial view of marine oil spill disaster and response vessel"
+                className="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-700 ease-out"
+              />
+            </div>
+
+          </div>
+        </section>
+
+        {/* 4-Step Investigation Roadmap */}
+        <RoadmapSection />
+
+        
       </main>
     </div>
   );
