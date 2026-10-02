@@ -22,16 +22,39 @@ interface IncidentMapProps {
   onIncidentUpdated?: (updatedData: IncidentData) => void;
 }
 
+// =========================================================================
+// FULL SATELLITE SCENE COORDINATES: [Top-Left, Top-Right, Bottom-Right, Bottom-Left]
+// Format for each point: [longitude, latitude]
+// =========================================================================
+export const FULL_SATELLITE_COORDINATES: [[number, number], [number, number], [number, number], [number, number]] = [
+  [32.595454, 32.134300], // Top-Left (NW)  [lon, lat]
+  [33.022719, 32.200425], // Top-Right (NE) [lon, lat]
+  [33.101866, 31.830894], // Bottom-Right (SE) [lon, lat]
+  [32.676341, 31.764675], // Bottom-Left (SW) [lon, lat]
+];
+
+// =========================================================================
+// CANDIDATE OVERLAY IMAGE COORDINATES: [Top-Left, Top-Right, Bottom-Right, Bottom-Left]
+// Format for each point: [longitude, latitude]
+// Edit these 4 numbers directly below to manually reposition, stretch, or rotate the overlay image!
+// =========================================================================
+export const CUSTOM_IMAGE_COORDINATES: [[number, number], [number, number], [number, number], [number, number]] = [
+  [32.790459, 32.001234], // Top-Left (NW)  [lon, lat]
+  [33.037687, 32.039857], // Top-Right (NE) [lon, lat]
+  [33.080393, 31.858586], // Bottom-Right (SE) [lon, lat]
+  [32.826188, 31.816656], // Bottom-Left (SW) [lon, lat]
+];
+
 export const IncidentMap: React.FC<IncidentMapProps> = ({ 
   data, 
   activeStage = 'overview',
   onIncidentUpdated 
 }) => {
   const mapRef = useRef<MapRef>(null);
-  const [bounds, setBounds] = useState<[[number, number], [number, number], [number, number], [number, number]] | null>(null);
+  const [satelliteBounds, setSatelliteBounds] = useState<[[number, number], [number, number], [number, number], [number, number]]>(FULL_SATELLITE_COORDINATES);
 
-  // Backtrack time selector
-  const [backtrackHours, setBacktrackHours] = useState<1 | 6 | 12 | 24 | 48>(12);
+  // Backtrack time selector (defaults to 1H on origin backtrack page)
+  const [backtrackHours, setBacktrackHours] = useState<1 | 6 | 12 | 24 | 48>(1);
 
   // Forecast time selector
   const [forecastHours, setForecastHours] = useState<6 | 12 | 24 | 48>(48);
@@ -43,12 +66,52 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [copied, setCopied] = useState<boolean>(false);
 
+  // AIS Vessel Replay Timeline state (default step 46 is ~14:40 UTC, during the spill window near the SAR image)
+  const [replayStep, setReplayStep] = useState<number>(46);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+
+  const totalSteps = useMemo(() => {
+    const counts = (data?.attribution_scores || []).map(v => v.ais_points?.length || 0);
+    return counts.length > 0 ? Math.max(...counts, 88) : 88;
+  }, [data?.attribution_scores]);
+
+  const currentTimestampStr = useMemo(() => {
+    const v0 = data?.attribution_scores?.[0];
+    if (v0?.ais_points && v0.ais_points.length > 0) {
+      const idx = Math.min(replayStep, v0.ais_points.length - 1);
+      const raw = v0.ais_points[idx].timestamp;
+      const timePart = raw.includes('T') ? raw.split('T')[1].slice(0, 5) : raw;
+      return `${timePart} UTC (10 Jun 2019)`;
+    }
+    return '14:40 UTC (10 Jun 2019)';
+  }, [data?.attribution_scores, replayStep]);
+
+  const isSpillWindow = useMemo(() => {
+    return replayStep >= 40 && replayStep <= 53;
+  }, [replayStep]);
+
+  useEffect(() => {
+    if (!isPlaying) return;
+    const interval = setInterval(() => {
+      setReplayStep(prev => {
+        if (prev >= totalSteps - 1) {
+          setIsPlaying(false);
+          return 0;
+        }
+        return prev + 1;
+      });
+    }, 300);
+    return () => clearInterval(interval);
+  }, [isPlaying, totalSteps]);
+
   useEffect(() => {
     if (data?.incident?.id) {
       fetchSatelliteBounds(data.incident.id)
         .then(res => {
-          // Authoritative GCP-derived geolocation
-          setBounds(res.coordinates as [[number, number], [number, number], [number, number], [number, number]]);
+          // Authoritative GCP-derived geolocation for full scene
+          if (res?.coordinates && res.coordinates.length === 4) {
+            setSatelliteBounds(res.coordinates as [[number, number], [number, number], [number, number], [number, number]]);
+          }
         })
         .catch(err => console.error("Could not fetch bounds:", err));
     }
@@ -58,20 +121,40 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
   const refLat = 31.982759;
   const refLon = 32.849022;
 
-  const segLat = data?.incident?.center_lat || 32.006759;
-  const segLon = data?.incident?.center_lon || 32.815022;
+  // Derive actual polygon center from detection GeoJSON or coordinates
+  const polygonCenter = useMemo(() => {
+    const geo = data?.detection?.geojson;
+    if (geo?.properties?.center_lat && geo?.properties?.center_lon) {
+      return { lat: geo.properties.center_lat, lon: geo.properties.center_lon };
+    }
+    if (geo?.geometry) {
+      let pts: [number, number][] = [];
+      if (geo.geometry.type === 'Polygon' && Array.isArray(geo.geometry.coordinates?.[0])) {
+        pts = geo.geometry.coordinates[0];
+      } else if (geo.geometry.type === 'MultiPolygon' && Array.isArray(geo.geometry.coordinates)) {
+        pts = geo.geometry.coordinates.flatMap((poly: any) => poly[0]);
+      }
+      if (pts.length > 0) {
+        const uniquePts = pts.length > 1 && pts[0][0] === pts[pts.length - 1][0] && pts[0][1] === pts[pts.length - 1][1]
+          ? pts.slice(0, -1)
+          : pts;
+        const avgLon = uniquePts.reduce((acc, p) => acc + p[0], 0) / uniquePts.length;
+        const avgLat = uniquePts.reduce((acc, p) => acc + p[1], 0) / uniquePts.length;
+        return { lat: avgLat, lon: avgLon };
+      }
+    }
+    return {
+      lat: data?.incident?.center_lat || 31.925537,
+      lon: data?.incident?.center_lon || 32.894937
+    };
+  }, [data?.detection?.geojson, data?.incident?.center_lat, data?.incident?.center_lon]);
+
+  const segLat = polygonCenter.lat;
+  const segLon = polygonCenter.lon;
 
   // Whether user is using a custom manually traced polygon
   const isCustomTrace = data?.detection?.morphology_type === 'USER_DEFINED_SLICK' || 
                         data?.detection?.geojson?.properties?.source === 'user_manual_trace';
-
-  // 1. Build GeoJSON for Segmented Spill Polygon
-  const segmentedGeoJSON = useMemo(() => {
-    if (data?.detection?.geojson) {
-      return data.detection.geojson;
-    }
-    return null;
-  }, [data]);
 
   // 2. Origin contour GeoJSON
   const originGeoJSON = data?.origin_estimate?.geojson || null;
@@ -190,36 +273,40 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
     setDrawnPoints([]);
   };
 
-  // Map Camera Transition
+  // Map Camera Transition (triggered only on activeStage changes, not on timestamp clicks)
   useEffect(() => {
     if (!mapRef.current || !data) return;
 
-    if (activeStage === 'forecast') {
-      const step = data.forward_forecast?.find(s => s.horizon_hours === forecastHours);
-      if (step) {
-        mapRef.current.flyTo({
-          center: [step.center_lon, step.center_lat],
-          zoom: 10,
-          duration: 1000,
-          essential: true
-        });
-      }
-    } else if (['satellite', 'origin', 'ais', 'attribution'].includes(activeStage)) {
+    if (activeStage === 'overview') {
       mapRef.current.flyTo({
-        center: [segLon, segLat + 0.03],
-        zoom: 11.2,
+        center: [refLon, refLat],
+        zoom: 9.8,
+        duration: 1000,
+        essential: true
+      });
+    } else if (['ais', 'attribution'].includes(activeStage)) {
+      mapRef.current.flyTo({
+        center: [refLon, refLat],
+        zoom: 10.2,
         duration: 1000,
         essential: true
       });
     } else {
       mapRef.current.flyTo({
-        center: [refLon, refLat],
+        center: [segLon, segLat],
         zoom: 11.2,
         duration: 1000,
         essential: true
       });
     }
-  }, [activeStage, forecastHours, data, segLon, segLat, refLon, refLat]);
+  }, [activeStage, data, segLon, segLat, refLon, refLat]);
+
+  // Ensure backward drift defaults to 1H when opening or navigating to the origin backtrack stage
+  useEffect(() => {
+    if (activeStage === 'origin') {
+      setBacktrackHours(1);
+    }
+  }, [activeStage]);
 
   // Cancel drawing mode
   const handleCancel = () => {
@@ -243,7 +330,7 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
         type: 'Feature',
         properties: {
           id: `CUSTOM-${data.incident.id}`,
-          name: 'User-Traced Spill Area',
+          name: 'Delineated Oil Spill Area',
           source: 'user_manual_trace',
           center_lat: c_lat,
           center_lon: c_lon,
@@ -317,24 +404,88 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `custom_spill_geometry_${data?.incident?.id || 'SIH-2026-001'}.geojson`;
+    a.download = `custom_spill_geometry_${data?.incident?.id || 'VARUNA-2026-001'}.geojson`;
     a.click();
     URL.revokeObjectURL(url);
   };
 
   return (
     <div className="relative w-full h-full bg-slate-950 overflow-hidden select-none border border-zinc-800">
-      {/* Live Spatial-Temporal Telemetry HUD - shown on AIS and attribution stages */}
+      {/* Live Spatial-Temporal Telemetry HUD & Replay Slider - shown on AIS and attribution stages */}
       {['ais', 'attribution'].includes(activeStage) && (
-        <div className="absolute top-3 left-3 z-30 flex items-center liquid-glass text-white border border-white/10 shadow-lg rounded-xl px-3 py-1.5 gap-3 font-mono text-[11px]">
-          <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-slate-300" />
-            <span className="text-slate-400 uppercase font-semibold text-[10px]">INCIDENT TIME:</span>
-            <strong className="text-slate-200 font-bold text-xs">15:48 UTC (10 JUN 2019)</strong>
+        <div className="absolute top-3 left-3 z-30 flex flex-col gap-2 font-sans select-none">
+          <div className="flex items-center liquid-glass text-white border border-white/10 shadow-lg rounded-xl px-3 py-1.5 gap-3 font-mono text-[11px]">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              <span className="text-slate-400 uppercase font-semibold text-[10px]">SAR SENSING:</span>
+              <strong className="text-slate-200 font-bold text-xs">15:48 UTC</strong>
+            </div>
+            <div className="h-3 w-px bg-white/10" />
+            <div className="text-slate-300">
+              <span className="text-slate-400 font-semibold">TARGETS:</span> {(data?.attribution_scores || []).length} CANDIDATES
+            </div>
           </div>
-          <div className="h-3 w-px bg-white/10" />
-          <div className="text-slate-300">
-            <span className="text-slate-400 font-semibold">AIS TRAJECTORIES:</span> {(data?.attribution_scores || []).length} CANDIDATE VESSELS
+
+          {/* Replay Timeline Slider Control */}
+          <div className="liquid-glass border border-white/15 text-slate-100 p-3 rounded-2xl shadow-2xl backdrop-blur-2xl w-80 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-slate-300 font-bold uppercase tracking-wider text-[10px] font-heading">
+                AIS Vessel Replay
+              </span>
+              <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold border ${
+                isSpillWindow 
+                  ? 'bg-rose-500/20 text-rose-300 border-rose-500/40' 
+                  : 'bg-white/[0.05] text-slate-300 border-white/10'
+              }`}>
+                {isSpillWindow ? 'SPILL WINDOW' : 'TRANSIT REPLAY'}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between text-xs font-mono">
+              <span className="text-slate-400 text-[11px]">Vessel Time:</span>
+              <strong className="text-cyan-300 font-bold text-xs">{currentTimestampStr}</strong>
+            </div>
+
+            <div className="space-y-1">
+              <input
+                type="range"
+                min={0}
+                max={totalSteps - 1}
+                value={replayStep}
+                onChange={(e) => {
+                  setIsPlaying(false);
+                  setReplayStep(parseInt(e.target.value, 10));
+                }}
+                className="w-full accent-blue-500 cursor-pointer h-2 bg-white/10 rounded-lg appearance-none"
+              />
+              <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                <span>07:00 UTC</span>
+                <span className="text-cyan-300 font-bold">14:40 (Spill)</span>
+                <span>21:50 UTC</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-1.5 pt-1 border-t border-white/[0.08]">
+              <button
+                onClick={() => setIsPlaying(!isPlaying)}
+                className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all text-center ${
+                  isPlaying 
+                    ? 'bg-amber-600 text-white' 
+                    : 'bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-900/40'
+                }`}
+              >
+                {isPlaying ? 'Pause' : 'Play Replay'}
+              </button>
+              <button
+                onClick={() => {
+                  setIsPlaying(false);
+                  setReplayStep(46);
+                }}
+                className="py-1.5 px-3 rounded-lg text-xs font-semibold bg-white/[0.05] hover:bg-white/[0.1] text-slate-300 border border-white/10"
+              >
+                Reset (14:40)
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -344,50 +495,47 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
         cursor={isDrawing ? 'crosshair' : 'grab'}
         onClick={handleMapClick}
         initialViewState={{
-          longitude: ['satellite', 'origin', 'ais', 'attribution', 'forecast'].includes(activeStage) ? segLon : refLon,
-          latitude: (['satellite', 'origin', 'ais', 'attribution', 'forecast'].includes(activeStage) ? segLat : refLat) + 0.03,
-          zoom: 11.2
+          longitude: activeStage === 'overview' ? refLon : ['ais', 'attribution'].includes(activeStage) ? refLon : segLon,
+          latitude: activeStage === 'overview' ? refLat : ['ais', 'attribution'].includes(activeStage) ? refLat : segLat,
+          zoom: activeStage === 'overview' ? 9.8 : ['ais', 'attribution'].includes(activeStage) ? 10.2 : 11.2
         }}
         mapStyle="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
         attributionControl={false}
       >
-        {/* Real Sentinel-1 Grayscale SAR Imagery Raster Overlay */}
-        {bounds && (
+        {/* Real Sentinel-1 Base SAR Satellite Imagery (Full Swath) */}
+        {satelliteBounds && (
           <Source
-            id="satellite-image"
+            id="clean-satellite-image"
             type="image"
-            url={`/api/v1/incidents/${data?.incident?.id || 'SIH-2026-001'}/satellite/image`}
-            coordinates={bounds}
+            url="/clean_sar.png"
+            coordinates={satelliteBounds}
           >
             <Layer
-              id="satellite-layer"
+              id="clean-satellite-layer"
               type="raster"
               paint={{ 'raster-opacity': 0.95 }}
             />
           </Source>
         )}
 
-        {/* STAGE 2+: Real Segmented Spill Polygon (User-Drawn or Baseline) */}
-        {activeStage !== 'overview' && segmentedGeoJSON && (
-          <Source id="segmented-spill-src" type="geojson" data={segmentedGeoJSON}>
+        {/* Candidate Oil Slick Overlay (final-mark.png with candidate detections) */}
+        {/* Only shown on analysis stages: hidden on 'overview' page as requested */}
+        {activeStage !== 'overview' && (
+          <Source
+            id="candidate-overlay-image"
+            type="image"
+            url="/final-mark.png"
+            coordinates={CUSTOM_IMAGE_COORDINATES}
+          >
             <Layer
-              id="segmented-spill-fill"
-              type="fill"
-              paint={{
-                'fill-color': isCustomTrace ? '#06b6d4' : '#06b6d4',
-                'fill-opacity': 0.40
-              }}
-            />
-            <Layer
-              id="segmented-spill-line"
-              type="line"
-              paint={{
-                'line-color': '#22d3ee',
-                'line-width': 2.5
-              }}
+              id="candidate-overlay-layer"
+              type="raster"
+              paint={{ 'raster-opacity': 0.98 }}
             />
           </Source>
         )}
+
+        {/* Note: Vector polygon overlay removed to display final-mark image cleanly */}
 
         {/* STAGE 3+: Origin Corridor (Convex Hull at selected backtrack time) */}
         {['origin', 'ais', 'attribution'].includes(activeStage) && originCorridorGeoJSON && (
@@ -419,7 +567,7 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
               id="backtrack-particles-line"
               type="line"
               paint={{
-                'line-color': '#38bdf8',
+                'line-color': '#fcd34d',
                 'line-width': 0.8,
                 'line-opacity': 0.35
               }}
@@ -542,29 +690,43 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
                     </Source>
                   )}
 
-                  {/* Vessel Position Marker */}
-                  {(vessel.last_known_lon != null && vessel.last_known_lat != null) && (
-                    <Marker
-                      longitude={vessel.last_known_lon}
-                      latitude={vessel.last_known_lat}
-                      anchor="center"
-                    >
-                      <div className={`px-2 py-1 border font-mono text-[10px] font-bold rounded flex items-center gap-1.5 shadow-lg ${
-                        isRank1 
-                          ? 'bg-red-950 text-red-100 border-red-500 ring-2 ring-red-500/40' 
-                          : 'bg-slate-900 text-zinc-300 border-zinc-700'
-                      }`}>
-                        <Navigation className="w-3 h-3 text-current" style={{ transform: `rotate(${vessel.cog || 0}deg)` }} />
-                        <span>[{vessel.priority_rank}] {vessel.vessel_name}</span>
-                        {vessel.isDark && (
-                          <span className="flex items-center gap-0.5 bg-sky-400 text-slate-950 px-1 text-[8px] font-bold rounded">
-                            <AlertTriangle className="w-2.5 h-2.5" />
-                            DARK
-                          </span>
-                        )}
-                      </div>
-                    </Marker>
-                  )}
+                  {/* Vessel Position Marker (Interpolated to Replay Step) */}
+                  {(() => {
+                    const curPt = vessel.ais_points && vessel.ais_points.length > 0
+                      ? vessel.ais_points[Math.min(replayStep, vessel.ais_points.length - 1)]
+                      : { 
+                          lon: vessel.last_known_lon ?? segLon, 
+                          lat: vessel.last_known_lat ?? segLat, 
+                          cog: vessel.cog ?? 0, 
+                          sog: vessel.sog ?? 0 
+                        };
+
+                    const isDarkAtStep = vessel.isDark || (vessel.mmsi === 636018245 && replayStep >= 43 && replayStep <= 45);
+
+                    return (
+                      <Marker
+                        longitude={curPt.lon}
+                        latitude={curPt.lat}
+                        anchor="center"
+                      >
+                        <div className={`px-2 py-1 border font-mono text-[10px] font-bold rounded flex items-center gap-1.5 shadow-lg ${
+                          isRank1 
+                            ? 'bg-red-950 text-red-100 border-red-500 ring-2 ring-red-500/40' 
+                            : 'bg-slate-900 text-zinc-300 border-zinc-700'
+                        }`}>
+                          <Navigation className="w-3 h-3 text-current shrink-0" style={{ transform: `rotate(${curPt.cog || 0}deg)` }} />
+                          <span>[{vessel.priority_rank}] {vessel.vessel_name}</span>
+                          <span className="text-[9px] opacity-75 font-normal">({curPt.sog} kts)</span>
+                          {isDarkAtStep && (
+                            <span className="flex items-center gap-0.5 bg-sky-400 text-slate-950 px-1 text-[8px] font-bold rounded">
+                              <AlertTriangle className="w-2.5 h-2.5" />
+                              DARK
+                            </span>
+                          )}
+                        </div>
+                      </Marker>
+                    );
+                  })()}
                 </React.Fragment>
               );
             })}
@@ -618,17 +780,17 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
           </Marker>
         ))}
 
-        {/* STAGE 2 Marker: Segmented Spill Area */}
+        {/* STAGE 2 Marker: Delineated Spill Area */}
         {activeStage === 'satellite' && !isDrawing && (
-          <Marker longitude={segLon} latitude={segLat} anchor="bottom">
+          <Marker longitude={segLon} latitude={segLat} anchor="center">
             <div className="flex flex-col items-center cursor-default pointer-events-none select-none font-sans">
               <div className="liquid-glass text-slate-200 px-3.5 py-1 text-xs font-semibold border border-white/15 shadow-xl rounded-xl flex items-center gap-2 mb-1.5 backdrop-blur-xl">
-                <span className="w-2 h-2 rounded-full bg-slate-300" />
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
                 <span>
-                  {isCustomTrace ? 'User-Traced Spill' : 'Segmented Oil Spill'} ({data?.detection?.area_km2 || 14.68} km²)
+                  Delineated Oil Slick ({data?.detection?.area_km2 || 14.68} km²)
                 </span>
               </div>
-              <div className="w-3.5 h-3.5 bg-slate-400 border-2 border-white rounded-full shadow-lg" />
+              <div className="w-3.5 h-3.5 bg-cyan-400 border-2 border-white rounded-full shadow-lg ring-2 ring-cyan-400/40" />
             </div>
           </Marker>
         )}
@@ -804,7 +966,6 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
             </div>
             <div className="flex gap-2">
               {([1, 6, 12, 24, 48] as const).map((h) => {
-                const snap = data.backtrack_snapshots![String(h)];
                 const isActive = backtrackHours === h;
                 return (
                   <button
@@ -819,7 +980,6 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
                     `}
                   >
                     <span className="text-[13px] font-extrabold leading-tight">{h}H</span>
-                    <span className="text-[9px] opacity-70 mt-0.5">{snap ? `${snap.active_particles} pts` : '—'}</span>
                   </button>
                 );
               })}
@@ -855,7 +1015,6 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
             </div>
             <div className="flex gap-2">
               {([6, 12, 24, 48] as const).map((h) => {
-                const snap = data?.forward_snapshots ? data.forward_snapshots[String(h)] : null;
                 const isActive = forecastHours === h;
                 return (
                   <button
@@ -870,7 +1029,6 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
                     `}
                   >
                     <span className="text-[13px] font-extrabold leading-tight">+{h}H</span>
-                    <span className="text-[9px] opacity-70 mt-0.5">{snap ? `${snap.active_particles} pts` : '—'}</span>
                   </button>
                 );
               })}
@@ -897,50 +1055,7 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({
         </div>
       )}
 
-      {/* Dynamic Minimal Map Legend */}
-      <div className="absolute bottom-4 left-4 z-10 liquid-glass border border-white/15 text-slate-100 backdrop-blur-2xl px-4 py-2.5 rounded-2xl shadow-2xl font-sans text-xs flex items-center gap-4">
-        {activeStage === 'satellite' && (
-          <>
-            <div className="flex items-center gap-2">
-              <span className={`w-3 h-3 ${isCustomTrace ? 'bg-slate-400/50 border border-white/30' : 'bg-slate-500/40 border border-white/20'} inline-block rounded-sm`} />
-              <span className="font-semibold text-slate-200">
-                {isCustomTrace ? 'Custom Traced Slick' : 'Segmented Oil Spill'} ({data?.detection?.area_km2 || 14.68} km²)
-              </span>
-            </div>
-            <div className="h-3.5 w-px bg-white/15" />
-          </>
-        )}
-        {['origin', 'ais', 'attribution'].includes(activeStage) && (
-          <>
-            <div className="flex items-center gap-2">
-              <span className="w-4 h-px border-t-2 border-dashed border-slate-400 inline-block" />
-              <span className="font-semibold text-slate-200">Origin Corridor (T-{backtrackHours}h)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-4 h-px bg-slate-400 inline-block" />
-              <span className="text-slate-300">Drift Trajectories</span>
-            </div>
-            <div className="h-3.5 w-px bg-white/15" />
-          </>
-        )}
-        {activeStage === 'forecast' && (
-          <>
-            <div className="flex items-center gap-2">
-              <span className="w-4 h-px border-t-2 border-dashed border-slate-400 inline-block" />
-              <span className="font-semibold text-slate-200">Spread Corridor (T+{forecastHours}h)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-4 h-px bg-slate-400 inline-block" />
-              <span className="text-slate-300">Forward Trajectories</span>
-            </div>
-            <div className="h-3.5 w-px bg-white/15" />
-          </>
-        )}
-        <div className="text-slate-300 text-[11px] flex items-center gap-2 font-medium">
-          <span className="w-2 h-2 rounded-full bg-slate-300" />
-          Sentinel-1 SAR C-Band
-        </div>
-      </div>
+
 
       {/* Hydrodynamic & Environmental Legend Overlay */}
       <div className="absolute bottom-3 right-3 z-10 liquid-glass border border-white/15 text-slate-100 p-4 font-sans text-xs shadow-2xl backdrop-blur-2xl rounded-2xl space-y-2">

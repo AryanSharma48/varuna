@@ -3,14 +3,21 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { IncidentData } from '../types';
 import { fetchIncident } from '../services/api';
 import { IncidentMap } from './IncidentMap';
+import { ForwardThreatAssessment } from './ForwardThreatAssessment';
+import { VesselAttributionPanel } from './VesselAttributionPanel';
 import { 
   ArrowLeft, 
   ArrowRight, 
   ChevronLeft, 
   ChevronRight, 
-  AlertCircle, 
-  CheckCircle2 
+  CheckCircle2,
+  FileText,
+  Bot
 } from 'lucide-react';
+import { InvestigationReportResponse } from '../types';
+import { generateReport } from '../services/api';
+import { ReportModal } from './ReportModal';
+import { AIInvestigatorModal } from './AIInvestigatorModal';
 
 type StageId = 'overview' | 'satellite' | 'origin' | 'ais' | 'attribution' | 'forecast';
 
@@ -33,13 +40,32 @@ const STAGES: StageConfig[] = [
 ];
 
 export const InvestigationWorkspace: React.FC = () => {
-  const { id = 'SIH-2026-001' } = useParams();
+  const { id = 'VARUNA-2026-001' } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 
   const [data, setData] = useState<IncidentData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Report Modal state
+  const [reportModalOpen, setReportModalOpen] = useState<boolean>(false);
+  const [reportData, setReportData] = useState<InvestigationReportResponse | null>(null);
+  const [generatingReport, setGeneratingReport] = useState<boolean>(false);
+  const [aiModalOpen, setAiModalOpen] = useState<boolean>(false);
+
+  const handleGenerateReport = async () => {
+    setGeneratingReport(true);
+    setReportModalOpen(true);
+    try {
+      const res = await generateReport(id);
+      setReportData(res);
+    } catch (err: any) {
+      console.error('Report generation error:', err);
+    } finally {
+      setGeneratingReport(false);
+    }
+  };
 
   // Determine active stage from URL pathname
   const activeStageIndex = useMemo(() => {
@@ -174,6 +200,24 @@ export const InvestigationWorkspace: React.FC = () => {
 
         {/* Right: Stage Navigation Buttons */}
         <div className="flex items-center gap-2">
+          {/* AI Investigator Header Button */}
+          <button
+            onClick={() => setAiModalOpen(true)}
+            className="flex items-center gap-2 px-3.5 py-1.5 text-xs text-cyan-200 hover:text-white font-bold bg-cyan-950/40 hover:bg-cyan-900/60 border border-cyan-400/40 hover:border-cyan-300 rounded-xl shadow-lg shadow-cyan-500/15 hover:shadow-cyan-500/30 transition-all cursor-pointer group mr-1"
+            title="Open AI Investigator Chatbot (Groq Powered)"
+          >
+            <div className="relative flex items-center justify-center">
+              <Bot className="w-3.5 h-3.5 text-cyan-400 group-hover:rotate-12 transition-transform" />
+              <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+            </div>
+            <span>AI Investigator</span>
+            <span className="px-1.5 py-0.5 rounded bg-cyan-400/20 text-[9px] font-mono text-cyan-300 border border-cyan-400/30 hidden sm:inline">
+              LLM
+            </span>
+          </button>
+
+          <div className="h-4 w-px bg-white/10 hidden sm:block" />
+
           {activeStageIndex > 0 && (
             <button
               onClick={() => goToStage(activeStageIndex - 1)}
@@ -184,13 +228,23 @@ export const InvestigationWorkspace: React.FC = () => {
             </button>
           )}
 
-          {activeStageIndex < STAGES.length - 1 && (
+          {activeStageIndex < STAGES.length - 1 ? (
             <button
               onClick={() => goToStage(activeStageIndex + 1)}
               className="flex items-center gap-1.5 px-4 py-1.5 text-xs text-white font-bold bg-blue-600 hover:bg-blue-500 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all"
             >
               <span>Next: {currentStage.nextName}</span>
               <ChevronRight className="w-4 h-4" />
+            </button>
+          ) : (
+            <button
+              onClick={handleGenerateReport}
+              disabled={generatingReport}
+              className="flex items-center gap-2 px-4 py-1.5 text-xs text-white font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all border border-blue-400/30"
+              title="Generate Official Preliminary Investigation Report"
+            >
+              <FileText className="w-3.5 h-3.5 text-blue-200" />
+              <span>{generatingReport ? 'Generating...' : 'Generate Report'}</span>
             </button>
           )}
         </div>
@@ -238,11 +292,6 @@ export const InvestigationWorkspace: React.FC = () => {
                     <div className="text-slate-200 font-mono text-xs">
                       31.9828° N, 32.8490° E
                     </div>
-                  </div>
-
-                  <div className="p-3.5 rounded-2xl liquid-glass-subtle border border-white/10 text-slate-300 flex items-center gap-2.5 text-xs font-medium">
-                    <AlertCircle className="w-4 h-4 text-slate-400 shrink-0" />
-                    <span>AIS data unavailable</span>
                   </div>
                 </div>
               </div>
@@ -398,36 +447,79 @@ export const InvestigationWorkspace: React.FC = () => {
             </div>
           )}
 
-          {/* STAGE 4 & 5: AIS & Attribution Stages */}
-          {['ais', 'attribution'].includes(currentStage.id) && (
+          {/* STAGE 4: AIS Spatio-Temporal Correlation */}
+          {currentStage.id === 'ais' && (
             <div className="flex flex-col justify-between h-full">
               <div>
                 <div className="pb-3 border-b border-white/[0.08] mb-4">
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/[0.05] border border-white/10 text-slate-300 text-[10px] font-medium tracking-wider uppercase mb-1.5">
-                    STAGE {currentStage.index} / {currentStage.name.toUpperCase()}
+                    STAGE 04 / AIS CORRELATION
                   </span>
                   <h2 className="text-sm font-bold text-white uppercase tracking-wide font-heading">
-                    Maritime Evidence Stream
+                    Spatio-Temporal Vessel Traffic
                   </h2>
                 </div>
 
-                <div className="p-4 rounded-2xl liquid-glass-subtle border border-white/[0.06] text-xs space-y-2">
-                  <div className="flex items-center gap-2 text-slate-200 font-medium">
-                    <AlertCircle className="w-4 h-4 text-slate-400 shrink-0" />
-                    <span>Real Incident Telemetry</span>
+                <div className="space-y-3 text-xs">
+                  <div className="p-3.5 rounded-2xl liquid-glass-subtle border border-white/[0.06] space-y-1.5">
+                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">Spatio-Temporal Search Window</span>
+                    <div className="text-slate-200 text-xs leading-relaxed">
+                      Correlating all historical AIS trajectories intersecting within 35 km of probable spill release origin between 13:45 and 15:45 UTC.
+                    </div>
                   </div>
-                  <p className="text-slate-300 leading-relaxed text-xs">
-                    Offshore Sentinel-1 scene S1B_IW_GRDH_20190610 (ow-0388). Ground truth reference verified against published DARTIS marine annotation.
-                  </p>
+
+                  <div className="p-3.5 rounded-2xl liquid-glass-subtle border border-white/[0.06] space-y-2">
+                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">Correlated Candidates (3 Vessels):</span>
+                    {data?.attribution_scores?.map((v) => (
+                      <div key={v.mmsi} className="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
+                        <div>
+                          <div className="font-bold text-white text-xs">{v.vessel_name}</div>
+                          <div className="text-[10px] text-slate-400">{v.vessel_type} • {v.flag}</div>
+                        </div>
+                        <span className="text-xs font-mono font-bold text-slate-300">
+                          MMSI {v.mmsi}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
               <div className="pt-3 border-t border-white/[0.08]">
                 <button
-                  onClick={() => goToStage(currentStage.id === 'ais' ? 4 : 5)}
+                  onClick={() => goToStage(4)}
                   className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5"
                 >
-                  <span>{currentStage.id === 'ais' ? 'Proceed to Attribution' : 'Proceed to Forward Spread'}</span>
+                  <span>Proceed to Attribution Scoring</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* STAGE 5: Vessel Attribution Scoring & Comparison */}
+          {currentStage.id === 'attribution' && (
+            <div className="flex flex-col justify-between h-full">
+              <div className="space-y-4">
+                <div className="pb-3 border-b border-white/[0.08]">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/[0.05] border border-white/10 text-slate-300 text-[10px] font-medium tracking-wider uppercase mb-1.5">
+                    STAGE 05 / VESSEL ATTRIBUTION
+                  </span>
+                  <h2 className="text-sm font-bold text-white uppercase tracking-wide font-heading">
+                    Rankwise Vessel Attribution
+                  </h2>
+                </div>
+
+                {/* Vessel Attribution Comparison Panel */}
+                <VesselAttributionPanel data={data} />
+              </div>
+
+              <div className="pt-3 border-t border-white/[0.08]">
+                <button
+                  onClick={() => goToStage(5)}
+                  className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5"
+                >
+                  <span>Proceed to Forward Spread</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -455,28 +547,24 @@ export const InvestigationWorkspace: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-2xl liquid-glass-subtle border border-white/[0.06] space-y-2.5 text-xs">
-                    <div className="text-slate-400 font-semibold uppercase text-[10px] tracking-wider">Simulation Features:</div>
-                    <div className="flex items-center gap-2.5 text-slate-200">
-                      <span className="w-2 h-2 rounded-full bg-slate-400" />
-                      <span>Full 48H particle trajectory stream</span>
-                    </div>
-                    <div className="flex items-center gap-2.5 text-slate-200">
-                      <span className="w-2 h-2 rounded-full bg-slate-400" />
-                      <span>Dynamic convex hull corridor at +6h, +12h, +24h, +48h</span>
-                    </div>
-                    <div className="flex items-center gap-2.5 text-slate-200">
-                      <span className="w-2 h-2 rounded-full bg-slate-400" />
-                      <span>Individual endpoint particle point clouds</span>
-                    </div>
-                  </div>
+                  {/* Dynamic Coastal, Fishery, EEZ & Endangered Habitat Assessment */}
+                  <ForwardThreatAssessment data={data} />
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-white/[0.08]">
+              <div className="pt-3 border-t border-white/[0.08] space-y-2">
+                <button
+                  onClick={handleGenerateReport}
+                  disabled={generatingReport}
+                  className="w-full py-3 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-500 hover:to-indigo-400 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>{generatingReport ? 'Assembling Report...' : 'Generate Final Investigation Report'}</span>
+                </button>
+
                 <button
                   onClick={() => goToStage(0)}
-                  className="w-full py-3 bg-white/[0.06] hover:bg-white/[0.12] text-slate-200 hover:text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-all border border-white/10 backdrop-blur-md shadow-sm"
+                  className="w-full py-2.5 bg-white/[0.06] hover:bg-white/[0.12] text-slate-200 hover:text-white font-semibold text-xs rounded-xl flex items-center justify-center gap-2 transition-all border border-white/10 backdrop-blur-md shadow-sm"
                 >
                   <span>Return to Overview</span>
                 </button>
@@ -485,6 +573,22 @@ export const InvestigationWorkspace: React.FC = () => {
           )}
         </aside>
       </main>
+
+      {/* Official Investigation Report Modal */}
+      <ReportModal
+        isOpen={reportModalOpen}
+        onClose={() => setReportModalOpen(false)}
+        reportData={reportData}
+        loading={generatingReport}
+        incidentId={id}
+      />
+
+      {/* Grounded AI Investigator Modal */}
+      <AIInvestigatorModal
+        isOpen={aiModalOpen}
+        onClose={() => setAiModalOpen(false)}
+        incidentId={id}
+      />
     </div>
   );
 };
