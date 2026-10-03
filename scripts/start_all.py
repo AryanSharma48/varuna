@@ -10,7 +10,7 @@ from db.seed import seed_demo_data
 
 def main():
     print("=" * 65)
-    print("SIH 26143 -- STARTING MARITIME INVESTIGATION PLATFORM BACKEND")
+    print("VARUNA -- STARTING MARITIME INVESTIGATION PLATFORM BACKEND")
     print("=" * 65)
     
     # 1. Seed database
@@ -23,7 +23,7 @@ def main():
     print("Health Status available at: http://127.0.0.1:8000/health")
     print("=" * 65 + "\n")
     
-    uvicorn.run("apps.api.main:app", host="0.0.0.0", port=8000, reload=False)
+    uvicorn.run("apps.api.main:app", host="0.0.0.0", port=8000, reload=True)
 
 if __name__ == "__main__":
     main()

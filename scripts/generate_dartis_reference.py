@@ -18,7 +18,9 @@ def generate_dartis_reference():
     derived_dir = os.path.join(base_dir, "derived")
     os.makedirs(derived_dir, exist_ok=True)
     
-    tab_path = "DARTIS_2019.tab"
+    tab_path = os.path.join(base_dir, "annotation", "DARTIS_2019.tab")
+    if not os.path.exists(tab_path):
+        tab_path = "DARTIS_2019.tab"
     if not os.path.exists(tab_path):
         raise FileNotFoundError(f"DARTIS dataset table not found at {tab_path}")
 

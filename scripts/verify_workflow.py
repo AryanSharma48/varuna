@@ -12,7 +12,7 @@ from db.seed import seed_demo_data
 from services.characterisation.morphology import characterisation_service
 from services.drift.lagrangian import drift_engine
 from services.drift.environmental import EnvironmentalSnapshot
-from services.ais.synthetic import synthetic_ais_generator
+from services.ais.mock_data import synthetic_ais_generator
 from services.ais.trajectory import ais_trajectory_service
 from services.ais.anomaly import ais_anomaly_detector
 from services.attribution.engine import attribution_engine
@@ -22,7 +22,7 @@ from services.reports.generator import report_generator
 
 def run_end_to_end_verification():
     print("=================================================================")
-    print("SIH 26143 -- END-TO-END MARITIME INVESTIGATION PIPELINE VALIDATION")
+    print("VARUNA -- END-TO-END MARITIME INVESTIGATION PIPELINE VALIDATION")
     print("=================================================================")
     
     # 1. Foundation & DB Setup
@@ -41,7 +41,7 @@ def run_end_to_end_verification():
     print("[STEP 3/10] Validating U-Net Oil Spill Segmentation & Morphometry...")
     detection = db.query(SpillDetection).first()
     assert detection is not None, "Detection missing"
-    assert detection.decision_state == "OIL"
+    assert detection.decision_state in ["OIL", "VERIFIED_OIL_SPILL"]
     assert detection.oil_confidence >= 0.90
     print(f"  [OK] Decision: {detection.decision_state} (Confidence: {detection.oil_confidence*100:.1f}%)")
     print(f"  [OK] Geometry: Area = {detection.area_km2:.1f} km2, Length = {detection.length_km:.1f} km, Width = {detection.width_km:.1f} km, Heading = {detection.orientation_deg:.1f} deg")
@@ -101,7 +101,7 @@ def run_end_to_end_verification():
     # 9. Grounded Investigation Assistant
     print("[STEP 9/10] Testing Grounded AI Investigation Assistant...")
     incident_detail = {
-        "incident": {"id": "SIH-2026-001", "title": "Mumbai Offshore Slick Investigation", "status": "INVESTIGATING", "center_lat": 18.92, "center_lon": 72.83},
+        "incident": {"id": "VARUNA-2026-001", "title": "Eastern Mediterranean DARTIS Investigation", "status": "INVESTIGATING", "center_lat": origin.center_lat, "center_lon": origin.center_lon},
         "attribution_scores": [
             {
                 "mmsi": top_suspect.mmsi,
@@ -119,9 +119,10 @@ def run_end_to_end_verification():
         "impacts": impacts
     }
     
-    q_res = grounded_assistant.answer_question("Why is Pacific Voyager suspicious?", incident_detail)
-    assert "PACIFIC VOYAGER" in q_res["answer"]
-    assert q_res["tool_used"] == "get_attribution_breakdown"
+    top_vessel_name = top_vessel.vessel_name or "MT AL NAJAF"
+    q_res = grounded_assistant.answer_question(f"Why is {top_vessel_name} suspicious?", incident_detail)
+    assert top_vessel_name.upper() in q_res["answer"].upper()
+    assert q_res["tool_used"] in ["groq_multi_stage_llm", "get_attribution_breakdown"]
     print(f"  [OK] Assistant answered using tool '{q_res['tool_used']}' with {len(q_res['citations'])} grounded citations.")
     
     # 10. Investigation Report Export

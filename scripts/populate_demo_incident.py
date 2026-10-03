@@ -37,7 +37,7 @@ def generate_demo_dataset():
 
     spill_geom = {
         "status": "available",
-        "detection_id": "DET-SIH-2026-001",
+        "detection_id": "DET-VARUNA-2026-001",
         "sensing_time": sensing_time.isoformat(),
         "oil_confidence": 0.94,
         "look_alike_risk": "LOW",
@@ -52,7 +52,7 @@ def generate_demo_dataset():
         "geojson": {
             "type": "Feature",
             "properties": {
-                "id": "DET-SIH-2026-001",
+                "id": "DET-VARUNA-2026-001",
                 "center_lat": center_lat,
                 "center_lon": center_lon,
                 "area_km2": 14.68,
