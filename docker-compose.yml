@@ -5,11 +5,11 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.api
-    container_name: sih_investigation_api
+    container_name: varuna_investigation_api
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://sih_user:sih_secret@db:5432/sih_db
+      - DATABASE_URL=postgresql://varuna_user:varuna_secret@db:5432/varuna_db
       - REDIS_URL=redis://redis:6379/0
       - CORS_ORIGINS=["http://localhost:5173","http://localhost:3000","*"]
     depends_on:
@@ -24,7 +24,7 @@ services:
     build:
       context: ./apps/web
       dockerfile: ../../docker/Dockerfile.web
-    container_name: sih_investigation_web
+    container_name: varuna_investigation_web
     ports:
       - "5173:5173"
     environment:
@@ -35,20 +35,20 @@ services:
 
   db:
     image: postgis/postgis:15-3.3
-    container_name: sih_investigation_db
+    container_name: varuna_investigation_db
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=sih_user
-      - POSTGRES_PASSWORD=sih_secret
-      - POSTGRES_DB=sih_db
+      - POSTGRES_USER=varuna_user
+      - POSTGRES_PASSWORD=varuna_secret
+      - POSTGRES_DB=varuna_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
 
   redis:
     image: redis:7-alpine
-    container_name: sih_investigation_redis
+    container_name: varuna_investigation_redis
     ports:
       - "6379:6379"
     restart: unless-stopped
