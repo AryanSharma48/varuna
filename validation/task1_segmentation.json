@@ -1,0 +1,134 @@
+{
+  "task": "TASK 1: U-Net Oil Spill Segmentation Validation",
+  "dataset": {
+    "name": "Refined Deep-SAR Oil Spill (SOS)",
+    "zenodo_record": "15298010",
+    "doi": "10.5281/zenodo.15298010",
+    "total_images": 8070,
+    "patch_resolution": [
+      256,
+      256
+    ],
+    "channels": 2,
+    "splits": {
+      "train_patches": 6455,
+      "val_patches": 807,
+      "test_patches": 808,
+      "test_percentage": 10.01
+    },
+    "split_policy_audit": {
+      "scene_level_possible_with_dataset": false,
+      "reason": "Zenodo 15298010 provides only pre-cropped patches named palsar_X and sentinel_X; scene acquisition SAFE IDs and geospatial coordinates were omitted by the benchmark authors.",
+      "leakage_audit": "0 exact image or path collisions across train, val, and test partitions.",
+      "held_out_status": "Strictly untouched 808 patches (half of official test/val set) evaluated only once after calibrating threshold on val split."
+    }
+  },
+  "model": {
+    "architecture": "U-Net (Standard 4-level DoubleConv encoder-decoder with bilinear upsampling)",
+    "checkpoint_path": "models/checkpoints/oil_spill_unet_best.pt",
+    "checkpoint_size_mb": 53.63,
+    "calibrated_threshold": 0.5
+  },
+  "hardware": {
+    "processor": "AMD Ryzen 7 7435HS (8 Cores, 16 Logical Processors)",
+    "os": "Windows 11",
+    "framework": "PyTorch 2.12.0+cpu",
+    "device": "cpu",
+    "threads": 8
+  },
+  "inference_benchmarking": {
+    "total_eval_time_sec": 223.82,
+    "average_latency_ms_per_patch": 277.0,
+    "throughput_fps": 3.61
+  },
+  "test_metrics_oil_class": {
+    "iou": 0.7077,
+    "dice_f1": 0.8288,
+    "precision": 0.8086,
+    "recall": 0.8501,
+    "accuracy": 0.9055,
+    "confusion_matrix": {
+      "true_positives": 12111751,
+      "false_positives": 2866486,
+      "true_negatives": 35839068,
+      "false_negatives": 2135783,
+      "total_pixels": 52953088
+    }
+  },
+  "test_metrics_background_class": {
+    "iou": 0.8775,
+    "dice_f1": 0.9348,
+    "precision": 0.9438,
+    "recall": 0.9259
+  },
+  "test_metrics_overall": {
+    "mean_iou_miou": 0.7926,
+    "mean_dice_mdice": 0.8818,
+    "classes_evaluated": [
+      "background",
+      "oil_spill"
+    ],
+    "classes_absent_in_ground_truth": [
+      "look_alike",
+      "ship",
+      "land"
+    ],
+    "note": "Refined Deep-SAR SOS provides binary masks {0, 255}; distinct categorical labels for ship/land are not present in this dataset."
+  },
+  "false_positive_analysis_lookalike": {
+    "zero_oil_patches_count": 29,
+    "zero_oil_patches_percentage": 3.59,
+    "total_pixels_in_zero_oil_patches": 1900544,
+    "false_positive_oil_pixels": 960,
+    "false_positive_pixel_rate": 0.0005,
+    "patches_with_zero_false_alarms": 22,
+    "patch_level_perfect_specificity": 75.86,
+    "stage2_lookalike_classifier_cases": [
+      {
+        "case_name": "Low-Wind Sheltered Bay",
+        "expected": "LOOK_ALIKE",
+        "decision": "OIL",
+        "confidence": 0.75,
+        "look_alike_risk": "LOW",
+        "look_alike_type": null,
+        "damping_db": 14.95,
+        "reasons": [
+          "Backscatter damping (15.0 dB) matches mineral oil suppression",
+          "Sharp, distinct perimeter gradients indicating high interfacial surface tension",
+          "Broad/amorphous shape with low elongation",
+          "Low ambient wind regime (<3.5 m/s) presents significant look-alike hazard"
+        ]
+      },
+      {
+        "case_name": "Natural Biogenic Plant Film",
+        "expected": "LOOK_ALIKE",
+        "decision": "UNCERTAIN",
+        "confidence": 0.6,
+        "look_alike_risk": "MEDIUM",
+        "look_alike_type": "BIOGENIC_FILM",
+        "damping_db": 2.52,
+        "reasons": [
+          "Weak damping (2.5 dB) typical of thin natural biogenic slicks",
+          "Sharp, distinct perimeter gradients indicating high interfacial surface tension",
+          "Broad/amorphous shape with low elongation",
+          "Moderate ambient wind (5.5 m/s) rules out low-wind calm sea false positives"
+        ]
+      },
+      {
+        "case_name": "Genuine Ship Bilge Discharge Streak",
+        "expected": "OIL",
+        "decision": "OIL",
+        "confidence": 1.0,
+        "look_alike_risk": "LOW",
+        "look_alike_type": null,
+        "damping_db": 9.98,
+        "reasons": [
+          "Backscatter damping (10.0 dB) matches mineral oil suppression",
+          "Sharp, distinct perimeter gradients indicating high interfacial surface tension",
+          "Elongated trajectory morphology (aspect ratio 4.8) consistent with moving vessel discharge",
+          "Moderate ambient wind (6.2 m/s) rules out low-wind calm sea false positives"
+        ]
+      }
+    ]
+  }
+}

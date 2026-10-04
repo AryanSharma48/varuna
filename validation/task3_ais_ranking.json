@@ -1,0 +1,210 @@
+{
+  "task": "TASK 3: AIS Ranking Sanity Check",
+  "weight_configuration": {
+    "proximity_weight": 0.3,
+    "timing_weight": 0.25,
+    "trajectory_weight": 0.2,
+    "ais_gap_weight": 0.15,
+    "behaviour_anomaly_weight": 0.1
+  },
+  "case_a_planted_source": {
+    "scenario": "Controlled Synthetic Maritime Corridor (Arabian Sea / Mumbai Offshore)",
+    "planted_source_vessel": "PACIFIC VOYAGER (MMSI 412356789, Crude Oil Tanker)",
+    "planted_anomalies": [
+      "AIS_GAP (40 min blackout)",
+      "SPEED_JUMP (throttle 14.2 -> 6.1 kts)",
+      "COURSE_DEVIATION (45 deg)"
+    ],
+    "planted_source_identified_rank_1": true,
+    "rankings": [
+      {
+        "mmsi": 412356789,
+        "vessel_name": "PACIFIC VOYAGER",
+        "vessel_type": "Crude Oil Tanker",
+        "flag": "Panama",
+        "total_score": 74.8,
+        "priority_level": "HIGH",
+        "breakdown": {
+          "proximity": 30.0,
+          "timing": 0.0,
+          "trajectory": 19.8,
+          "ais_gap": 15.0,
+          "behaviour_anomaly": 10.0
+        },
+        "reasons": [
+          "Direct passage (1.4 km) through probable origin centroid",
+          "Passed within 4.4 hours of estimated spill window",
+          "Transit course (48.8\u00b0) strongly aligns with slick elongation axis (48.0\u00b0)",
+          "Identified unannounced AIS transmission outage / gap in origin vicinity",
+          "Exhibited atypical kinematic behavior (speed reduction or sharp course change)"
+        ],
+        "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
+        "priority_rank": 1
+      },
+      {
+        "mmsi": 419012345,
+        "vessel_name": "SAGAR RATNA",
+        "vessel_type": "Offshore Supply Vessel",
+        "flag": "India",
+        "total_score": 35.2,
+        "priority_level": "LOW",
+        "breakdown": {
+          "proximity": 1.7,
+          "timing": 21.4,
+          "trajectory": 12.1,
+          "ais_gap": 0.0,
+          "behaviour_anomaly": 0.0
+        },
+        "reasons": [
+          "Moderate distance (22.8 km) from origin zone",
+          "Passed within 0.6 hours of estimated spill window"
+        ],
+        "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
+        "priority_rank": 2
+      },
+      {
+        "mmsi": 211567890,
+        "vessel_name": "NORDIC TRADER",
+        "vessel_type": "Container Ship",
+        "flag": "Liberia",
+        "total_score": 19.7,
+        "priority_level": "LOW",
+        "breakdown": {
+          "proximity": 10.8,
+          "timing": 0.0,
+          "trajectory": 8.9,
+          "ais_gap": 0.0,
+          "behaviour_anomaly": 0.0
+        },
+        "reasons": [
+          "Moderate distance (11.5 km) from origin zone",
+          "Passed within 4.6 hours of estimated spill window"
+        ],
+        "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
+        "priority_rank": 3
+      },
+      {
+        "mmsi": 352678901,
+        "vessel_name": "OCEAN EXPLORER",
+        "vessel_type": "Bulk Carrier",
+        "flag": "Marshall Islands",
+        "total_score": 13.4,
+        "priority_level": "LOW",
+        "breakdown": {
+          "proximity": 5.2,
+          "timing": 0.0,
+          "trajectory": 8.2,
+          "ais_gap": 0.0,
+          "behaviour_anomaly": 0.0
+        },
+        "reasons": [
+          "Moderate distance (18.5 km) from origin zone",
+          "Passed within 4.2 hours of estimated spill window"
+        ],
+        "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
+        "priority_rank": 4
+      },
+      {
+        "mmsi": 419890123,
+        "vessel_name": "MATSYA RANI",
+        "vessel_type": "Fishing Vessel",
+        "flag": "India",
+        "total_score": 12.7,
+        "priority_level": "LOW",
+        "breakdown": {
+          "proximity": 0.0,
+          "timing": 2.6,
+          "trajectory": 10.1,
+          "ais_gap": 0.0,
+          "behaviour_anomaly": 0.0
+        },
+        "reasons": [
+          "Passed within 3.6 hours of estimated spill window"
+        ],
+        "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
+        "priority_rank": 5
+      }
+    ]
+  },
+  "case_b_gap_ablation": {
+    "vessel": "PACIFIC VOYAGER",
+    "score_with_ais_gap": 74.8,
+    "score_without_ais_gap": 59.8,
+    "delta_points": 15.0,
+    "finding": "AIS gap adds an explainable +15.0 penalty directly reflected in attribution score, elevating suspected 'dark vessel' priority."
+  },
+  "case_c_incident_001_sample": {
+    "scenario": "Incident 001 (Eastern Mediterranean DARTIS ow-0388)",
+    "data_present": true,
+    "vessels_file": "demo/incidents/incident_001/ais\\vessels.json",
+    "anomalies_file": "demo/incidents/incident_001/ais\\anomalies.json",
+    "rankings": [
+      {
+        "mmsi": 636018245,
+        "vessel_name": "MT AL NAJAF",
+        "vessel_type": "Oil/Chemical Tanker",
+        "flag": "Liberia",
+        "total_score": 78.8,
+        "priority_level": "HIGH",
+        "breakdown": {
+          "proximity": 18.9,
+          "timing": 25.0,
+          "trajectory": 19.9,
+          "ais_gap": 15.0,
+          "behaviour_anomaly": 0.0
+        },
+        "reasons": [
+          "Close spatial proximity (5.0 km) to probable origin boundary",
+          "Closest approach (15:20 UTC) coincided exactly with estimated spill window",
+          "Transit course (44.5\u00b0) strongly aligns with slick elongation axis (45.0\u00b0)",
+          "Identified unannounced AIS transmission outage / gap in origin vicinity"
+        ],
+        "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
+        "priority_rank": 1
+      },
+      {
+        "mmsi": 241319000,
+        "vessel_name": "MT LEVANT STAR",
+        "vessel_type": "Crude Oil Tanker",
+        "flag": "Greece",
+        "total_score": 72.7,
+        "priority_level": "HIGH",
+        "breakdown": {
+          "proximity": 30.0,
+          "timing": 25.0,
+          "trajectory": 12.7,
+          "ais_gap": 0.0,
+          "behaviour_anomaly": 5.0
+        },
+        "reasons": [
+          "Direct passage (0.9 km) through probable origin centroid",
+          "Closest approach (13:50 UTC) coincided exactly with estimated spill window",
+          "Exhibited atypical kinematic behavior (speed reduction or sharp course change)"
+        ],
+        "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
+        "priority_rank": 2
+      },
+      {
+        "mmsi": 352884000,
+        "vessel_name": "MV MEDITERRANEAN EXPRESS",
+        "vessel_type": "Container Ship",
+        "flag": "Panama",
+        "total_score": 47.5,
+        "priority_level": "MEDIUM",
+        "breakdown": {
+          "proximity": 10.7,
+          "timing": 25.0,
+          "trajectory": 11.8,
+          "ais_gap": 0.0,
+          "behaviour_anomaly": 0.0
+        },
+        "reasons": [
+          "Moderate distance (11.6 km) from origin zone",
+          "Closest approach (14:10 UTC) coincided exactly with estimated spill window"
+        ],
+        "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
+        "priority_rank": 3
+      }
+    ]
+  }
+}

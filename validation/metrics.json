@@ -1,0 +1,876 @@
+{
+  "project": "VARUNA - Autonomous Satellite Oil Spill Detection, Lagrangian Backtracking & Vessel Attribution",
+  "git_commit_hash": "55b3bf873f055259c5bb7568ba54a02ab7d446d8",
+  "validation_timestamp": "2026-10-05T20:47:00+05:30",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7435HS (8 Cores, 16 Logical Processors)",
+    "os": "Windows 11",
+    "frameworks": {
+      "pytorch": "2.12.0+cpu",
+      "opendrift": "1.14.11",
+      "python": "3.14.3"
+    }
+  },
+  "commands_to_reproduce": {
+    "task1_segmentation": "python validation/evaluate_task1_segmentation.py",
+    "task2_drift_synthetic": "python validation/run_drift_synthetic_test.py",
+    "task3_ais_ranking": "python validation/run_task3_ais_sanity_check.py"
+  },
+  "task1_segmentation": {
+    "task": "TASK 1: U-Net Oil Spill Segmentation Validation",
+    "dataset": {
+      "name": "Refined Deep-SAR Oil Spill (SOS)",
+      "zenodo_record": "15298010",
+      "doi": "10.5281/zenodo.15298010",
+      "total_images": 8070,
+      "patch_resolution": [
+        256,
+        256
+      ],
+      "channels": 2,
+      "splits": {
+        "train_patches": 6455,
+        "val_patches": 807,
+        "test_patches": 808,
+        "test_percentage": 10.01
+      },
+      "split_policy_audit": {
+        "scene_level_possible_with_dataset": false,
+        "reason": "Zenodo 15298010 provides only pre-cropped patches named palsar_X and sentinel_X; scene acquisition SAFE IDs and geospatial coordinates were omitted by the benchmark authors.",
+        "leakage_audit": "0 exact image or path collisions across train, val, and test partitions.",
+        "held_out_status": "Strictly untouched 808 patches (half of official test/val set) evaluated only once after calibrating threshold on val split."
+      }
+    },
+    "model": {
+      "architecture": "U-Net (Standard 4-level DoubleConv encoder-decoder with bilinear upsampling)",
+      "checkpoint_path": "models/checkpoints/oil_spill_unet_best.pt",
+      "checkpoint_size_mb": 53.63,
+      "calibrated_threshold": 0.5
+    },
+    "hardware": {
+      "processor": "AMD Ryzen 7 7435HS (8 Cores, 16 Logical Processors)",
+      "os": "Windows 11",
+      "framework": "PyTorch 2.12.0+cpu",
+      "device": "cpu",
+      "threads": 8
+    },
+    "inference_benchmarking": {
+      "total_eval_time_sec": 223.82,
+      "average_latency_ms_per_patch": 277.0,
+      "throughput_fps": 3.61
+    },
+    "test_metrics_oil_class": {
+      "iou": 0.7077,
+      "dice_f1": 0.8288,
+      "precision": 0.8086,
+      "recall": 0.8501,
+      "accuracy": 0.9055,
+      "confusion_matrix": {
+        "true_positives": 12111751,
+        "false_positives": 2866486,
+        "true_negatives": 35839068,
+        "false_negatives": 2135783,
+        "total_pixels": 52953088
+      }
+    },
+    "test_metrics_background_class": {
+      "iou": 0.8775,
+      "dice_f1": 0.9348,
+      "precision": 0.9438,
+      "recall": 0.9259
+    },
+    "test_metrics_overall": {
+      "mean_iou_miou": 0.7926,
+      "mean_dice_mdice": 0.8818,
+      "classes_evaluated": [
+        "background",
+        "oil_spill"
+      ],
+      "classes_absent_in_ground_truth": [
+        "look_alike",
+        "ship",
+        "land"
+      ],
+      "note": "Refined Deep-SAR SOS provides binary masks {0, 255}; distinct categorical labels for ship/land are not present in this dataset."
+    },
+    "false_positive_analysis_lookalike": {
+      "zero_oil_patches_count": 29,
+      "zero_oil_patches_percentage": 3.59,
+      "total_pixels_in_zero_oil_patches": 1900544,
+      "false_positive_oil_pixels": 960,
+      "false_positive_pixel_rate": 0.0005,
+      "patches_with_zero_false_alarms": 22,
+      "patch_level_perfect_specificity": 75.86,
+      "stage2_lookalike_classifier_cases": [
+        {
+          "case_name": "Low-Wind Sheltered Bay",
+          "expected": "LOOK_ALIKE",
+          "decision": "OIL",
+          "confidence": 0.75,
+          "look_alike_risk": "LOW",
+          "look_alike_type": null,
+          "damping_db": 14.95,
+          "reasons": [
+            "Backscatter damping (15.0 dB) matches mineral oil suppression",
+            "Sharp, distinct perimeter gradients indicating high interfacial surface tension",
+            "Broad/amorphous shape with low elongation",
+            "Low ambient wind regime (<3.5 m/s) presents significant look-alike hazard"
+          ]
+        },
+        {
+          "case_name": "Natural Biogenic Plant Film",
+          "expected": "LOOK_ALIKE",
+          "decision": "UNCERTAIN",
+          "confidence": 0.6,
+          "look_alike_risk": "MEDIUM",
+          "look_alike_type": "BIOGENIC_FILM",
+          "damping_db": 2.52,
+          "reasons": [
+            "Weak damping (2.5 dB) typical of thin natural biogenic slicks",
+            "Sharp, distinct perimeter gradients indicating high interfacial surface tension",
+            "Broad/amorphous shape with low elongation",
+            "Moderate ambient wind (5.5 m/s) rules out low-wind calm sea false positives"
+          ]
+        },
+        {
+          "case_name": "Genuine Ship Bilge Discharge Streak",
+          "expected": "OIL",
+          "decision": "OIL",
+          "confidence": 1.0,
+          "look_alike_risk": "LOW",
+          "look_alike_type": null,
+          "damping_db": 9.98,
+          "reasons": [
+            "Backscatter damping (10.0 dB) matches mineral oil suppression",
+            "Sharp, distinct perimeter gradients indicating high interfacial surface tension",
+            "Elongated trajectory morphology (aspect ratio 4.8) consistent with moving vessel discharge",
+            "Moderate ambient wind (6.2 m/s) rules out low-wind calm sea false positives"
+          ]
+        }
+      ]
+    }
+  },
+  "task2_drift_backtest": {
+    "task": "TASK 2: OpenDrift Backtracking Synthetic Recovery Test",
+    "validation_type": "SYNTHETIC",
+    "label": "SYNTHETIC VALIDATION (Simulated forward release + backward ensemble recovery)",
+    "forcing_data": {
+      "currents_source": "Copernicus Marine CMEMS (demo/incidents/incident_001/environment/currents.nc)",
+      "winds_source": "ECMWF ERA5 Reanalysis (demo/incidents/incident_001/environment/winds.nc)",
+      "spatial_domain": "Eastern Mediterranean (31.5\u00b0N - 33.5\u00b0N, 31.5\u00b0E - 34.5\u00b0E)",
+      "temporal_domain": "2019-06-08T00:00Z to 2019-06-13T00:00Z"
+    },
+    "model_configuration": {
+      "engine": "OpenDrift OpenOil v1.14.11",
+      "drift_duration_hours": 6.0,
+      "forward_time_step_min": 15,
+      "backward_time_step_min": -15,
+      "particle_count": 100,
+      "initial_slick_radius_m": 150
+    },
+    "summary_metrics": {
+      "total_runs": 20,
+      "mean_centroid_error_km": 0.2065,
+      "median_centroid_error_km": 0.2038,
+      "worst_case_error_km": 0.4494,
+      "min_centroid_error_km": 0.0575,
+      "std_dev_error_km": 0.1044,
+      "inside_50_pct_confidence_count": 18,
+      "inside_50_pct_confidence_rate": 90.0,
+      "inside_90_pct_confidence_count": 20,
+      "inside_90_pct_confidence_rate": 100.0
+    },
+    "runs": [
+      {
+        "run_id": 1,
+        "true_release_point": {
+          "lon": 33.0952,
+          "lat": 31.63001,
+          "timestamp": "2019-06-09T13:12:05.066214"
+        },
+        "observation_point": {
+          "lon": 33.1056,
+          "lat": 31.60158,
+          "timestamp": "2019-06-09T19:12:05.066214",
+          "net_forward_drift_km": 3.311
+        },
+        "backtracked_centroid": {
+          "lon": 33.09694,
+          "lat": 31.63106
+        },
+        "centroid_error_km": 0.2015,
+        "radius_50_km": 0.432,
+        "radius_90_km": 0.766,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 12.09
+      },
+      {
+        "run_id": 2,
+        "true_release_point": {
+          "lon": 32.5125,
+          "lat": 32.48377,
+          "timestamp": "2019-06-10T08:28:53.671427"
+        },
+        "observation_point": {
+          "lon": 32.59826,
+          "lat": 32.49088,
+          "timestamp": "2019-06-10T14:28:53.671427",
+          "net_forward_drift_km": 8.082
+        },
+        "backtracked_centroid": {
+          "lon": 32.51336,
+          "lat": 32.48643
+        },
+        "centroid_error_km": 0.3062,
+        "radius_50_km": 0.441,
+        "radius_90_km": 0.788,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 4.58
+      },
+      {
+        "run_id": 3,
+        "true_release_point": {
+          "lon": 33.44905,
+          "lat": 31.70433,
+          "timestamp": "2019-06-09T20:15:08.090442"
+        },
+        "observation_point": {
+          "lon": 33.44884,
+          "lat": 31.72154,
+          "timestamp": "2019-06-10T02:15:08.090442",
+          "net_forward_drift_km": 1.914
+        },
+        "backtracked_centroid": {
+          "lon": 33.44841,
+          "lat": 31.70568
+        },
+        "centroid_error_km": 0.1614,
+        "radius_50_km": 0.406,
+        "radius_90_km": 0.733,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 4.39
+      },
+      {
+        "run_id": 4,
+        "true_release_point": {
+          "lon": 32.24172,
+          "lat": 31.86237,
+          "timestamp": "2019-06-10T00:15:25.393784"
+        },
+        "observation_point": {
+          "lon": 32.2473,
+          "lat": 31.87775,
+          "timestamp": "2019-06-10T06:15:25.393784",
+          "net_forward_drift_km": 1.79
+        },
+        "backtracked_centroid": {
+          "lon": 32.24073,
+          "lat": 31.8616
+        },
+        "centroid_error_km": 0.1267,
+        "radius_50_km": 0.433,
+        "radius_90_km": 0.772,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 3.84
+      },
+      {
+        "run_id": 5,
+        "true_release_point": {
+          "lon": 32.23715,
+          "lat": 31.83861,
+          "timestamp": "2019-06-10T07:11:40.030848"
+        },
+        "observation_point": {
+          "lon": 32.27806,
+          "lat": 31.8273,
+          "timestamp": "2019-06-10T13:11:40.030848",
+          "net_forward_drift_km": 4.065
+        },
+        "backtracked_centroid": {
+          "lon": 32.23613,
+          "lat": 31.84095
+        },
+        "centroid_error_km": 0.2776,
+        "radius_50_km": 0.392,
+        "radius_90_km": 0.737,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 3.21
+      },
+      {
+        "run_id": 6,
+        "true_release_point": {
+          "lon": 32.96292,
+          "lat": 31.86453,
+          "timestamp": "2019-06-10T04:17:05.110174"
+        },
+        "observation_point": {
+          "lon": 32.97477,
+          "lat": 31.86961,
+          "timestamp": "2019-06-10T10:17:05.110174",
+          "net_forward_drift_km": 1.253
+        },
+        "backtracked_centroid": {
+          "lon": 32.96296,
+          "lat": 31.86689
+        },
+        "centroid_error_km": 0.2629,
+        "radius_50_km": 0.429,
+        "radius_90_km": 0.783,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 3.84
+      },
+      {
+        "run_id": 7,
+        "true_release_point": {
+          "lon": 33.3332,
+          "lat": 31.6078,
+          "timestamp": "2019-06-10T14:40:45.566717"
+        },
+        "observation_point": {
+          "lon": 33.35264,
+          "lat": 31.57435,
+          "timestamp": "2019-06-10T20:40:45.566717",
+          "net_forward_drift_km": 4.15
+        },
+        "backtracked_centroid": {
+          "lon": 33.33372,
+          "lat": 31.60683
+        },
+        "centroid_error_km": 0.1182,
+        "radius_50_km": 0.408,
+        "radius_90_km": 0.739,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 3.48
+      },
+      {
+        "run_id": 8,
+        "true_release_point": {
+          "lon": 33.1774,
+          "lat": 32.0083,
+          "timestamp": "2019-06-09T07:27:46.857567"
+        },
+        "observation_point": {
+          "lon": 33.1729,
+          "lat": 32.01313,
+          "timestamp": "2019-06-09T13:27:46.857567",
+          "net_forward_drift_km": 0.684
+        },
+        "backtracked_centroid": {
+          "lon": 33.17674,
+          "lat": 32.00847
+        },
+        "centroid_error_km": 0.0651,
+        "radius_50_km": 0.41,
+        "radius_90_km": 0.751,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 4.81
+      },
+      {
+        "run_id": 9,
+        "true_release_point": {
+          "lon": 33.5401,
+          "lat": 32.00391,
+          "timestamp": "2019-06-09T04:27:06.481736"
+        },
+        "observation_point": {
+          "lon": 33.56004,
+          "lat": 31.96761,
+          "timestamp": "2019-06-09T10:27:06.481736",
+          "net_forward_drift_km": 4.452
+        },
+        "backtracked_centroid": {
+          "lon": 33.54219,
+          "lat": 32.00445
+        },
+        "centroid_error_km": 0.2061,
+        "radius_50_km": 0.396,
+        "radius_90_km": 0.718,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 4.56
+      },
+      {
+        "run_id": 10,
+        "true_release_point": {
+          "lon": 32.3354,
+          "lat": 32.61699,
+          "timestamp": "2019-06-10T04:58:43.858220"
+        },
+        "observation_point": {
+          "lon": 32.40386,
+          "lat": 32.66105,
+          "timestamp": "2019-06-10T10:58:43.858220",
+          "net_forward_drift_km": 8.068
+        },
+        "backtracked_centroid": {
+          "lon": 32.33183,
+          "lat": 32.61969
+        },
+        "centroid_error_km": 0.4494,
+        "radius_50_km": 0.4,
+        "radius_90_km": 0.735,
+        "inside_50_pct_region": false,
+        "inside_90_pct_region": true,
+        "duration_sec": 4.53
+      },
+      {
+        "run_id": 11,
+        "true_release_point": {
+          "lon": 33.32998,
+          "lat": 32.47568,
+          "timestamp": "2019-06-10T01:44:20.214203"
+        },
+        "observation_point": {
+          "lon": 33.32706,
+          "lat": 32.46661,
+          "timestamp": "2019-06-10T07:44:20.214203",
+          "net_forward_drift_km": 1.046
+        },
+        "backtracked_centroid": {
+          "lon": 33.3321,
+          "lat": 32.47399
+        },
+        "centroid_error_km": 0.2738,
+        "radius_50_km": 0.444,
+        "radius_90_km": 0.801,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 4.64
+      },
+      {
+        "run_id": 12,
+        "true_release_point": {
+          "lon": 33.56236,
+          "lat": 32.05424,
+          "timestamp": "2019-06-10T02:29:52.621084"
+        },
+        "observation_point": {
+          "lon": 33.5743,
+          "lat": 32.06393,
+          "timestamp": "2019-06-10T08:29:52.621084",
+          "net_forward_drift_km": 1.558
+        },
+        "backtracked_centroid": {
+          "lon": 33.56297,
+          "lat": 32.05618
+        },
+        "centroid_error_km": 0.2234,
+        "radius_50_km": 0.405,
+        "radius_90_km": 0.746,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 4.4
+      },
+      {
+        "run_id": 13,
+        "true_release_point": {
+          "lon": 33.36117,
+          "lat": 32.34222,
+          "timestamp": "2019-06-10T17:21:42.952374"
+        },
+        "observation_point": {
+          "lon": 33.36105,
+          "lat": 32.35108,
+          "timestamp": "2019-06-10T23:21:42.952374",
+          "net_forward_drift_km": 0.985
+        },
+        "backtracked_centroid": {
+          "lon": 33.36097,
+          "lat": 32.34148
+        },
+        "centroid_error_km": 0.0849,
+        "radius_50_km": 0.439,
+        "radius_90_km": 0.784,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 4.53
+      },
+      {
+        "run_id": 14,
+        "true_release_point": {
+          "lon": 33.00829,
+          "lat": 32.44549,
+          "timestamp": "2019-06-09T02:11:58.453496"
+        },
+        "observation_point": {
+          "lon": 33.08028,
+          "lat": 32.41172,
+          "timestamp": "2019-06-09T08:11:58.453496",
+          "net_forward_drift_km": 7.73
+        },
+        "backtracked_centroid": {
+          "lon": 33.01269,
+          "lat": 32.44661
+        },
+        "centroid_error_km": 0.4314,
+        "radius_50_km": 0.417,
+        "radius_90_km": 0.79,
+        "inside_50_pct_region": false,
+        "inside_90_pct_region": true,
+        "duration_sec": 4.63
+      },
+      {
+        "run_id": 15,
+        "true_release_point": {
+          "lon": 32.51906,
+          "lat": 31.94727,
+          "timestamp": "2019-06-09T03:49:48.053612"
+        },
+        "observation_point": {
+          "lon": 32.51918,
+          "lat": 31.92832,
+          "timestamp": "2019-06-09T09:49:48.053612",
+          "net_forward_drift_km": 2.108
+        },
+        "backtracked_centroid": {
+          "lon": 32.52018,
+          "lat": 31.94558
+        },
+        "centroid_error_km": 0.2162,
+        "radius_50_km": 0.408,
+        "radius_90_km": 0.76,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 4.61
+      },
+      {
+        "run_id": 16,
+        "true_release_point": {
+          "lon": 32.52591,
+          "lat": 31.7212,
+          "timestamp": "2019-06-09T13:20:33.838617"
+        },
+        "observation_point": {
+          "lon": 32.54346,
+          "lat": 31.7073,
+          "timestamp": "2019-06-09T19:20:33.838617",
+          "net_forward_drift_km": 2.268
+        },
+        "backtracked_centroid": {
+          "lon": 32.52587,
+          "lat": 31.72218
+        },
+        "centroid_error_km": 0.1086,
+        "radius_50_km": 0.428,
+        "radius_90_km": 0.754,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 3.65
+      },
+      {
+        "run_id": 17,
+        "true_release_point": {
+          "lon": 33.08996,
+          "lat": 32.0378,
+          "timestamp": "2019-06-09T17:46:07.271118"
+        },
+        "observation_point": {
+          "lon": 33.062,
+          "lat": 32.05524,
+          "timestamp": "2019-06-09T23:46:07.271118",
+          "net_forward_drift_km": 3.272
+        },
+        "backtracked_centroid": {
+          "lon": 33.08848,
+          "lat": 32.03637
+        },
+        "centroid_error_km": 0.212,
+        "radius_50_km": 0.401,
+        "radius_90_km": 0.745,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 3.56
+      },
+      {
+        "run_id": 18,
+        "true_release_point": {
+          "lon": 32.49331,
+          "lat": 31.92037,
+          "timestamp": "2019-06-10T20:57:33.912757"
+        },
+        "observation_point": {
+          "lon": 32.48734,
+          "lat": 31.92202,
+          "timestamp": "2019-06-11T02:57:33.912757",
+          "net_forward_drift_km": 0.593
+        },
+        "backtracked_centroid": {
+          "lon": 32.49283,
+          "lat": 31.92005
+        },
+        "centroid_error_km": 0.0575,
+        "radius_50_km": 0.403,
+        "radius_90_km": 0.737,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 4.43
+      },
+      {
+        "run_id": 19,
+        "true_release_point": {
+          "lon": 33.10725,
+          "lat": 32.33096,
+          "timestamp": "2019-06-09T08:12:52.758409"
+        },
+        "observation_point": {
+          "lon": 33.09998,
+          "lat": 32.32884,
+          "timestamp": "2019-06-09T14:12:52.758409",
+          "net_forward_drift_km": 0.723
+        },
+        "backtracked_centroid": {
+          "lon": 33.10743,
+          "lat": 32.32928
+        },
+        "centroid_error_km": 0.1879,
+        "radius_50_km": 0.409,
+        "radius_90_km": 0.818,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 4.79
+      },
+      {
+        "run_id": 20,
+        "true_release_point": {
+          "lon": 33.22078,
+          "lat": 31.79608,
+          "timestamp": "2019-06-09T18:12:49.900336"
+        },
+        "observation_point": {
+          "lon": 33.18959,
+          "lat": 31.79779,
+          "timestamp": "2019-06-10T00:12:49.900336",
+          "net_forward_drift_km": 2.954
+        },
+        "backtracked_centroid": {
+          "lon": 33.21973,
+          "lat": 31.79496
+        },
+        "centroid_error_km": 0.1592,
+        "radius_50_km": 0.404,
+        "radius_90_km": 0.764,
+        "inside_50_pct_region": true,
+        "inside_90_pct_region": true,
+        "duration_sec": 4.58
+      }
+    ]
+  },
+  "task3_ais_attribution": {
+    "task": "TASK 3: AIS Ranking Sanity Check",
+    "weight_configuration": {
+      "proximity_weight": 0.3,
+      "timing_weight": 0.25,
+      "trajectory_weight": 0.2,
+      "ais_gap_weight": 0.15,
+      "behaviour_anomaly_weight": 0.1
+    },
+    "case_a_planted_source": {
+      "scenario": "Controlled Synthetic Maritime Corridor (Arabian Sea / Mumbai Offshore)",
+      "planted_source_vessel": "PACIFIC VOYAGER (MMSI 412356789, Crude Oil Tanker)",
+      "planted_anomalies": [
+        "AIS_GAP (40 min blackout)",
+        "SPEED_JUMP (throttle 14.2 -> 6.1 kts)",
+        "COURSE_DEVIATION (45 deg)"
+      ],
+      "planted_source_identified_rank_1": true,
+      "rankings": [
+        {
+          "mmsi": 412356789,
+          "vessel_name": "PACIFIC VOYAGER",
+          "vessel_type": "Crude Oil Tanker",
+          "flag": "Panama",
+          "total_score": 74.8,
+          "priority_level": "HIGH",
+          "breakdown": {
+            "proximity": 30.0,
+            "timing": 0.0,
+            "trajectory": 19.8,
+            "ais_gap": 15.0,
+            "behaviour_anomaly": 10.0
+          },
+          "reasons": [
+            "Direct passage (1.4 km) through probable origin centroid",
+            "Passed within 4.4 hours of estimated spill window",
+            "Transit course (48.8\u00b0) strongly aligns with slick elongation axis (48.0\u00b0)",
+            "Identified unannounced AIS transmission outage / gap in origin vicinity",
+            "Exhibited atypical kinematic behavior (speed reduction or sharp course change)"
+          ],
+          "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
+          "priority_rank": 1
+        },
+        {
+          "mmsi": 419012345,
+          "vessel_name": "SAGAR RATNA",
+          "vessel_type": "Offshore Supply Vessel",
+          "flag": "India",
+          "total_score": 35.2,
+          "priority_level": "LOW",
+          "breakdown": {
+            "proximity": 1.7,
+            "timing": 21.4,
+            "trajectory": 12.1,
+            "ais_gap": 0.0,
+            "behaviour_anomaly": 0.0
+          },
+          "reasons": [
+            "Moderate distance (22.8 km) from origin zone",
+            "Passed within 0.6 hours of estimated spill window"
+          ],
+          "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
+          "priority_rank": 2
+        },
+        {
+          "mmsi": 211567890,
+          "vessel_name": "NORDIC TRADER",
+          "vessel_type": "Container Ship",
+          "flag": "Liberia",
+          "total_score": 19.7,
+          "priority_level": "LOW",
+          "breakdown": {
+            "proximity": 10.8,
+            "timing": 0.0,
+            "trajectory": 8.9,
+            "ais_gap": 0.0,
+            "behaviour_anomaly": 0.0
+          },
+          "reasons": [
+            "Moderate distance (11.5 km) from origin zone",
+            "Passed within 4.6 hours of estimated spill window"
+          ],
+          "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
+          "priority_rank": 3
+        },
+        {
+          "mmsi": 352678901,
+          "vessel_name": "OCEAN EXPLORER",
+          "vessel_type": "Bulk Carrier",
+          "flag": "Marshall Islands",
+          "total_score": 13.4,
+          "priority_level": "LOW",
+          "breakdown": {
+            "proximity": 5.2,
+            "timing": 0.0,
+            "trajectory": 8.2,
+            "ais_gap": 0.0,
+            "behaviour_anomaly": 0.0
+          },
+          "reasons": [
+            "Moderate distance (18.5 km) from origin zone",
+            "Passed within 4.2 hours of estimated spill window"
+          ],
+          "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
+          "priority_rank": 4
+        },
+        {
+          "mmsi": 419890123,
+          "vessel_name": "MATSYA RANI",
+          "vessel_type": "Fishing Vessel",
+          "flag": "India",
+          "total_score": 12.7,
+          "priority_level": "LOW",
+          "breakdown": {
+            "proximity": 0.0,
+            "timing": 2.6,
+            "trajectory": 10.1,
+            "ais_gap": 0.0,
+            "behaviour_anomaly": 0.0
+          },
+          "reasons": [
+            "Passed within 3.6 hours of estimated spill window"
+          ],
+          "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
+          "priority_rank": 5
+        }
+      ]
+    },
+    "case_b_gap_ablation": {
+      "vessel": "PACIFIC VOYAGER",
+      "score_with_ais_gap": 74.8,
+      "score_without_ais_gap": 59.8,
+      "delta_points": 15.0,
+      "finding": "AIS gap adds an explainable +15.0 penalty directly reflected in attribution score, elevating suspected 'dark vessel' priority."
+    },
+    "case_c_incident_001_sample": {
+      "scenario": "Incident 001 (Eastern Mediterranean DARTIS ow-0388)",
+      "data_present": true,
+      "vessels_file": "demo/incidents/incident_001/ais\\vessels.json",
+      "anomalies_file": "demo/incidents/incident_001/ais\\anomalies.json",
+      "rankings": [
+        {
+          "mmsi": 636018245,
+          "vessel_name": "MT AL NAJAF",
+          "vessel_type": "Oil/Chemical Tanker",
+          "flag": "Liberia",
+          "total_score": 78.8,
+          "priority_level": "HIGH",
+          "breakdown": {
+            "proximity": 18.9,
+            "timing": 25.0,
+            "trajectory": 19.9,
+            "ais_gap": 15.0,
+            "behaviour_anomaly": 0.0
+          },
+          "reasons": [
+            "Close spatial proximity (5.0 km) to probable origin boundary",
+            "Closest approach (15:20 UTC) coincided exactly with estimated spill window",
+            "Transit course (44.5\u00b0) strongly aligns with slick elongation axis (45.0\u00b0)",
+            "Identified unannounced AIS transmission outage / gap in origin vicinity"
+          ],
+          "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
+          "priority_rank": 1
+        },
+        {
+          "mmsi": 241319000,
+          "vessel_name": "MT LEVANT STAR",
+          "vessel_type": "Crude Oil Tanker",
+          "flag": "Greece",
+          "total_score": 72.7,
+          "priority_level": "HIGH",
+          "breakdown": {
+            "proximity": 30.0,
+            "timing": 25.0,
+            "trajectory": 12.7,
+            "ais_gap": 0.0,
+            "behaviour_anomaly": 5.0
+          },
+          "reasons": [
+            "Direct passage (0.9 km) through probable origin centroid",
+            "Closest approach (13:50 UTC) coincided exactly with estimated spill window",
+            "Exhibited atypical kinematic behavior (speed reduction or sharp course change)"
+          ],
+          "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
+          "priority_rank": 2
+        },
+        {
+          "mmsi": 352884000,
+          "vessel_name": "MV MEDITERRANEAN EXPRESS",
+          "vessel_type": "Container Ship",
+          "flag": "Panama",
+          "total_score": 47.5,
+          "priority_level": "MEDIUM",
+          "breakdown": {
+            "proximity": 10.7,
+            "timing": 25.0,
+            "trajectory": 11.8,
+            "ais_gap": 0.0,
+            "behaviour_anomaly": 0.0
+          },
+          "reasons": [
+            "Moderate distance (11.6 km) from origin zone",
+            "Closest approach (14:10 UTC) coincided exactly with estimated spill window"
+          ],
+          "disclaimer": "Investigation priority rank only. Does not constitute legal proof of liability.",
+          "priority_rank": 3
+        }
+      ]
+    }
+  }
+}

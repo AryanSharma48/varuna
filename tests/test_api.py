@@ -18,11 +18,11 @@ def test_get_incidents():
     assert res.status_code == 200
     data = res.json()
     assert len(data) >= 1
-    assert data[0]["id"] == "SIH-2026-001"
+    assert data[0]["id"] in ("VARUNA-2026-001", "SIH-2026-001")
 
 def test_get_incident_detail():
     """Verify the real DARTIS Eastern Mediterranean incident is returned."""
-    res = client.get("/api/v1/incidents/SIH-2026-001")
+    res = client.get("/api/v1/incidents/VARUNA-2026-001")
     assert res.status_code == 200
     data = res.json()
     assert "incident" in data
@@ -30,7 +30,7 @@ def test_get_incident_detail():
     # Real incident coordinates in Eastern Mediterranean
     assert 31.8 <= inc["center_lat"] <= 32.2, f"Wrong lat: {inc['center_lat']}"
     assert 32.7 <= inc["center_lon"] <= 33.0, f"Wrong lon: {inc['center_lon']}"
-    assert inc["id"] == "SIH-2026-001"
+    assert inc["id"] in ("VARUNA-2026-001", "SIH-2026-001")
     # Attribution scores and detection not yet populated from minimal seed
     assert "attribution_scores" in data
     assert "detection" in data
@@ -48,7 +48,7 @@ def test_get_incident_detail():
 def test_grounded_assistant():
     """Verify assistant answers about the real DARTIS ow-0388 incident."""
     payload = {
-        "incident_id": "SIH-2026-001",
+        "incident_id": "VARUNA-2026-001",
         "query": "What is the DARTIS annotation for this incident?"
     }
     res = client.post("/api/v1/investigation/ask", json=payload)
@@ -59,7 +59,7 @@ def test_grounded_assistant():
     assert len(data["answer"]) > 10
 
 def test_generate_report():
-    res = client.post("/api/v1/reports/SIH-2026-001")
+    res = client.post("/api/v1/reports/VARUNA-2026-001")
     assert res.status_code == 200
     data = res.json()
     assert "report_id" in data
