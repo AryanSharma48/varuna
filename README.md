@@ -62,6 +62,15 @@ flowchart LR
 
 ## Core Pipeline
 
+<p align="center">
+  <img src="docs/assets/sentinel1_raw_sar.png" alt="Sentinel-1 Raw SAR Backscatter" width="48%" />
+  &nbsp;
+  <img src="docs/assets/sar_slick_detection.png" alt="SAR Oil Slick Boundary Delineation" width="48%" />
+</p>
+<p align="center">
+  <em>Left: Calibrated Sentinel-1 SAR C-band radar backscatter showing capillary wave damping over the slick. Right: Automated U-Net boundary delineation and bounding contour isolation.</em>
+</p>
+
 ### 1. Satellite Radar Processing and Quality Check
 - **Radiometric Calibration:** Converts raw Sentinel-1 digital numbers to calibrated decibel backscatter values.
 - **Wind and Clutter Gate:** Validates that ambient sea surface winds are between 3 and 12 m/s. Winds below 3 m/s create calm dark patches that look like oil, while winds above 12 m/s disperse oil slicks into the water column.
