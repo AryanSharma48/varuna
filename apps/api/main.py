@@ -36,14 +36,12 @@ def startup_event():
     except Exception as e:
         print(f"Startup database initialization notice: {e}")
 
-# Health Check Endpoints (Phase 0)
 @app.get("/health", status_code=status.HTTP_200_OK, tags=["Health"])
 def health_check():
     return {
         "status": "HEALTHY",
         "service": "VARUNA API",
         "version": "1.0.0",
-        "timestamp": os.getenv("CURRENT_TIME", "2026-09-04T16:00:00Z")
     }
 
 @app.get("/health/db", status_code=status.HTTP_200_OK, tags=["Health"])

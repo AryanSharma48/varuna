@@ -204,7 +204,12 @@ STAGE 6 - FORWARD DISPERSION & SENSITIVE ASSET IMPACT:
 {impact_text}
 
 CRITICAL INVESTIGATION INSTRUCTIONS:
-1. When asked "which ship was ranked one and why not the other" or questions comparing vessels:
+1. STRICT SCOPE & DOMAIN RESTRICTION (MANDATORY):
+   - You are strictly and exclusively an autonomous forensic maritime investigator for this specific oil spill case ({inc_id}).
+   - You MUST NOT write general programming code (e.g. Python, JavaScript, SQL, shell scripts), solve coding tasks, debug code, or answer general knowledge/trivia unrelated to this maritime investigation.
+   - If the user asks for code, programming help, or any off-topic question, politely refuse with:
+     "I am Varuna AI Investigator, specialized exclusively in maritime oil spill forensics and vessel attribution for this case file. I cannot generate programming code or assist with unrelated queries. Please ask questions regarding the satellite SAR detection, Lagrangian origin backtrack, vessel AIS telemetry, or attribution evidence for this incident."
+2. When asked "which ship was ranked one and why not the other" or questions comparing vessels:
    - State clearly which vessel was ranked #1 (e.g. MT AL NAJAF with total score 89.9/100, HIGH PRIORITY).
    - Compare Rank #1 against all other candidate vessels (e.g. CHEMICAL PIONEER at Rank #2, PACIFIC VOYAGER at Rank #3).
    - Detail the exact reasons why Rank #1 scored highest:
@@ -218,8 +223,8 @@ CRITICAL INVESTIGATION INSTRUCTIONS:
      * Diverging heading relative to slick orientation
      * Maintained continuous AIS transponder broadcast without blackout
    - Use clean markdown tables and bullet points for readability.
-2. Maintain zero hallucination: cite only factual numbers and vessels from the investigation record above.
-3. Always include the standard legal notice:
+3. Maintain zero hallucination: cite only factual numbers and vessels from the investigation record above.
+4. Always include the standard legal notice:
    "> *Legal Notice: Vessel attribution scores represent investigative priority ranking based on AIS and hydrodynamic drift correlation, and do not constitute definitive legal proof of guilt.*"
 """
 
@@ -235,7 +240,13 @@ CRITICAL INVESTIGATION INSTRUCTIONS:
     def _rule_based_fallback(self, query: str, incident_data: Dict[str, Any]) -> Dict[str, Any]:
         """Deterministic tool-calling fallback when offline."""
         q_lower = query.lower()
-        if any(w in q_lower for w in ["why", "suspicious", "culprit", "responsible", "score", "priority", "voyager", "pacific", "najaf", "rank", "one", "other"]):
+        if any(w in q_lower for w in ["code", "python", "script", "function", "program", "javascript", "sql", "write a python", "write python", "coding"]):
+            return {
+                "answer": "I am Varuna AI Investigator, specialized exclusively in maritime oil spill forensics and vessel attribution for this case file. I cannot generate programming code or assist with unrelated queries. Please ask questions regarding the satellite SAR detection, Lagrangian origin backtrack, vessel AIS telemetry, or attribution evidence for this incident.",
+                "tool_used": "scope_enforcement",
+                "citations": []
+            }
+        elif any(w in q_lower for w in ["why", "suspicious", "culprit", "responsible", "score", "priority", "voyager", "pacific", "najaf", "rank", "one", "other"]):
             return self._tool_explain_attribution(incident_data)
         elif any(w in q_lower for w in ["who was", "vessels near", "traffic", "nearby", "candidates", "within"]):
             return self._tool_list_candidates(incident_data)
