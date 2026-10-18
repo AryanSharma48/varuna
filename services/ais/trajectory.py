@@ -118,6 +118,8 @@ class AISTrajectoryService:
         Interpolates all vessel positions at an exact replay timestamp.
         """
         current_positions = []
+        if target_time.tzinfo is not None:
+            target_time = target_time.replace(tzinfo=None)
         
         for mmsi, track in trajectories.items():
             if not track:
@@ -126,6 +128,8 @@ class AISTrajectoryService:
             pts = []
             for p in track:
                 t = datetime.fromisoformat(p["timestamp"]) if isinstance(p["timestamp"], str) else p["timestamp"]
+                if t.tzinfo is not None:
+                    t = t.replace(tzinfo=None)
                 pts.append((t, p))
                 
             pts.sort(key=lambda x: x[0])
