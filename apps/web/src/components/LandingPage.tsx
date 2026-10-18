@@ -22,14 +22,14 @@ export const LandingPage: React.FC = () => {
       {/* Main Content */}
       <main className="max-w-[1500px] mx-auto w-full px-4 sm:px-6 md:px-10 py-10 space-y-12 flex-1 relative z-10">
         
-        {/* Hero Title */}
-        <section className="text-center max-w-5xl mx-auto pt-8 pb-4 flex flex-col items-center justify-center space-y-4">
+        {/* Hero Title - Seamless without background box */}
+        <section className="text-center max-w-7xl mx-auto py-12 sm:py-16 md:py-20 flex items-center justify-center">
           <h1 className="flex items-center justify-center w-full">
             <span 
-              className="text-6xl sm:text-8xl md:text-9xl lg:text-[10rem] font-bold tracking-normal leading-none font-amita select-none bg-clip-text text-transparent"
+              className="text-6xl sm:text-8xl md:text-9xl lg:text-[10rem] xl:text-[12rem] font-bold tracking-normal leading-none font-amita select-none bg-clip-text text-transparent"
               style={{ 
                 fontFamily: "'Amita', cursive",
-                backgroundImage: 'linear-gradient(180deg, #38bdf8, #1d4ed8)',
+                backgroundImage: 'linear-gradient(180deg, #0b1d3a, #1a56db)',
                 WebkitBackgroundClip: 'text',
                 backgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -39,15 +39,6 @@ export const LandingPage: React.FC = () => {
               वरुण
             </span>
           </h1>
-
-          <div className="space-y-2">
-            <p className="text-xs sm:text-sm md:text-base font-semibold tracking-widest uppercase text-sky-400">
-              Autonomous Maritime Oil Spill Forensic Attribution Platform
-            </p>
-            <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-              Detect dark bilge discharges via Sentinel-1 SAR, model reverse Lagrangian ocean drift, and correlate AIS ship trajectories to identify polluting vessels with verifiable legal evidence.
-            </p>
-          </div>
         </section>
 
         {/* PRIMARY JUDGES CTA HUB (Prominent, Central, High Impact) */}
