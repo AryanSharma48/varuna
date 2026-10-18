@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { WavesShader } from './WavesShader';
 import { RoadmapSection } from './RoadmapSection';
-import { Play, ShieldAlert, Satellite, Compass, Ship, FileCheck, ArrowRight } from 'lucide-react';
+import { Play, Satellite, Compass, Ship, FileCheck, ArrowRight } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
@@ -129,10 +129,6 @@ export const LandingPage: React.FC = () => {
               
               {/* Problem */}
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-red-400 text-xs sm:text-sm font-bold uppercase tracking-wider">
-                  <ShieldAlert className="w-4 h-4" />
-                  <span>The Enforcement Challenge</span>
-                </div>
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading text-white tracking-tight leading-tight">
                   Tankers dump oily bilge at night and turn off transponders to avoid fines.
                 </h2>
