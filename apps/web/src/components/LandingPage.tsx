@@ -58,14 +58,8 @@ export const LandingPage: React.FC = () => {
             
             <div className="relative liquid-glass rounded-3xl p-6 sm:p-10 md:p-12 border border-sky-400/30 shadow-2xl backdrop-blur-2xl text-center space-y-8">
               
-              {/* Badge for Judges */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-500/10 border border-sky-400/40 text-sky-300 text-xs sm:text-sm font-bold tracking-wide uppercase shadow-inner">
-                <span className="w-2 h-2 rounded-full bg-sky-400 animate-ping"></span>
-                <span>Evaluation Benchmark Case File • Incident VARUNA-2026-001</span>
-              </div>
-
               {/* Headline */}
-              <div className="space-y-2 max-w-2xl mx-auto">
+              <div className="space-y-2 max-w-2xl mx-auto pt-2">
                 <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
                   Eastern Mediterranean Oil Discharge Investigation
                 </h2>
@@ -118,7 +112,7 @@ export const LandingPage: React.FC = () => {
                 <button
                   id="btn-launch-demo"
                   onClick={handleLaunchDemo}
-                  className="w-full sm:w-auto min-w-[320px] sm:min-w-[420px] group/btn relative inline-flex items-center justify-center gap-3 px-8 sm:px-12 py-5 sm:py-6 text-base sm:text-xl font-extrabold text-white bg-gradient-to-r from-blue-600 via-sky-500 to-blue-700 hover:from-blue-500 hover:via-sky-400 hover:to-blue-600 rounded-2xl shadow-[0_0_40px_rgba(14,165,233,0.5)] hover:shadow-[0_0_60px_rgba(14,165,233,0.8)] transform hover:-translate-y-1 active:translate-y-0 transition-all duration-300 border border-sky-300/40"
+                  className="w-full sm:w-auto min-w-[320px] sm:min-w-[420px] group/btn inline-flex items-center justify-center gap-3 px-8 sm:px-12 py-5 sm:py-6 text-base sm:text-xl font-extrabold text-white bg-blue-600 hover:bg-blue-500 active:bg-blue-700 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-200"
                 >
                   <Play className="w-6 h-6 fill-white text-white group-hover/btn:scale-110 transition-transform" />
                   <span className="tracking-wide">Launch Investigation Demo</span>
