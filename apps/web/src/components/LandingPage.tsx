@@ -43,11 +43,7 @@ export const LandingPage: React.FC = () => {
 
         {/* PRIMARY JUDGES CTA HUB (Prominent, Central, High Impact) */}
         <section className="max-w-4xl mx-auto w-full">
-          <div className="relative group">
-            {/* Ambient Glow */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-sky-500 via-blue-600 to-cyan-400 rounded-3xl blur-xl opacity-40 group-hover:opacity-60 transition duration-1000"></div>
-            
-            <div className="relative liquid-glass rounded-3xl p-6 sm:p-10 md:p-12 border border-sky-400/30 shadow-2xl backdrop-blur-2xl text-center space-y-8">
+          <div className="liquid-glass rounded-3xl p-6 sm:p-10 md:p-12 shadow-2xl backdrop-blur-2xl text-center space-y-8">
               
               {/* Headline */}
               <div className="space-y-2 max-w-2xl mx-auto pt-2">
@@ -117,7 +113,6 @@ export const LandingPage: React.FC = () => {
               </div>
 
             </div>
-          </div>
         </section>
 
         {/* The Crisis & The Solution Spotlight */}
