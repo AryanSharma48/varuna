@@ -1,6 +1,8 @@
 import { IncidentData, InvestigationReportResponse, CanonicalInvestigationReport } from '../types';
 
-const API_BASE = '/api/v1';
+const API_BASE = import.meta.env.VITE_API_URL 
+  ? `${(import.meta.env.VITE_API_URL as string).replace(/\/$/, '')}/api/v1` 
+  : '/api/v1';
 
 export async function fetchIncident(incidentId: string = 'VARUNA-2026-001'): Promise<IncidentData> {
   const res = await fetch(`${API_BASE}/incidents/${incidentId}`);
