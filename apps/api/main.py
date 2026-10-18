@@ -9,8 +9,7 @@ from apps.api.routes import incidents, reports
 from db.database import engine, Base, get_db
 from db.seed import seed_demo_data
 
-# Create DB Tables on startup
-Base.metadata.create_all(bind=engine)
+
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -29,11 +28,12 @@ app.add_middleware(
 
 @app.on_event("startup")
 def startup_event():
-    # Automatically seed the demo incident if clean checkout
+    # Safely initialize tables and demo seed
     try:
+        Base.metadata.create_all(bind=engine)
         seed_demo_data()
     except Exception as e:
-        print(f"Startup seed notice: {e}")
+        print(f"Startup database initialization notice: {e}")
 
 # Health Check Endpoints (Phase 0)
 @app.get("/health", status_code=status.HTTP_200_OK, tags=["Health"])
